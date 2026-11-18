@@ -37,6 +37,16 @@ create table if not exists public.profiles (
   updated_at timestamptz default now()
 );
 
+-- Full profile details (added in v3; safe to re-run on an existing database)
+alter table public.profiles add column if not exists phone text;
+alter table public.profiles add column if not exists education jsonb default '[]'::jsonb;        -- [{school, degree, field, start, end, grade}]
+alter table public.profiles add column if not exists experience jsonb default '[]'::jsonb;       -- [{company, title, location, start, end, current, bullets[]}]
+alter table public.profiles add column if not exists certifications jsonb default '[]'::jsonb;   -- [{name, issuer, year, url}]
+alter table public.profiles add column if not exists achievements jsonb default '[]'::jsonb;     -- [{title, detail, year}]
+alter table public.profiles add column if not exists spoken_languages text[] default '{}';
+alter table public.profiles add column if not exists other_links jsonb default '[]'::jsonb;      -- [{label, url}]
+alter table public.profiles add column if not exists resume_updated_at timestamptz;
+
 -- ─────────────────────────────────────────────────────────────
 -- Applications tracker
 -- ─────────────────────────────────────────────────────────────

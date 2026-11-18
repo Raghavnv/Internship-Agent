@@ -155,3 +155,25 @@ def test_resume_parse_and_review(monkeypatch):
 def test_geocode():
     assert client.get("/api/geocode", params={"q": "Austin, TX"}).json()["city"] == "Austin"
     assert client.get("/api/geocode", params={"q": "Remote"}).status_code == 404
+
+
+def test_clean_profile_rejects_bad_ai_output():
+    from resume import clean_profile
+    out = clean_profile({
+        "full_name": "  Asha   Rao ", "linkedin": "not a url !!", "github": "github.com/asha",
+        "education": [{"school": "RVCE", "degree": "B.Tech", "field": "CS", "end": "2028"}],
+        "experience": [{"company": "Acme", "title": "Intern", "bullets": ["a", "b", "c", "d", "e"]}, {"company": "", "title": "x"}],
+        "skills": ["Python", "python", "SQL"], "roles": ["Backend", "Wizard"],
+        "achievements": [{"title": "Won", "year": 3000}], "evil": "<script>",
+    })
+    assert out["full_name"] == "Asha Rao" and "linkedin" not in out and out["github"] == "https://github.com/asha"
+    assert out["college"] == "RVCE" and out["grad_year"] == 2028 and out["degree_level"] == "bachelors"
+    assert len(out["experience"]) == 1 and len(out["experience"][0]["bullets"]) == 4
+    assert out["skills"] == ["Python", "SQL"] and out["roles"] == ["Backend"]
+    assert out["achievements"][0]["year"] is None and "evil" not in out
+
+
+def test_profile_summary_mentions_experience():
+    from fit import profile_summary
+    s = profile_summary({"full_name": "Asha", "experience": [{"title": "Backend Intern", "company": "Acme"}]})
+    assert "Backend Intern at Acme" in s

@@ -179,4 +179,9 @@ def profile_summary(p):
         out += f" Work authorisation: {auth}."
     if p.get("paid_only"):
         out += " Only wants paid internships."
+    exp = [e for e in p.get("experience") or [] if isinstance(e, dict)][:3]
+    if exp:
+        out += " Experience: " + "; ".join(f"{e.get('title')} at {e.get('company')}" for e in exp) + "."
+    if p.get("projects_summary"):
+        out += f" Projects: {p['projects_summary']}."
     return out
