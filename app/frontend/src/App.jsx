@@ -1,18 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
 import { chat, getMeta, searchJobs, setPasscode } from './api.js'
-import Flap from './Flap.jsx'
-import { cityCode, cityName, describeArgs, postedLabel } from './format.js'
+import { cityName, describeArgs, postedLabel } from './format.js'
 
-const EXAMPLES = [
-  'Backend or full stack internships in Austin or Dallas for summer 2027',
-  'Remote machine learning internships I could do between January and June',
-  'Best fits for me in the Bay Area, newest first',
-  'Which companies have the most openings in Texas?',
+const SUGGESTIONS = [
+  'Backend roles in Austin or Dallas this summer',
+  'Remote ML internships, January to June',
+  'Best fits for me in the Bay Area',
+  'Who’s hiring most in Texas?',
   'AI internships in Bangalore',
-  'Software roles posted in the last 3 days that don’t need a Master’s',
+  'Posted in the last 3 days',
 ]
 
-// Tiny, safe renderer for **bold** and "- " bullets in AI replies (no HTML injection).
+// Safe renderer for **bold** and "- " bullets in AI replies.
 function RichText({ text }) {
   const inline = (s, key) =>
     s.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
@@ -29,119 +28,120 @@ function RichText({ text }) {
   return <>{blocks}</>
 }
 
-function useClock() {
-  const fmt = () => new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata' }).format(new Date())
-  const [t, setT] = useState(fmt)
-  useEffect(() => { const id = setInterval(() => setT(fmt()), 15000); return () => clearInterval(id) }, [])
-  return t
-}
-
 function shortTerms(terms) {
-  if (!terms.length) return null
+  if (!terms?.length) return 'Dates not stated'
   const t = terms.map((x) => x.replace(/^(Winter|Spring|Summer|Fall) \d{2}(\d{2})$/, (_, s, y) => `${s} ’${y}`))
-  return t.length > 2 ? `${t[0]} +${t.length - 1}` : t.join(', ')
+  return t.length > 2 ? `${t[0]} + ${t.length - 1} more` : t.join(', ')
 }
 
-function Row({ job, index }) {
-  const loc = job.locations[0] || (job.remote ? 'Remote' : '')
-  const code = cityCode(loc || 'TBA')
-  const posted = postedLabel(job.posted)
-  const note = job.sponsorship?.includes('Citizenship') ? { t: 'US citizens only', warn: true }
-    : job.sponsorship?.includes('Does Not Offer') ? { t: 'No visa sponsorship' } : null
-  const fresh = posted === 'Posted today' || posted === 'Posted yesterday'
-  const others = job.locations.slice(1).map(cityName)
+function FitRing({ value }) {
+  if (value == null) return <span className="fit-none" aria-hidden="true" />
+  const r = 15, c = 2 * Math.PI * r
   return (
-    <li className="row">
-      <div className="cell-code">
-        <Flap text={code.padEnd(3, ' ').slice(0, 3)} size="md" label={cityName(loc) || 'Location not listed'} startDelay={Math.min(index, 8) * 70} />
-        <span className="code-city">{cityName(loc) || 'TBA'}</span>
-      </div>
-      <div className="cell-role">
+    <span className="fit" title="How well this matches your profile">
+      <svg viewBox="0 0 36 36" aria-hidden="true">
+        <circle cx="18" cy="18" r={r} className="ring-bg" />
+        <circle cx="18" cy="18" r={r} className="ring" strokeDasharray={c} strokeDashoffset={c * (1 - value / 100)} />
+      </svg>
+      <span className="fit-num">{value}</span>
+      <span className="sr">fit score out of 100</span>
+    </span>
+  )
+}
+
+function JobRow({ job }) {
+  const city = cityName(job.locations[0] || (job.remote ? 'Remote' : ''))
+  const more = job.locations.length - 1 + (job.more_locations || 0)
+  const posted = postedLabel(job.posted)
+  const flag = job.sponsorship?.includes('Citizenship') ? 'US citizens only' : null
+  return (
+    <li className="job">
+      <span className="avatar" aria-hidden="true">{(job.company || '?').trim().charAt(0)}</span>
+      <div className="job-main">
         <h3>{job.title}</h3>
-        <p>
-          <span className="co">{job.company}</span>
-          {(others.length > 0 || job.more_locations > 0) && (
-            <span className="also">{others.length ? `, also ${others.join(', ')}` : ''}{job.more_locations ? `${others.length ? ' and' : ','} ${job.more_locations} more ${job.more_locations === 1 ? 'city' : 'cities'}` : ''}</span>
-          )}
+        <p className="job-sub">
+          {job.company}
+          <span className="sep" aria-hidden="true" />
+          {city || 'Location not listed'}{more > 0 ? `, +${more}` : ''}
         </p>
-        {(note || job.stipend) && (
-          <p className="row-notes">
-            {job.stipend && <span>{job.stipend}</span>}
-            {note && <span className={note.warn ? 'warn' : ''}>{note.t}</span>}
-          </p>
-        )}
+        <p className="job-meta">
+          <span>{shortTerms(job.terms)}</span>
+          {posted && <span>{posted}</span>}
+          {job.stipend && <span>{job.stipend}</span>}
+          {flag && <span className="flag">{flag}</span>}
+        </p>
       </div>
-      <div className="cell-when">
-        <span className="k">When</span>
-        <span className={shortTerms(job.terms) ? '' : 'dim'}>{shortTerms(job.terms) || 'Not stated'}</span>
-      </div>
-      <div className="cell-posted">
-        <span className="k">Posted</span>
-        <span className={fresh ? 'fresh-dot' : ''}>{posted ? posted.replace('Posted ', '') : '—'}</span>
-      </div>
-      <div className="cell-fit">
-        <span className="k">Fit</span>
-        {job.fit != null ? <span className="fit" title="How well this matches your profile">{job.fit}</span> : <span className="dim">{'—'}</span>}
-      </div>
-      <div className="cell-go">
-        <a className="apply" href={job.url} target="_blank" rel="noreferrer">
-          Apply<span className="sr"> to {job.title} at {job.company} (opens in a new tab)</span>
-        </a>
-      </div>
+      <FitRing value={job.fit} />
+      <a className="apply" href={job.url} target="_blank" rel="noreferrer">
+        Apply<span className="sr"> to {job.title} at {job.company} (opens in a new tab)</span>
+      </a>
     </li>
   )
 }
 
-function Counts({ data }) {
-  const max = Math.max(...data.counts.map((c) => c[1]), 1)
-  const label = { company: 'Companies', city: 'Cities', country: 'Countries', category: 'Fields', term: 'Terms' }[data.group_by]
+function Results({ data, compact }) {
+  const [open, setOpen] = useState(false)
+  if (!data) return null
+  if (data.counts) {
+    const max = Math.max(...data.counts.map((c) => c[1]), 1)
+    return (
+      <div className="result counts">
+        <ol>
+          {data.counts.slice(0, 10).map(([name, n]) => (
+            <li key={name}>
+              <span className="cname">{name}</span>
+              <span className="bar"><span style={{ width: `${(n / max) * 100}%` }} /></span>
+              <span className="cnum">{n}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    )
+  }
+  const shown = open || compact === false ? data.results : data.results.slice(0, 5)
+  const chips = data.args ? describeArgs(data.args) : []
   return (
-    <div className="counts">
-      <h3>{label} with the most matching roles</h3>
-      <ol>
-        {data.counts.map(([name, n]) => (
-          <li key={name}>
-            <span className="cname">{name}</span>
-            <span className="bar"><span style={{ width: `${(n / max) * 100}%` }} /></span>
-            <span className="cnum">{n}</span>
-          </li>
-        ))}
-      </ol>
+    <div className="result">
+      {chips.length > 0 && (
+        <ul className="chips" aria-label="Filters used">
+          {chips.map((c, i) => <li key={i} title={c.k}>{c.v}</li>)}
+        </ul>
+      )}
+      {data.results.length === 0
+        ? <p className="quiet">Nothing matched. Try a wider area or fewer filters.</p>
+        : <ul className="jobs">{shown.map((j) => <JobRow key={j.id} job={j} />)}</ul>}
+      {data.results.length > 5 && compact !== false && (
+        <button type="button" className="more" onClick={() => setOpen(!open)} aria-expanded={open}>
+          {open ? 'Show fewer' : `Show ${data.results.length - 5} more`}
+        </button>
+      )}
     </div>
   )
 }
 
-function stepText(s) {
-  const what = describeArgs(s.args).map((c) => c.v).join(', ') || 'all listings'
-  const verb = s.tool === 'count_internships' ? 'Counted' : 'Searched'
-  return `${verb} ${what}: ${s.total ?? 0} found`
-}
-
 export default function App() {
   const [meta, setMeta] = useState(null)
+  const [picks, setPicks] = useState(null)
   const [needCode, setNeedCode] = useState(false)
   const [code, setCode] = useState('')
   const [messages, setMessages] = useState([])
-  const [board, setBoard] = useState(null)
   const [input, setInput] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
-  const logRef = useRef(null)
-  const clock = useClock()
+  const endRef = useRef(null)
+  const inputRef = useRef(null)
 
   const loadMeta = () =>
     getMeta().then((m) => {
       setMeta(m)
       setNeedCode(false)
-      searchJobs({ fit_only: true, sort: 'fit', limit: 12 })
-        .then((r) => setBoard((b) => b || { tool: 'search_internships', ...r, intro: true, key: 'intro' }))
-        .catch(() => {})
+      searchJobs({ fit_only: true, sort: 'fit', limit: 5 }).then(setPicks).catch(() => {})
     }).catch((e) => {
       if (e.status === 401) setNeedCode(true)
-      else setError('Can’t reach the server. It may be waking up; try again in 30 seconds.')
+      else setError('The server is waking up. Try again in about 30 seconds.')
     })
   useEffect(() => { loadMeta() }, [])
-  useEffect(() => { logRef.current?.scrollTo({ top: logRef.current.scrollHeight, behavior: 'smooth' }) }, [messages, busy])
+  useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' }) }, [messages, busy])
 
   async function ask(text) {
     const q = text.trim()
@@ -153,8 +153,7 @@ export default function App() {
     setBusy(true)
     try {
       const res = await chat(next.map(({ role, content }) => ({ role, content })))
-      setMessages([...next, { role: 'assistant', content: res.reply || 'Done.', steps: res.steps }])
-      if (res.last) setBoard({ ...res.last, key: Date.now() })
+      setMessages([...next, { role: 'assistant', content: res.reply || 'Done.', last: res.last }])
       if (res.meta) setMeta((m) => ({ ...m, ...res.meta }))
     } catch (e) {
       if (e.status === 401) setNeedCode(true)
@@ -163,6 +162,7 @@ export default function App() {
       setInput(q)
     } finally {
       setBusy(false)
+      inputRef.current?.focus()
     }
   }
 
@@ -170,103 +170,72 @@ export default function App() {
     return (
       <main className="gate">
         <form onSubmit={(e) => { e.preventDefault(); setPasscode(code); loadMeta() }}>
-          <Flap text="GATE" size="lg" label="Internship Copilot" />
-          <label htmlFor="pc">Enter the passcode to board</label>
-          <input id="pc" type="password" value={code} onChange={(e) => setCode(e.target.value)} autoFocus />
-          <button type="submit">Unlock</button>
+          <h1>Internship Copilot</h1>
+          <label htmlFor="pc">Passcode</label>
+          <div className="gate-row">
+            <input id="pc" type="password" value={code} onChange={(e) => setCode(e.target.value)} autoFocus />
+            <button type="submit">Unlock</button>
+          </div>
         </form>
       </main>
     )
   }
 
-  const chips = board && !board.intro ? describeArgs(board.args) : []
-  const total = board?.total ?? 0
-  const title = !board ? 'Departures' : board.intro ? 'Your best fits right now'
-    : board.tool === 'count_internships' ? 'Breakdown' : 'Departures'
+  const home = messages.length === 0
+  const composer = (
+    <form className="composer" onSubmit={(e) => { e.preventDefault(); ask(input) }}>
+      <label htmlFor="q" className="sr">Ask about internships</label>
+      <textarea id="q" ref={inputRef} rows={1} value={input}
+        placeholder={home ? 'Ask for any internship…' : 'Ask a follow-up…'}
+        onChange={(e) => setInput(e.target.value)}
+        onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ask(input) } }} />
+      <button type="submit" disabled={busy || !input.trim()} aria-label="Send">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15V5M5.5 9.5 10 5l4.5 4.5" /></svg>
+      </button>
+    </form>
+  )
+
   return (
-    <div className="shell">
+    <div className={`app ${home ? 'is-home' : 'is-thread'}`}>
       <header className="top">
-        <div className="brand">
-          <span className="mark" aria-hidden="true" />
-          <h1>Internship Copilot</h1>
-        </div>
-        <p className="fresh">
-          {meta ? <>{meta.count.toLocaleString('en-IN')} live listings, refreshed {meta.updated_human.replace(/^\d+ \w+ \d{4}, /, '')}</> : 'Loading listings…'}
-        </p>
-        <div className="clock" title="Bangalore time">
-          <Flap text={clock.replace(':', '')} size="sm" label={`Bangalore time ${clock}`} stagger={30} />
-          <span className="tz">BLR</span>
-        </div>
+        <span className="wordmark">Internship Copilot</span>
+        {meta && <span className="live"><span className="dot" aria-hidden="true" />{meta.count.toLocaleString('en-IN')} live listings</span>}
       </header>
 
-      <section className="console" aria-label="Chat">
-        <div className="log" ref={logRef} aria-live="polite">
-          {messages.length === 0 && (
-            <div className="intro">
-              <p className="lede">Where do you want to intern next?</p>
-              <p className="sub">Ask in plain words. I search every live listing and put the matches on the board.</p>
-              <ul className="examples">
-                {EXAMPLES.map((ex) => (
-                  <li key={ex}><button type="button" onClick={() => ask(ex)}>{ex}</button></li>
-                ))}
-              </ul>
-            </div>
+      {home ? (
+        <main className="home">
+          <h1>Find the internship<br /><em>that fits you.</em></h1>
+          <p className="lead">Ask in your own words. I search every live listing, refreshed every 15 minutes.</p>
+          {composer}
+          {error && <p className="error" role="alert">{error}</p>}
+          <ul className="suggest">
+            {SUGGESTIONS.map((s) => <li key={s}><button type="button" onClick={() => ask(s)}>{s}</button></li>)}
+          </ul>
+          {picks?.results?.length > 0 && (
+            <section className="picks" aria-labelledby="picks-h">
+              <h2 id="picks-h">Picked for you</h2>
+              <Results data={{ results: picks.results }} compact={false} />
+            </section>
           )}
+        </main>
+      ) : (
+        <main className="thread">
           {messages.map((m, i) => (
-            <div key={i} className={`msg ${m.role}`}>
-              {m.role === 'assistant' ? <RichText text={m.content} /> : <p>{m.content}</p>}
-              {m.steps?.length > 0 && (
-                <ul className="steps">{m.steps.map((s, j) => <li key={j}>{stepText(s)}</li>)}</ul>
+            <article key={i} className={`turn ${m.role}`}>
+              {m.role === 'user' ? <p className="q">{m.content}</p> : (
+                <>
+                  <div className="a"><RichText text={m.content} /></div>
+                  <Results data={m.last} />
+                </>
               )}
-            </div>
+            </article>
           ))}
-          {busy && <div className="msg assistant pending"><p>Checking the board{'…'}</p></div>}
-        </div>
-        {error && <p className="error" role="alert">{error}</p>}
-        <form className="composer" onSubmit={(e) => { e.preventDefault(); ask(input) }}>
-          <label htmlFor="q" className="sr">Ask about internships</label>
-          <textarea id="q" rows={2} value={input} placeholder="ML internships in Houston that start in June"
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ask(input) } }} />
-          <button type="submit" disabled={busy || !input.trim()}>Ask</button>
-        </form>
-      </section>
-
-      <section className="board" aria-label="Results">
-        <div className="board-head">
-          <div className="board-title">
-            <h2>{title}</h2>
-            {board?.results && !board.intro && (
-              <p className="tally">
-                <Flap key={board.key} text={String(total).padStart(3, ' ')} size="sm" label={`${total} matching`} />
-                <span>{total === 1 ? 'internship matches' : 'internships match'}{board.total > board.results.length ? `, top ${board.results.length} shown` : ''}</span>
-              </p>
-            )}
-            {board?.intro && <p className="tally-text">Ranked by your alert agent&rsquo;s fit score. Ask anything to search all {meta?.count.toLocaleString('en-IN')}.</p>}
-          </div>
-          {chips.length > 0 && (
-            <ul className="chips" aria-label="What the search used">
-              {chips.map((c, i) => <li key={i}><span>{c.k}</span>{c.v}</li>)}
-            </ul>
-          )}
-        </div>
-
-        {!board && <p className="empty">The board fills in when you ask a question.</p>}
-        {board?.counts && <Counts data={board} />}
-        {board?.results && board.results.length === 0 && (
-          <p className="empty">No departures match that. Try a wider area, more role words, or drop the dates.</p>
-        )}
-        {board?.results?.length > 0 && (
-          <>
-            <div className="cols" aria-hidden="true">
-              <span>To</span><span>Role</span><span>When</span><span>Posted</span><span>Fit</span><span />
-            </div>
-            <ol className="rows" key={board.key}>
-              {board.results.map((j, i) => <Row key={j.id} job={j} index={i} />)}
-            </ol>
-          </>
-        )}
-      </section>
+          {busy && <article className="turn assistant"><p className="thinking"><span /><span /><span /><span className="sr">Searching</span></p></article>}
+          {error && <p className="error" role="alert">{error}</p>}
+          <div ref={endRef} />
+          <div className="dock">{composer}</div>
+        </main>
+      )}
     </div>
   )
 }
