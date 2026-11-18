@@ -1,88 +1,103 @@
 # ✈️ Internship Copilot
 
-Chat with every live internship your alert agent tracks (~5,000 roles, refreshed every 15 minutes).
+A full-stack AI app for finding internships. Students sign up, answer a few questions about themselves, and every
+one of 5,000+ live listings (refreshed every 15 minutes) is scored for them. They can ask an AI in plain words,
+explore on a live world map, track applications, save roles, and get resume feedback for any role.
 
-> "Backend or full stack internships in Austin or Dallas for summer 2027"
-> "Remote ML internships I could do between January and June"
-> "Which companies have the most openings in Texas?"
+**Stack:** React + Vite (frontend, Vercel) · FastAPI (backend, Render) · Supabase (Postgres, auth, file storage) ·
+Groq `gpt-oss-120b` (LLM with tool calling) · GitHub Actions data pipeline (`../agent`).
 
-The home screen is a live dot-matrix map of every open internship. Ask a question and arcs draw from Bangalore to each matching city; each answer lists its roles with company, city, dates, a fit-score ring and an Apply link.
+## What's in it
 
-## What's in the app
+| Area | What it does |
+|---|---|
+| **Landing** | Animated live map: a student somewhere asks a question, arcs draw to matching cities. How it works, features, live stats. |
+| **Sign up / log in** | Email + password and Continue with Google (Supabase Auth). |
+| **Onboarding** | 6 short steps: about you, resume (auto-extracts skills), roles, where and when, eligibility (visa, pay), links. |
+| **Overview** | Greeting, numbers, top matches, quick AI ask, application pipeline, profile strength checklist. |
+| **AI Copilot** | Chat. The LLM turns questions into filters and calls `search_internships` / `count_internships` over real listings. Results land on the map. |
+| **Explore** | Manual filters (cities, roles, keyword, remote, recency, sort, "strong fits only") with the map. |
+| **Applications** | Tracker: Applied, Interviewing, Offer, Rejected; notes; follow-up nudges; CSV export. Clicking Apply anywhere adds a role here. |
+| **Saved** | Bookmarked roles. |
+| **Resume** | Private PDF upload (Supabase Storage), skill extraction, AI feedback and rewritten bullets for a chosen role. |
+| **Portfolio** | Headline, bio, links, projects with a live preview card. |
+| **Profile** | Edit every onboarding answer. Fit scores update immediately. |
 
-- **Landing page:** live map, a "How it works" walkthrough, live counts for your cities, and your best matches to apply for now.
-- **Chat search:** ask anything; results appear under each answer and on the map.
-- **My applications:** clicking Apply saves the role. Track status (Applied, Interviewing, Offer, Rejected), add notes,
-  and export/import a backup. Saved in your browser on this device (no account needed).
+**Fit scores are per user** (`backend/fit.py`): role interests, skills, preferred locations, remote/in-person
+availability windows vs. the internship's dates, degree level, US work authorisation vs. sponsorship, pay and recency.
 
-## How it works
+**Privacy:** every table uses Postgres row-level security, so users can only ever read or change their own rows and
+resume files (`supabase/schema.sql`).
 
-```
-GitHub Actions (every 15 min)          FastAPI backend (Render)                 React frontend (Vercel)
-agent/ fetches SimplifyJobs,   ──►    loads data branch jobs.json      ◄──►     chat + ticket board
-Internshala, company boards           LLM (Groq gpt-oss-120b) calls
-→ publishes jobs.json (data branch)   search_internships / count_internships
-```
+---
 
-- **The AI never invents jobs.** The LLM turns your question into structured filters (roles + synonyms,
-  cities/metros/states/countries, month ranges, remote, company, visa, degree, recency, fit) and calls a
-  search tool over the real listings. The UI shows the tool's results directly and the filters it used as chips.
-- **Search engine** (`backend/search.py`): in-memory filtering and ranking, ~15 ms over 5k listings.
-  Understands metros ("bay area", "dallas" = DFW), states ("texas", "TX"), countries, and maps seasons
-  (Winter/Spring/Summer/Fall YYYY) to months for date-range questions. De-duplicates reposted roles.
-- **Frontend** (`frontend/`): React + Vite, no UI framework, self-hosted fonts, responsive, keyboard accessible.
+## Setup
+
+### 1. Supabase (database + login), about 10 minutes
+1. Go to **supabase.com**, sign in with GitHub, and click **New project**. Name it `internship-copilot`, set a database password (save it somewhere), and choose the **Mumbai** region (closest to you).
+2. When it's ready, open **SQL Editor → New query**, paste the whole of [`supabase/schema.sql`](supabase/schema.sql) and click **Run**. You should see "Success". This creates the tables, the privacy rules and the private `resumes` storage bucket.
+3. Open **Project Settings → API** (or **Connect**) and copy:
+   - **Project URL**, e.g. `https://abcd1234.supabase.co`
+   - **anon / publishable key** (the public one, *not* the `service_role` / secret key)
+4. **Authentication → URL Configuration:**
+   - **Site URL:** your Vercel URL, e.g. `https://internship-copilot.vercel.app`
+   - **Redirect URLs:** add `https://internship-copilot.vercel.app/**` and `http://localhost:5173/**`
+
+### 2. "Continue with Google", about 10 minutes
+1. Go to **console.cloud.google.com**, create a project, then go to **APIs & Services → OAuth consent screen**. Choose **External**, add an app name and your email, then save.
+2. Go to **Credentials → Create credentials → OAuth client ID → Web application**.
+   - **Authorised redirect URI:** `https://<your-project>.supabase.co/auth/v1/callback`. Supabase shows this exact URL on its Google provider page.
+3. Copy the **Client ID** and **Client secret** into **Supabase → Authentication → Sign In / Providers → Google**, switch it on, and save.
+
+Email sign-up works without this step; Google is optional.
+
+### 3. Backend on Render
+Your service from before just needs two more environment variables (**Environment** tab):
+
+| Key | Value |
+|---|---|
+| `SUPABASE_URL` | Project URL from step 1 |
+| `SUPABASE_ANON_KEY` | anon / publishable key from step 1 |
+| `GROQ_API_KEY` | (already set) |
+| `ALLOWED_ORIGINS` | your Vercel URL |
+
+With `SUPABASE_URL` set, the API only answers signed-in users (the landing page's map and stats stay public).
+
+### 4. Frontend on Vercel
+Project settings: **Root Directory** `app/frontend`, framework **Vite**. Environment variables:
+
+| Key | Value |
+|---|---|
+| `VITE_API_URL` | your Render URL, e.g. `https://internship-copilot-api.onrender.com` |
+| `VITE_SUPABASE_URL` | Project URL |
+| `VITE_SUPABASE_ANON_KEY` | anon / publishable key |
+
+Then **Redeploy**: `VITE_` variables only apply to new builds.
+
+### 5. Keep Supabase awake (optional)
+Free Supabase projects pause after 7 days without traffic. Add `SUPABASE_URL` and `SUPABASE_ANON_KEY` as GitHub
+**repository secrets** too; the alert agent's 15-minute workflow then pings it so it never pauses.
+
+---
 
 ## Run locally
 
 ```bash
 # backend
-cd app/backend
-pip install -r requirements.txt
-export GROQ_API_KEY=gsk_...        # free at console.groq.com
-uvicorn main:app --reload           # http://localhost:8000/api/health
+cd app/backend && pip install -r requirements.txt
+export GROQ_API_KEY=gsk_...                 # optional SUPABASE_URL / SUPABASE_ANON_KEY
+uvicorn main:app --reload                    # http://localhost:8000/api/health
 
 # frontend (new terminal)
-cd app/frontend
-npm install
-npm run dev                         # http://localhost:5173 (proxies /api to :8000)
+cd app/frontend && npm install
+npm run dev                                  # http://localhost:5173
 ```
 
-Tests: `cd app/backend && python -m pytest -q` (uses a fake LLM and `tests/sample_jobs.json`).
+Without `VITE_SUPABASE_*` the frontend runs in **demo mode**: sign-up, profile, applications and saved roles live
+in your browser, so you can try everything before setting up Supabase.
 
-## Deploy (free)
-
-**1. Backend on Render**
-1. render.com → sign in with GitHub → **New → Blueprint** → pick `Internship-Agent`. It reads `render.yaml`.
-2. Fill in the secrets it asks for:
-   - `GROQ_API_KEY`: from console.groq.com → API Keys
-   - `APP_PASSCODE`: any word you choose; the site will ask for it, so strangers can't use up your Groq quota
-   - `ALLOWED_ORIGINS`: your Vercel URL from step 2 (you can leave it blank at first and fill it in after)
-3. Deploy, then open `https://<your-service>.onrender.com/api/health`. You should see `"llm": true`.
-   (Free Render services sleep after 15 min idle; the first request then takes ~30 s.)
-
-**2. Frontend on Vercel**
-1. vercel.com → sign in with GitHub → **Add New → Project** → import `Internship-Agent`.
-2. **Root Directory:** `app/frontend` (framework preset: Vite).
-3. **Environment variable:** `VITE_API_URL` = `https://<your-service>.onrender.com`
-4. Deploy. Then put the Vercel URL into Render's `ALLOWED_ORIGINS`.
+Tests: `cd app/backend && python -m pytest -q` (fake LLM, sample data, auth and resume parsing covered).
 
 ## Use it like a Mac app
-
-Once deployed, open your Vercel URL and:
-- **Safari:** File → **Add to Dock**. It gets its own icon and window.
-- **Chrome / Edge:** the install icon at the right of the address bar → **Install**.
-
-For a menu-bar widget with notifications (works even before deploying), see [widget/README.md](../widget/README.md).
-
-## Configuration (backend env vars)
-
-| Variable | Default | What it does |
-|---|---|---|
-| `GROQ_API_KEY` / `LLM_API_KEY` | – | LLM key |
-| `LLM_BASE_URL` | `https://api.groq.com/openai/v1` | Any OpenAI-compatible API works |
-| `LLM_MODEL` | `openai/gpt-oss-120b` | Try `openai/gpt-oss-20b` for faster replies |
-| `APP_PASSCODE` | none | Require a passcode to use the app |
-| `ALLOWED_ORIGINS` | `*` | Comma-separated frontend URLs for CORS |
-| `CHAT_RATE_PER_HOUR` | `60` | Questions per IP per hour |
-| `DATA_URL` | this repo's `data` branch | Where listings are loaded from |
-| `USER_PROFILE` | Raghav's profile | Used for "for me" / "best fit" questions |
+On the deployed site: Safari → **File → Add to Dock**, or Chrome → install icon in the address bar.
+For a menu-bar widget with notifications, see [`../widget`](../widget/README.md).

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { cityName, describeArgs, postedLabel } from './format.js'
+import { Icon } from './ui.jsx'
 
 // Safe renderer for **bold** and "- " bullets in AI replies.
 export function RichText({ text }) {
@@ -43,12 +44,15 @@ const Check = () => (
   <svg viewBox="0 0 16 16" aria-hidden="true" className="ico"><path d="M3.5 8.5 6.5 11.5 12.5 5" /></svg>
 )
 
-export function JobRow({ job, onFocus, applied, onApply }) {
+export function JobRow({ job, onFocus, actions }) {
   const city = cityName(job.locations[0] || (job.remote ? 'Remote' : ''))
   const more = job.locations.length - 1 + (job.more_locations || 0)
   const posted = postedLabel(job.posted)
-  const flag = job.sponsorship?.includes('Citizenship') ? 'US citizens only' : null
+  const flag = job.sponsorship?.includes('Citizenship') ? 'US citizens only'
+    : job.sponsorship?.includes('Does Not Offer') ? 'No visa sponsorship' : null
   const fresh = posted === 'Posted today' || posted === 'Posted yesterday'
+  const applied = actions?.isApplied?.(job.id)
+  const saved = actions?.isSaved?.(job.id)
   return (
     <li className={`job${applied ? ' is-applied' : ''}`} onMouseEnter={() => onFocus?.(job.id)} onMouseLeave={() => onFocus?.(null)}
       onFocus={() => onFocus?.(job.id)} onBlur={() => onFocus?.(null)}>
@@ -64,20 +68,29 @@ export function JobRow({ job, onFocus, applied, onApply }) {
           <span>{shortTerms(job.terms)}</span>
           {posted && <span className={fresh ? 'fresh' : ''}>{posted}</span>}
           {job.stipend && <span>{job.stipend}</span>}
-          {flag && <span className="flag">{flag}</span>}
+          {flag && <span className={flag.startsWith('US') ? 'flag' : ''}>{flag}</span>}
         </p>
       </div>
       <FitRing value={job.fit} />
-      <a className={`apply${applied ? ' done' : ''}`} href={job.url} target="_blank" rel="noreferrer"
-        onClick={() => { if (!applied) onApply?.(job) }}>
-        {applied ? <><Check />Applied</> : 'Apply'}
-        <span className="sr"> {applied ? '(saved in My applications), open' : 'to'} {job.title} at {job.company} (opens in a new tab)</span>
-      </a>
+      <div className="job-actions">
+        {actions?.toggleSave && (
+          <button type="button" className={`icon-btn${saved ? ' on' : ''}`} aria-pressed={saved}
+            aria-label={saved ? `Remove ${job.title} from saved` : `Save ${job.title} for later`}
+            title={saved ? 'Saved' : 'Save for later'} onClick={() => actions.toggleSave(job)}>
+            <Icon name="saved" size={16} />
+          </button>
+        )}
+        <a className={`apply${applied ? ' done' : ''}`} href={job.url} target="_blank" rel="noreferrer"
+          onClick={() => { if (!applied) actions?.apply?.(job) }}>
+          {applied ? <><Check />Applied</> : 'Apply'}
+          <span className="sr"> {applied ? '(in My applications), open' : 'to'} {job.title} at {job.company} (opens in a new tab)</span>
+        </a>
+      </div>
     </li>
   )
 }
 
-export function Results({ data, onFocus, limit = 5, applied, onApply }) {
+export function Results({ data, onFocus, limit = 5, actions, empty }) {
   const [open, setOpen] = useState(false)
   if (!data) return null
   if (data.counts) {
@@ -106,9 +119,9 @@ export function Results({ data, onFocus, limit = 5, applied, onApply }) {
         </ul>
       )}
       {data.results.length === 0
-        ? <p className="quiet">Nothing matched. Try a wider area or fewer filters.</p>
+        ? <p className="quiet">{empty || 'Nothing matched. Try a wider area or fewer filters.'}</p>
         : <ul className="jobs">{shown.map((j) => (
-          <JobRow key={j.id} job={j} onFocus={onFocus} applied={applied?.(j.id)} onApply={onApply} />
+          <JobRow key={j.id} job={j} onFocus={onFocus} actions={actions} />
         ))}</ul>}
       {data.results.length > limit && (
         <button type="button" className="more" onClick={() => setOpen(!open)} aria-expanded={open}>

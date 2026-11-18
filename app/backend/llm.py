@@ -9,6 +9,7 @@ from datetime import date
 
 import httpx
 
+from fit import profile_summary
 from search import aggregate, search
 
 log = logging.getLogger("llm")
@@ -53,7 +54,7 @@ FILTER_PROPS = {
     "needs_sponsorship": {"type": "boolean", "description": "Only roles that don't rule out visa sponsorship."},
     "exclude_citizenship_required": {"type": "boolean"},
     "undergrad_only": {"type": "boolean", "description": "Drop Master's/PhD/MBA-only roles."},
-    "fit_only": {"type": "boolean", "description": "Only roles the alert agent scored as a fit for the user."},
+    "fit_only": {"type": "boolean", "description": "Only roles that are a strong fit for the user's profile."},
 }
 TOOLS = [
     {"type": "function", "function": {
@@ -78,13 +79,14 @@ TOOLS = [
 ALLOWED = set(FILTER_PROPS) | {"sort", "limit", "group_by", "top"}
 
 
-def system_prompt(meta):
+def system_prompt(meta, profile=None):
+    about = profile_summary(profile) or PROFILE
     return f"""You are Internship Copilot, an assistant that helps a student find internships.
 Today is {date.today():%A %d %B %Y}. You have {meta['count']} live listings (refreshed every 15 minutes; last
 update {meta['updated_human']}). Most are US internships from the SimplifyJobs feed, plus some Indian ones
 from Internshala and company career pages.
 
-The user: {PROFILE}
+The user: {about}
 
 Rules:
 - For ANY question about jobs/internships, call a tool. Never invent listings, companies, links or counts.
@@ -98,27 +100,28 @@ Rules:
 - The app shows the result cards (with links) from your LAST search under your message. So keep your reply short:
   2-5 sentences or a few bullets. Say how many matched, highlight the most interesting 2-4 by company and title,
   and mention notable patterns (dates, locations, sponsorship). Don't paste URLs or long lists.
-- Mention caveats briefly: listings marked "Does Not Offer Sponsorship" are fine for this user; flag
-  "U.S. Citizenship is Required"; flag Master's/PhD-only roles.
+- Mention caveats briefly and based on the user's situation: visa sponsorship ("Does Not Offer Sponsorship",
+  "U.S. Citizenship is Required") against their work authorisation, and Master's/PhD-only roles.
 - For non-job questions (resume tips, interview prep, what a role involves), answer helpfully without tools.
 """
 
 
-def run_tool(name, args, jobs):
+def run_tool(name, args, jobs, profile=None):
     args = {k: v for k, v in (args or {}).items() if k in ALLOWED and v not in (None, "", [])}
     if args.get("remote") == "any":
         args.pop("remote")
+    extra = {"profile": profile} if profile else {}
     if name == "count_internships":
-        return aggregate(jobs, **args), args
+        return aggregate(jobs, **args, **extra), args
     args.setdefault("limit", 15)
-    return search(jobs, **args), args
+    return search(jobs, **args, **extra), args
 
 
-def chat(messages, jobs, meta):
+def chat(messages, jobs, meta, profile=None):
     """messages: [{role: user|assistant, content: str}] from the client. Returns reply + last results."""
     if not API_KEY:
         raise RuntimeError("LLM_API_KEY (or GROQ_API_KEY) is not set on the server.")
-    convo = [{"role": "system", "content": system_prompt(meta)}]
+    convo = [{"role": "system", "content": system_prompt(meta, profile)}]
     for m in messages[-20:]:
         if m.get("role") in ("user", "assistant") and isinstance(m.get("content"), str):
             convo.append({"role": m["role"], "content": m["content"][:4000]})
@@ -142,7 +145,7 @@ def chat(messages, jobs, meta):
             except json.JSONDecodeError:
                 args = {}
             try:
-                result, used = run_tool(fn, args, jobs)
+                result, used = run_tool(fn, args, jobs, profile)
             except Exception as e:
                 result, used = {"error": str(e)}, args
             steps.append({"tool": fn, "args": used, "total": result.get("total")})

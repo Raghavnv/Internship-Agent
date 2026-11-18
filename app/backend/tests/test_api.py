@@ -44,7 +44,7 @@ def tool_call(name, args, cid="c1"):
 def test_health_and_meta():
     assert client.get("/api/health").json()["ok"]
     m = client.get("/api/meta").json()
-    assert m["count"] == 4
+    assert m["count"] == 4 and "companies" in m
 
 
 def test_search_endpoint_filters():
@@ -86,7 +86,72 @@ def test_chat_count_tool(monkeypatch):
     assert d["last"]["tool"] == "count_internships" and d["last"]["total"] == 4
 
 
-def test_passcode(monkeypatch):
-    monkeypatch.setattr(main, "PASSCODE", "s3cret")
-    assert client.get("/api/meta").status_code == 401
-    assert client.get("/api/meta", headers={"x-passcode": "s3cret"}).status_code == 200
+PROFILE = {"full_name": "Asha", "skills": ["Python"], "roles": ["Backend"], "locations": ["Austin"],
+           "work_modes": ["onsite"], "onsite_from": "2027-06-01", "onsite_to": "2027-08-31"}
+
+
+def test_search_scores_for_the_given_profile():
+    r = client.post("/api/search", json={"profile": PROFILE, "sort": "fit", "limit": 4}).json()
+    assert r["results"][0]["company"] == "PayPal" and r["results"][0]["fit"] >= 70
+    other = client.post("/api/search", json={"profile": {"roles": ["AI / ML"], "locations": ["bay area"]},
+                                             "sort": "fit"}).json()
+    assert other["results"][0]["company"] == "NVIDIA"
+
+
+def test_chat_uses_profile_in_prompt(monkeypatch):
+    post, calls = fake_llm([{"role": "assistant", "content": "Hi Asha"}])
+    monkeypatch.setattr(llm.httpx, "post", post)
+    r = client.post("/api/chat", json={"messages": [{"role": "user", "content": "hi"}], "profile": PROFILE})
+    assert r.status_code == 200
+    assert "Asha" in calls[0]["messages"][0]["content"] and "Backend" in calls[0]["messages"][0]["content"]
+
+
+def test_auth_required_when_supabase_configured(monkeypatch):
+    import auth
+
+    class R:
+        def __init__(self, code, data):
+            self.status_code, self._d = code, data
+
+        def json(self):
+            return self._d
+
+    monkeypatch.setattr(auth, "SUPABASE_URL", "https://example.supabase.co")
+    monkeypatch.setattr(auth.httpx, "get", lambda url, headers=None, timeout=None:
+                        R(200, {"id": "u1", "email": "a@b.c"}) if headers["Authorization"] == "Bearer good" else R(401, {}))
+    auth._cache.clear()
+    assert client.post("/api/search", json={}).status_code == 401
+    assert client.post("/api/search", json={}, headers={"Authorization": "Bearer bad"}).status_code == 401
+    assert client.post("/api/search", json={}, headers={"Authorization": "Bearer good"}).status_code == 200
+    assert client.get("/api/meta").status_code == 200  # landing page data stays public
+
+
+def test_resume_parse_and_review(monkeypatch):
+    from io import BytesIO
+    from reportlab.pdfgen import canvas
+    buf = BytesIO()
+    c = canvas.Canvas(buf)
+    for i, line in enumerate(["Asha Rao", "B.Tech Computer Science, RV College of Engineering, 2028",
+                              "Skills: Python, FastAPI, PostgreSQL, React", "Built a RAG chatbot with LLMs"]):
+        c.drawString(72, 760 - i * 18, line)
+    c.save()
+    post, calls = fake_llm([
+        {"role": "assistant", "content": '{"full_name": "Asha Rao", "skills": ["Python", "FastAPI"], "roles": ["Backend"], "grad_year": "2028", "bogus": 1}'},
+        {"role": "assistant", "content": "**Match**: 80/100"},
+    ])
+    monkeypatch.setattr(llm.httpx, "post", post)
+    import resume
+    monkeypatch.setattr(resume.httpx, "post", post)
+    r = client.post("/api/resume/parse", files={"file": ("cv.pdf", buf.getvalue(), "application/pdf")})
+    assert r.status_code == 200, r.text
+    d = r.json()
+    assert "FastAPI" in d["text"] and d["profile"]["grad_year"] == 2028 and "bogus" not in d["profile"]
+    bad = client.post("/api/resume/parse", files={"file": ("x.pdf", b"hello", "application/pdf")})
+    assert bad.status_code == 415
+    rv = client.post("/api/resume/review", json={"resume_text": d["text"] * 2, "job": {"title": "Backend Intern"}})
+    assert rv.status_code == 200 and rv.json()["review"].startswith("**Match**")
+
+
+def test_geocode():
+    assert client.get("/api/geocode", params={"q": "Austin, TX"}).json()["city"] == "Austin"
+    assert client.get("/api/geocode", params={"q": "Remote"}).status_code == 404

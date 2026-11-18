@@ -150,6 +150,7 @@ SORTS = ("relevance", "newest", "fit")
 
 def search(jobs, *, sort="relevance", limit=20, offset=0, now=None, **filters):
     hits = match(jobs, now=now, **filters)
+    fits = {id(h[3]): h[2] for h in hits}
     key = {"newest": lambda h: (-h[1], -h[0]), "fit": lambda h: (-h[2], -h[0], -h[1])}.get(
         sort, lambda h: (-h[0], -h[1]))
     hits.sort(key=key)
@@ -164,13 +165,14 @@ def search(jobs, *, sort="relevance", limit=20, offset=0, now=None, **filters):
     hits = uniq
     limit = max(1, min(int(limit or 20), 50))
     page = hits[int(offset or 0): int(offset or 0) + limit]
-    return {"total": len(hits), "results": [compact(j, ml) for *_, j, ml in page]}
+    return {"total": len(hits), "results": [compact(j, ml, fit=fits.get(id(j))) for *_, j, ml in page]}
 
 
 def match(jobs, *, keywords=None, any_keywords=None, exclude_keywords=None, companies=None,
            exclude_companies=None, locations=None, remote=None, start_month=None, end_month=None, terms=None,
            include_undated=True, posted_within_days=None, categories=None, needs_sponsorship=False,
-           exclude_citizenship_required=False, undergrad_only=False, fit_only=False, now=None):
+           exclude_citizenship_required=False, undergrad_only=False, fit_only=False, now=None, profile=None,
+           min_fit=55):
     """Returns [(relevance, posted, fit, job, matched_locations)] for listings passing every filter."""
     now = now or time.time()
     kw_all = [word_re(k) for k in (keywords or []) if norm(k)]
@@ -185,6 +187,10 @@ def match(jobs, *, keywords=None, any_keywords=None, exclude_keywords=None, comp
     if rng:
         rng = (rng[0] or rng[1], rng[1] or rng[0])
 
+    prof = None
+    if profile:
+        from fit import prepare, score as fit_score
+        prof = prepare(profile)
     hits = []
     for j in jobs:
         title = j.get("title", "")
@@ -239,8 +245,8 @@ def match(jobs, *, keywords=None, any_keywords=None, exclude_keywords=None, comp
         deg = j.get("degrees") or []
         if undergrad_only and deg and not ({"Bachelor's", "Associate's"} & set(deg)):
             continue
-        fit = (j.get("fit") or {}).get("score")
-        if fit_only and fit is None:
+        fit = fit_score(j, prof, now)[0] if prof else (j.get("fit") or {}).get("score")
+        if fit_only and (fit is None or fit < (min_fit if prof else 0)):
             continue
 
         # relevance: keyword hits in title, location precision, recency, personal fit
@@ -258,7 +264,7 @@ def match(jobs, *, keywords=None, any_keywords=None, exclude_keywords=None, comp
     return hits
 
 
-def compact(j, matched_locs=None):
+def compact(j, matched_locs=None, fit=None):
     locs = j.get("locations") or []
     shown = (matched_locs or [])[:3] or locs[:3]
     geo = j.get("geo") or []
@@ -276,7 +282,7 @@ def compact(j, matched_locs=None):
         "locations": shown, "more_locations": max(0, len(locs) - len(shown)), "terms": j.get("terms") or [],
         "remote": bool(j.get("remote")), "posted": date.fromtimestamp(posted).isoformat() if posted else None,
         "category": j.get("category"), "sponsorship": j.get("sponsorship"), "stipend": j.get("stipend"),
-        "fit": (j.get("fit") or {}).get("score"), "source": j.get("source"), "pins": pins,
+        "fit": fit if fit is not None else (j.get("fit") or {}).get("score"), "source": j.get("source"), "pins": pins,
     }
 
 

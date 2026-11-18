@@ -14,7 +14,9 @@ services:
         value: 3.12.7
       - key: GROQ_API_KEY
         sync: false
-      - key: APP_PASSCODE
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
         sync: false
       - key: ALLOWED_ORIGINS
         sync: false

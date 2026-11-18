@@ -57,6 +57,14 @@ jobs:
           if [ "$MODE" = "test" ]; then python -m agent.main --test
           elif [ "$MODE" = "digest" ]; then python -m agent.main --digest
           else python -m agent.main; fi
+      - name: Keep the Supabase project awake (free projects pause after a week idle)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          if [ -n "$SUPABASE_URL" ]; then
+            curl -fsS -o /dev/null "$SUPABASE_URL/rest/v1/profiles?select=id&limit=1" -H "apikey: $SUPABASE_ANON_KEY" || true
+          fi
       - name: Save state
         if: ${{ github.event.inputs.mode != 'test' }}
         run: |
