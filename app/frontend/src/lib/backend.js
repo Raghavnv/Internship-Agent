@@ -2,8 +2,8 @@
 // otherwise a "demo mode" that keeps everything in this browser (handy for local development).
 import { createClient } from '@supabase/supabase-js'
 
-const URL_ = import.meta.env.VITE_SUPABASE_URL
-const KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
+const URL_ = (import.meta.env.VITE_SUPABASE_URL || '').trim().replace(/\/+$/, '')
+const KEY = (import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || '').trim()
 export const DEMO = !(URL_ && KEY)
 
 const sb = DEMO ? null : createClient(URL_, KEY, { auth: { persistSession: true, autoRefreshToken: true } })
