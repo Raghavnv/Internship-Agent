@@ -73,6 +73,25 @@ def write_matches_page(matched):
     (ROOT / "MATCHES.md").write_text("\n".join(lines) + "\n")
 
 
+def export_jobs(jobs, evs, st):
+    """Full listing dump for the AI search app (published to the `data` branch by the workflow)."""
+    keep = ("id", "source", "company", "title", "url", "locations", "terms", "remote", "posted",
+            "sponsorship", "category", "degrees", "stipend")
+    out = []
+    for j in jobs:
+        rec = {k: j.get(k) for k in keep if j.get(k) not in (None, [], "")}
+        rec["first_seen"] = int(st["seen"].get(j["id"]) or time.time())
+        ev = evs.get(j["id"])
+        if ev:
+            rec["fit"] = {"score": ev["score"], "bucket": ev["bucket"], "tags": ev["tags"]}
+        out.append(rec)
+    out.sort(key=lambda r: -(r.get("posted") or r["first_seen"]))
+    d = ROOT / "data"
+    d.mkdir(exist_ok=True)
+    (d / "jobs.json").write_text(json.dumps({"updated": int(time.time()), "count": len(out), "jobs": out},
+                                            separators=(",", ":"), ensure_ascii=False))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true")
@@ -114,6 +133,7 @@ def main():
     for k, v in sorted(health.items()):
         log.info("source %-28s %s", k, v)
     write_matches_page(matched)
+    export_jobs(jobs, {j["id"]: ev for j, ev in matched}, st)
     (ROOT / "STATUS.md").write_text(
         f"# Source status\n_Last run {datetime.now(IST):%d %b %Y, %I:%M %p} IST: "
         f"{len(jobs)} listings fetched, {len(matched)} match._\n\n| Source | Status |\n|---|---|\n"
