@@ -57,7 +57,7 @@ function Hero({ meta, cities }) {
         </p>
         <div className="l-ctas">
           <Link to="/signup" className="btn btn-primary">Get started free</Link>
-          <a href="#how" className="btn btn-ghost">See how it works</a>
+          <a href="#how" className="btn btn-text">See how it works</a>
         </div>
       </div>
       <div className="l-demo" aria-hidden="true">
@@ -165,8 +165,7 @@ export default function Landing() {
           {FEATURES.map(({ art: Art, title, body }) => (
             <li key={title} className="feat">
               <div className="feat-art"><Art /></div>
-              <h3>{title}</h3>
-              <p>{body}</p>
+              <div className="feat-text"><h3>{title}</h3><p>{body}</p></div>
             </li>
           ))}
         </ul>
@@ -182,8 +181,10 @@ export default function Landing() {
       )}
 
       <section className="l-final">
-        <h2>Set up your profile in two minutes</h2>
-        <p>Tell us what you&rsquo;re looking for once. Every listing gets scored for you from then on.</p>
+        <div>
+          <h2>Set up your profile in two minutes</h2>
+          <p>Tell us what you&rsquo;re looking for once. Every listing gets scored for you from then on.</p>
+        </div>
         <Link to={appLink || '/signup'} className="btn btn-primary">{appLink ? 'Open dashboard' : 'Get started free'}</Link>
       </section>
 

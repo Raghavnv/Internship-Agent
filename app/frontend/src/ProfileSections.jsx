@@ -3,8 +3,9 @@ import { useRef, useState } from 'react'
 import { parseResume } from './lib/api.js'
 import { projects as P, uploadResume } from './lib/backend.js'
 import { fillEmpty } from './lib/resumeMerge.js'
-import { COMPANY_TYPES, DEGREE_LEVELS, LOCATIONS, ROLES, SKILLS, US_AUTH, WORK_MODES, YEARS, fromMonth, toMonth } from './lib/options.js'
+import { COMPANY_TYPES, DEGREE_LEVELS, ROLES, SKILLS, US_AUTH, WORK_MODES, YEARS, fromMonth, toMonth } from './lib/options.js'
 import { ChipInput, ChoiceChips, Field, Icon, Spinner } from './ui.jsx'
+import { useLocationSuggestions } from './lib/mapdata.js'
 
 export const SECTIONS = [
   { key: 'about', title: 'About you', intro: 'The basics, so we can match your level and background.' },
@@ -34,7 +35,7 @@ function About({ d, s }) {
   )
 }
 
-function Resume({ d, setDraft, userId }) {
+export function ResumeUpload({ d, setDraft, userId }) {
   const ref = useRef(null)
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState('')
@@ -82,7 +83,7 @@ function Interests({ d, s }) {
   return (
     <>
       <Field label="Roles you want" wide><ChoiceChips options={ROLES} value={d.roles || []} onChange={s('roles')} label="Roles you want" /></Field>
-      <Field label="Your skills" htmlFor="f-skills" hint="Type and press Enter, or pick from the suggestions." wide>
+      <Field label="Your skills" htmlFor="f-skills" hint="Type anything and press Enter. Suggestions appear as you type." wide>
         <ChipInput id="f-skills" value={d.skills || []} onChange={s('skills')} suggestions={SKILLS} placeholder="Python, React, SQL…" />
       </Field>
       <Field label="Roles to skip" hint="We’ll push these down the list." wide>
@@ -93,10 +94,11 @@ function Interests({ d, s }) {
 }
 
 function Where({ d, s }) {
+  const locSuggest = useLocationSuggestions()
   return (
     <>
       <Field label="Preferred locations" htmlFor="f-locs" hint="Cities, metros, or “Anywhere in US”. Add Remote if you’d work remotely." wide>
-        <ChipInput id="f-locs" value={d.locations || []} onChange={s('locations')} suggestions={LOCATIONS} placeholder="Bay Area, Bangalore…" />
+        <ChipInput id="f-locs" value={d.locations || []} onChange={s('locations')} suggestions={locSuggest} placeholder="Bay Area, Bangalore…" />
       </Field>
       <Field label="How you’d like to work" wide><ChoiceChips options={WORK_MODES} value={d.work_modes || []} onChange={s('work_modes')} label="Work modes" /></Field>
       <div className="grid2">
@@ -133,7 +135,7 @@ function Links({ d, s }) {
   )
 }
 
-const PARTS = { about: About, resume: Resume, interests: Interests, where: Where, eligibility: Eligibility, links: Links }
+const PARTS = { about: About, resume: ResumeUpload, interests: Interests, where: Where, eligibility: Eligibility, links: Links }
 
 export function Section({ k, draft, setDraft, userId }) {
   const Part = PARTS[k]

@@ -1,7 +1,6 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import '@fontsource-variable/geist'
-import '@fontsource-variable/bricolage-grotesque'
+import '@fontsource-variable/ibm-plex-sans'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App.jsx'
 import { SessionProvider } from './lib/session.jsx'

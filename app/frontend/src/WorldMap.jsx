@@ -4,8 +4,8 @@ import { feature } from 'topojson-client'
 import landTopo from 'world-atlas/land-110m.json'
 
 const LAND = feature(landTopo, landTopo.objects.land)
-const DEST = [143, 168, 255]   // cornflower: destinations
-const HOME = [255, 194, 133]   // amber: Bangalore
+const DEST = [134, 183, 211]   // chart blue: roles
+const HOME = [240, 163, 94]    // amber: you
 const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${a})`
 const reduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
@@ -74,7 +74,7 @@ export default function WorldMap({ cities = [], home, pins = [], focus, onCity, 
     const o = off.getContext('2d')
     o.scale(dpr, dpr)
     const step = compact ? 6 : Math.max(6, Math.round(w / 170))
-    o.fillStyle = 'rgba(160,176,206,0.20)'
+    o.fillStyle = 'rgba(170,186,182,0.17)'
     for (let y = step / 2; y < h; y += step) {
       for (let x = step / 2; x < w; x += step) {
         if (data[(Math.floor(y) * w + Math.floor(x)) * 4 + 3] > 0) {

@@ -4,6 +4,7 @@ import { auth, DEMO } from '../lib/backend.js'
 import { useSession } from '../lib/session.jsx'
 import { UserDataProvider, useUserData } from '../lib/userdata.jsx'
 import { Icon, Logo } from '../ui.jsx'
+import JobPanel from '../JobPanel.jsx'
 
 const NAV = [
   { to: '/app', end: true, icon: 'overview', label: 'Overview' },
@@ -11,10 +12,10 @@ const NAV = [
   { to: '/app/explore', icon: 'explore', label: 'Explore' },
   { to: '/app/applications', icon: 'applications', label: 'Applications', count: 'apps' },
   { to: '/app/saved', icon: 'saved', label: 'Saved', count: 'saved' },
-  { divider: 'You' },
+  { divider: 'Your profile' },
   { to: '/app/resume', icon: 'resume', label: 'Resume' },
   { to: '/app/portfolio', icon: 'portfolio', label: 'Portfolio' },
-  { to: '/app/profile', icon: 'profile', label: 'Profile & preferences' },
+  { to: '/app/profile', icon: 'profile', label: 'Profile' },
 ]
 
 function Toast() {
@@ -59,7 +60,7 @@ function Sidebar({ open, onClose }) {
         <button type="button" className="icon-btn" aria-label="Log out" title="Log out"
           onClick={async () => { await auth.signOut(); nav('/', { replace: true }) }}><Icon name="logout" /></button>
       </div>
-      {DEMO && <p className="side-demo">Demo mode: data is saved in this browser.</p>}
+      {DEMO && <p className="side-demo" title="Connect Supabase to save accounts online">Demo mode</p>}
     </aside>
   )
 }
@@ -69,7 +70,7 @@ export default function DashboardLayout() {
   const loc = useLocation()
   useEffect(() => { window.scrollTo(0, 0) }, [loc.pathname])
   return (
-    <UserDataProvider>
+    <UserDataProvider key="ud">
       <div className="dash">
         <Sidebar open={open} onClose={() => setOpen(false)} />
         {open && <button type="button" className="scrim" aria-label="Close menu" onClick={() => setOpen(false)} />}
@@ -80,6 +81,7 @@ export default function DashboardLayout() {
           </header>
           <Outlet />
         </div>
+        <JobPanel />
         <Toast />
       </div>
     </UserDataProvider>

@@ -8,8 +8,8 @@ import { Results, RichText } from '../components.jsx'
 import WorldMap from '../WorldMap.jsx'
 
 const SUGGESTIONS = [
-  'Best fits for me this summer', 'Remote internships I could do from January to June', 'Who’s hiring most in my cities?',
-  'Backend roles posted this week', 'Paid AI internships in Bangalore', 'Roles that don’t need a Master’s',
+  'Best fits for me this summer', 'Remote internships from January to June',
+  'Backend roles posted this week', 'Who’s hiring most in my cities?',
 ]
 const KEY = 'copilot-thread'
 const loadThread = () => { try { return JSON.parse(sessionStorage.getItem(KEY) || '[]') } catch { return [] } }
@@ -75,7 +75,7 @@ export default function Copilot() {
         {messages.length === 0 ? (
           <div className="cp-empty">
             <h1>Ask for exactly what you want</h1>
-            <p className="sub">I search every live listing and score each one against your profile. Results land on the map too.</p>
+            <p className="sub">Ask in plain words. I search every live listing, score each against your profile and plot the results on the map.</p>
             <ul className="suggest">{SUGGESTIONS.map((s) => <li key={s}><button type="button" onClick={() => ask(s)}>{s}</button></li>)}</ul>
           </div>
         ) : (
@@ -86,7 +86,7 @@ export default function Copilot() {
             {m.role === 'user' ? <p className="q">{m.content}</p> : (
               <>
                 <div className="a"><RichText text={m.content} /></div>
-                <Results data={m.last} onFocus={setFocus} actions={data} />
+                <Results data={m.last} onFocus={setFocus} />
               </>
             )}
           </article>

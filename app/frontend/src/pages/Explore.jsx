@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react'
 import { searchJobs } from '../lib/api.js'
-import { toPins, useMapData } from '../lib/mapdata.js'
-import { LOCATIONS } from '../lib/options.js'
+import { useLocationSuggestions } from '../lib/mapdata.js'
 import { useSession } from '../lib/session.jsx'
-import { useUserData } from '../lib/userdata.jsx'
 import { Results } from '../components.jsx'
-import { ChipInput, ChoiceChips, Spinner } from '../ui.jsx'
-import WorldMap from '../WorldMap.jsx'
+import { ChipInput, Icon, Spinner } from '../ui.jsx'
 
 const ROLE_WORDS = {
   'Software Engineering': ['software engineer', 'software develop', 'swe', 'sde'], Backend: ['backend', 'back-end', 'api', 'platform'],
@@ -16,13 +13,12 @@ const ROLE_WORDS = {
   Security: ['security'], Research: ['research'], 'Forward Deployed': ['forward deploy', 'solutions engineer'], Product: ['product'],
   Quant: ['quant', 'trading'], 'Hardware / Embedded': ['hardware', 'embedded', 'firmware'], 'Design / UX': ['design', 'ux'],
 }
-const POSTED = [{ value: 0, label: 'Any time' }, { value: 3, label: 'Last 3 days' }, { value: 7, label: 'Last week' }, { value: 30, label: 'Last month' }]
-const SORTS = [{ value: 'fit', label: 'Best fit' }, { value: 'newest', label: 'Newest' }, { value: 'relevance', label: 'Relevance' }]
+const POSTED = [[0, 'Any time'], [3, 'Last 3 days'], [7, 'Last week'], [30, 'Last month']]
+const WORK = [['any', 'Any'], ['only', 'Remote'], ['exclude', 'In person']]
 
 export default function Explore() {
-  const { profile, home } = useSession()
-  const data = useUserData()
-  const map = useMapData()
+  const { profile } = useSession()
+  const locSuggest = useLocationSuggestions()
   const [locations, setLocations] = useState(null)
   const [roles, setRoles] = useState(null)
   const [keyword, setKeyword] = useState('')
@@ -33,8 +29,8 @@ export default function Explore() {
   const [res, setRes] = useState(null)
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState('')
-  const [limit, setLimit] = useState(20)
-  const [focus, setFocus] = useState(null)
+  const [limit, setLimit] = useState(25)
+  const [showFilters, setShowFilters] = useState(false)
 
   useEffect(() => {
     if (profile && locations === null) {
@@ -60,54 +56,89 @@ export default function Explore() {
     try { setRes(await searchJobs(f, profile)) } catch (e) { setErr(e.message) } finally { setBusy(false) }
   }
 
-  return (
-    <div className="explore">
-      <div className="ex-map"><WorldMap cities={map.cities} home={home} pins={toPins(res?.results)} focus={focus} compact
-        onCity={(c) => setLocations([c])} /></div>
-      <main className="page">
-        <header className="page-head">
-          <div>
-            <h1>Explore</h1>
-            <p className="sub">Filter every live listing yourself. Click a city on the map to jump there.</p>
-          </div>
-        </header>
-        <div className="filters">
-          <div className="f-row">
-            <label className="f-label" htmlFor="ex-loc">Where</label>
-            <ChipInput id="ex-loc" value={locations || []} onChange={setLocations} suggestions={LOCATIONS} placeholder="Anywhere" />
-          </div>
-          <div className="f-row">
-            <span className="f-label">Roles</span>
-            <ChoiceChips options={Object.keys(ROLE_WORDS)} value={roles || []} onChange={setRoles} label="Roles" />
-          </div>
-          <div className="f-grid">
-            <div className="f-row"><label className="f-label" htmlFor="ex-kw">Keyword</label>
-              <input id="ex-kw" value={keyword} onChange={(e) => setKeyword(e.target.value)} placeholder="Company or title word" /></div>
-            <div className="f-row"><span className="f-label">Work</span>
-              <ChoiceChips single options={[{ value: 'any', label: 'Any' }, { value: 'only', label: 'Remote only' }, { value: 'exclude', label: 'In person' }]} value={remote} onChange={setRemote} label="Work mode" /></div>
-            <div className="f-row"><span className="f-label">Posted</span><ChoiceChips single options={POSTED} value={posted} onChange={setPosted} label="Posted" /></div>
-            <div className="f-row"><span className="f-label">Sort</span><ChoiceChips single options={SORTS} value={sort} onChange={setSort} label="Sort" /></div>
-          </div>
-          <label className="switch-row">
-            <input type="checkbox" checked={fitOnly} onChange={(e) => setFitOnly(e.target.checked)} />
-            <span className="switch" aria-hidden="true" />Only strong fits for my profile
-          </label>
-        </div>
+  const reset = () => {
+    setLocations((profile?.locations || []).filter((l) => !/^remote$/i.test(l))); setRoles(profile?.roles || [])
+    setKeyword(''); setRemote('any'); setPosted(0); setFitOnly(true)
+  }
+  const nFilters = (locations?.length ? 1 : 0) + (roles?.length ? 1 : 0) + (remote !== 'any') + (posted ? 1 : 0)
 
-        <div className="ex-results">
-          <p className="ex-count" aria-live="polite">
-            {busy ? <Spinner /> : res ? <><strong>{res.total.toLocaleString('en-IN')}</strong> {res.total === 1 ? 'internship' : 'internships'}</> : null}
-          </p>
+  return (
+    <main className="page page-wide">
+      <header className="page-head">
+        <div>
+          <h1>Explore</h1>
+          <p className="sub">Every live listing, filtered your way. Select a role to read the full description.</p>
+        </div>
+      </header>
+
+      <div className="ex">
+        <aside className={`ex-filters${showFilters ? ' open' : ''}`} aria-label="Filters">
+          <div className="exf">
+            <label className="exf-label" htmlFor="ex-loc">Where</label>
+            <ChipInput id="ex-loc" value={locations || []} onChange={setLocations} suggestions={locSuggest} placeholder="Anywhere" />
+          </div>
+          <div className="exf">
+            <span className="exf-label">Work</span>
+            <div className="seg-ctl" role="radiogroup" aria-label="Work mode">
+              {WORK.map(([v, l]) => <button key={v} type="button" role="radio" aria-checked={remote === v} className={remote === v ? 'on' : ''} onClick={() => setRemote(v)}>{l}</button>)}
+            </div>
+          </div>
+          <div className="exf">
+            <label className="exf-label" htmlFor="ex-posted">Posted</label>
+            <select id="ex-posted" className="select" value={posted} onChange={(e) => setPosted(Number(e.target.value))}>
+              {POSTED.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+            </select>
+          </div>
+          <fieldset className="exf">
+            <legend className="exf-label">Roles</legend>
+            <div className="checklist">
+              {Object.keys(ROLE_WORDS).map((r) => (
+                <label key={r} className="ck">
+                  <input type="checkbox" checked={(roles || []).includes(r)}
+                    onChange={(e) => setRoles(e.target.checked ? [...(roles || []), r] : (roles || []).filter((x) => x !== r))} />
+                  <span>{r}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          <button type="button" className="link-btn" onClick={reset}>Reset to my profile</button>
+        </aside>
+
+        <section className="ex-main" aria-label="Results">
+          <div className="ex-bar">
+            <div className="search-field">
+              <Icon name="explore" size={16} />
+              <label htmlFor="ex-kw" className="sr">Search by company or title</label>
+              <input id="ex-kw" value={keyword} onChange={(e) => setKeyword(e.target.value)} placeholder="Search company or title" />
+            </div>
+            <button type="button" className="btn btn-ghost btn-sm ex-toggle" aria-expanded={showFilters} onClick={() => setShowFilters(!showFilters)}>
+              Filters{nFilters ? ` (${nFilters})` : ''}
+            </button>
+          </div>
+          <div className="ex-meta">
+            <p className="ex-count" aria-live="polite">
+              {busy ? <Spinner /> : res ? <><strong>{res.total.toLocaleString('en-IN')}</strong> {res.total === 1 ? 'internship' : 'internships'}</> : null}
+            </p>
+            <label className="ck small">
+              <input type="checkbox" checked={fitOnly} onChange={(e) => setFitOnly(e.target.checked)} /><span>Strong fits only</span>
+            </label>
+            <label className="sort">
+              <span>Sort</span>
+              <select className="select" value={sort} onChange={(e) => setSort(e.target.value)}>
+                <option value="fit">Best fit</option><option value="newest">Newest</option><option value="relevance">Relevance</option>
+              </select>
+            </label>
+          </div>
           {err && <p className="form-error">{err}</p>}
-          {res && <Results data={{ results: res.results }} limit={limit} actions={data} onFocus={setFocus}
+          {res && <Results data={{ results: res.results }} limit={limit} showChips={false}
             empty="Nothing matches all of that. Remove a filter or two." />}
           {res && res.total > res.results.length && res.results.length >= limit && (
-            <button type="button" className="btn btn-ghost" onClick={() => setLimit(Math.min(50, limit + 15))} disabled={limit >= 50}>
-              {limit >= 50 ? 'Showing the top 50, narrow the filters to see others' : 'Show more'}
+            <button type="button" className="btn btn-ghost more-btn" onClick={() => setLimit(Math.min(50, limit + 25))} disabled={limit >= 50}>
+              {limit >= 50 ? "Showing the top 50. Narrow the filters to see others." : "Show more"}
             </button>
           )}
-        </div>
-      </main>
-    </div>
+        </section>
+      </div>
+    </main>
   )
 }

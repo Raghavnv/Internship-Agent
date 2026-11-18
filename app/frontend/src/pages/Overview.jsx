@@ -24,7 +24,7 @@ export default function Overview() {
 
   useEffect(() => {
     if (!profile) return
-    searchJobs({ fit_only: true, sort: 'fit', limit: 8 }, profile).then(setTop).catch((e) => setErr(e.message))
+    searchJobs({ fit_only: true, sort: 'fit', limit: 10 }, profile).then(setTop).catch((e) => setErr(e.message))
     searchJobs({ fit_only: true, posted_within_days: 7, sort: 'newest', limit: 1 }, profile).then(setFresh).catch(() => {})
   }, [profile])
 
@@ -32,72 +32,79 @@ export default function Overview() {
   const byStatus = Object.fromEntries(STATUSES.map((s) => [s, data.apps.filter((a) => a.status === s).length]))
   const checks = [
     { ok: Boolean(profile?.resume_path), text: 'Upload your resume', to: '/app/resume' },
-    { ok: (profile?.skills || []).length >= 5, text: 'Add at least 5 skills', to: '/app/profile' },
-    { ok: Boolean(profile?.remote_from || profile?.onsite_from), text: 'Set when you’re available', to: '/app/profile' },
-    { ok: Boolean(profile?.linkedin || profile?.github), text: 'Add LinkedIn or GitHub', to: '/app/portfolio' },
+    { ok: (profile?.skills || []).length >= 5, text: 'Add at least five skills', to: '/app/profile' },
+    { ok: Boolean(profile?.remote_from || profile?.onsite_from), text: 'Say when you’re available', to: '/app/profile' },
+    { ok: Boolean(profile?.linkedin || profile?.github), text: 'Add LinkedIn or GitHub', to: '/app/profile' },
   ]
-  const strength = Math.round((checks.filter((c) => c.ok).length / checks.length) * 100)
+  const todo = checks.filter((c) => !c.ok)
 
   return (
     <main className="page">
       <header className="page-head">
         <div>
           <h1>{greeting()}{first ? `, ${first}` : ''}</h1>
-          <p className="sub">Here&rsquo;s what fits you right now.</p>
+          <p className="sub">
+            {top ? <><strong>{top.total.toLocaleString('en-IN')}</strong> {top.total === 1 ? 'role fits' : 'roles fit'} your profile right now
+              {fresh?.total ? <>, and <strong>{fresh.total}</strong> of them were posted this week.</> : '.'}</> : 'Finding roles that fit you…'}
+          </p>
         </div>
       </header>
 
-      <section className="tiles" aria-label="Your numbers">
-        <div className="tile"><strong>{top ? top.total.toLocaleString('en-IN') : '—'}</strong><span>strong matches</span></div>
-        <div className="tile"><strong>{fresh ? fresh.total : '—'}</strong><span>new this week</span></div>
-        <Link to="/app/applications" className="tile"><strong>{data.apps.length}</strong><span>applications</span></Link>
-        <Link to="/app/applications" className="tile"><strong>{byStatus.Interviewing}</strong><span>interviewing</span></Link>
-      </section>
-
       <form className="quick-ask" onSubmit={(e) => { e.preventDefault(); if (q.trim()) nav(`/app/copilot?q=${encodeURIComponent(q.trim())}`) }}>
-        <Icon name="copilot" />
+        <Icon name="copilot" size={16} />
         <label htmlFor="qa" className="sr">Ask the AI Copilot</label>
-        <input id="qa" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Ask anything, e.g. “paid ML internships in Bangalore”" />
-        <button type="submit" className="btn btn-primary btn-sm" disabled={!q.trim()}>Ask</button>
+        <input id="qa" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Ask the Copilot, e.g. paid ML internships in Bangalore" />
+        {q.trim() && <button type="submit" className="btn btn-primary btn-sm">Ask</button>}
       </form>
 
       <div className="ov-grid">
-        <section className="panel ov-matches" aria-labelledby="tm-h">
-          <div className="panel-head">
-            <h2 id="tm-h">Top matches for you</h2>
-            <Link to="/app/explore" className="link">Explore all</Link>
+        <section className="ov-matches" aria-labelledby="tm-h">
+          <div className="sec-head">
+            <h2 id="tm-h">Best matches</h2>
+            <Link to="/app/explore" className="link">See all in Explore</Link>
           </div>
           {err && <p className="form-error">{err}</p>}
           {!top && !err && <div className="loading"><Spinner /></div>}
-          {top && <Results data={top} limit={8} actions={data}
-            empty="No strong matches yet. Try adding more locations or roles in your profile." />}
+          {top && <Results data={top} limit={10} showChips={false}
+            empty="No strong matches yet. Try adding more locations or roles to your profile." />}
         </section>
 
-        <div className="ov-side">
-          <section className="panel" aria-labelledby="pl-h">
-            <div className="panel-head"><h2 id="pl-h">Your pipeline</h2><Link to="/app/applications" className="link">Open</Link></div>
-            {data.apps.length === 0 ? <p className="quiet small">Click Apply on any role and it shows up here.</p> : (
+        <aside className="ov-side">
+          <section className="side-card" aria-labelledby="pl-h">
+            <div className="sec-head"><h2 id="pl-h">Applications</h2><Link to="/app/applications" className="link">Open</Link></div>
+            {data.apps.length === 0 ? <p className="quiet small">Nothing yet. Roles you apply to are tracked here.</p> : (
               <ul className="pipe">
                 {STATUSES.map((s) => (
-                  <li key={s}><i className={`dot-${s.toLowerCase()}`} />{s}<strong>{byStatus[s]}</strong></li>
+                  <li key={s}><i className={`dot-${s.toLowerCase()}`} aria-hidden="true" />{s}<strong>{byStatus[s]}</strong></li>
                 ))}
               </ul>
             )}
           </section>
 
-          <section className="panel" aria-labelledby="ps-h">
-            <div className="panel-head"><h2 id="ps-h">Profile strength</h2><span className="pct">{strength}%</span></div>
-            <div className="meter" aria-hidden="true"><span style={{ width: `${strength}%` }} /></div>
-            <ul className="checks">
-              {checks.map((c) => (
-                <li key={c.text} className={c.ok ? 'ok' : ''}>
-                  <span className="check-dot">{c.ok && <Icon name="check" size={12} />}</span>
-                  {c.ok ? c.text : <Link to={c.to}>{c.text}</Link>}
-                </li>
-              ))}
-            </ul>
-          </section>
-        </div>
+          {data.saved.length > 0 && (
+            <section className="side-card" aria-labelledby="sv-h">
+              <div className="sec-head"><h2 id="sv-h">Saved</h2><Link to="/app/saved" className="link">All {data.saved.length}</Link></div>
+              <ul className="mini-list">
+                {data.saved.slice(0, 4).map((s) => (
+                  <li key={s.job_id}>
+                    <button type="button" onClick={() => data.openJob({ locations: [], terms: [], ...s.job })}>
+                      <strong>{s.job?.title}</strong><span>{s.job?.company}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {todo.length > 0 && (
+            <section className="side-card" aria-labelledby="ps-h">
+              <div className="sec-head"><h2 id="ps-h">Sharpen your matches</h2><span className="quiet small">{checks.length - todo.length} of {checks.length}</span></div>
+              <ul className="checks">
+                {todo.map((c) => <li key={c.text}><span className="check-dot" aria-hidden="true" /><Link to={c.to}>{c.text}</Link></li>)}
+              </ul>
+            </section>
+          )}
+        </aside>
       </div>
     </main>
   )

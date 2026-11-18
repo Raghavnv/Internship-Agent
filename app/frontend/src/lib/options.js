@@ -1,6 +1,32 @@
 export const ROLES = ['Software Engineering', 'Backend', 'Full Stack', 'Frontend', 'AI / ML', 'Data Science', 'Data Engineering',
   'Mobile', 'DevOps / Cloud', 'Security', 'Research', 'Forward Deployed', 'Product', 'Quant', 'Hardware / Embedded', 'Design / UX']
 
+export const ROLE_INFO = {
+  'Software Engineering': 'General engineering roles across a product',
+  Backend: 'APIs, services, databases',
+  'Full Stack': 'Both the interface and the server',
+  Frontend: 'Interfaces people use',
+  'AI / ML': 'Models, LLMs, applied ML',
+  'Data Science': 'Analysis, statistics, experiments',
+  'Data Engineering': 'Pipelines and data platforms',
+  Mobile: 'iOS, Android, cross-platform',
+  'DevOps / Cloud': 'Infrastructure, reliability, cloud',
+  Security: 'Application and infrastructure security',
+  Research: 'Research teams and labs',
+  'Forward Deployed': 'Building alongside customers',
+  Product: 'Product management',
+  Quant: 'Trading and quantitative research',
+  'Hardware / Embedded': 'Chips, firmware, devices',
+  'Design / UX': 'Product and interaction design',
+}
+
+export const US_AUTH_INFO = {
+  citizen: 'Every US role is open to you',
+  authorized: 'We’ll still show roles that don’t sponsor visas',
+  needs_sponsorship: 'We’ll push down roles that won’t sponsor',
+  not_applicable: 'US roles won’t be ranked against this',
+}
+
 export const SKILLS = ['Python', 'Java', 'C', 'C++', 'JavaScript', 'TypeScript', 'Go', 'Rust', 'SQL', 'React', 'Next.js', 'Node.js',
   'FastAPI', 'Django', 'Flask', 'Spring', 'PostgreSQL', 'MySQL', 'MongoDB', 'Redis', 'Docker', 'Kubernetes', 'AWS', 'GCP', 'Azure',
   'Git', 'Linux', 'PyTorch', 'TensorFlow', 'scikit-learn', 'Pandas', 'NumPy', 'XGBoost', 'LLMs', 'RAG', 'LangChain', 'Computer Vision',

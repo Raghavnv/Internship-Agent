@@ -14,12 +14,14 @@ from fastapi import Depends, FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
+import fit as fitlib
+import jobdetail
 import llm
 import resume as resume_ai
 from auth import current_user
 from data import store
 from geo import geocode
-from search import city_map, search
+from search import city_map, compact, search
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
 IST = timezone(timedelta(hours=5, minutes=30))
@@ -111,6 +113,40 @@ def post_search(body: dict, user: dict = Depends(current_user)):
         return {**search(store.get(), profile=profile, **args), "args": args}
     except TypeError as e:
         raise HTTPException(400, str(e))
+
+
+_index: dict = {"key": None, "by_id": {}}
+
+
+def job_by_id(jid: str):
+    jobs = store.get()
+    if _index["key"] is not id(jobs):
+        _index.update(key=id(jobs), by_id={j["id"]: j for j in jobs})
+    return _index["by_id"].get(jid)
+
+
+class JobIn(BaseModel):
+    id: str = Field(max_length=300)
+    profile: dict | None = None
+
+
+@app.post("/api/job")
+def post_job(body: JobIn, user: dict = Depends(limited("job", 600))):
+    """One listing in full: every location, how it fits this user, and the description when we can read it."""
+    j = job_by_id(body.id)
+    if not j:
+        raise HTTPException(404, "This listing is no longer live.")
+    out = compact(j)
+    out["locations"] = j.get("locations") or []
+    out["more_locations"] = 0
+    out["degrees"] = j.get("degrees") or []
+    out["pins"] = [g[:2] for g in (j.get("geo") or []) if g][:12]
+    checks = []
+    if body.profile:
+        prof = fitlib.prepare(body.profile)
+        out["fit"] = fitlib.score(j, prof)[0]
+        checks = fitlib.explain(j, prof)
+    return {"job": out, "checks": checks, "description": jobdetail.description(j.get("url", ""))}
 
 
 @app.post("/api/chat")

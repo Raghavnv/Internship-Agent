@@ -1,15 +1,10 @@
 import { useState } from 'react'
 
-// The mark: an arc from you (apricot) to the role (periwinkle).
+// The mark: a dashed route from you (amber) to the role (slate blue).
 export const Logo = () => (
   <svg className="logo-svg" viewBox="0 0 24 14" width="24" height="14" aria-hidden="true">
-    <defs>
-      <linearGradient id="logo-g" x1="0" x2="1" y1="0" y2="0">
-        <stop offset="0" stopColor="#ffb38a" /><stop offset=".5" stopColor="#e3a6d6" /><stop offset="1" stopColor="#9aa8ff" />
-      </linearGradient>
-    </defs>
-    <path d="M3 12 Q12 -3 21 12" fill="none" stroke="url(#logo-g)" strokeWidth="2" strokeLinecap="round" />
-    <circle cx="3" cy="12" r="2" fill="#ffb38a" /><circle cx="21" cy="12" r="2" fill="#9aa8ff" />
+    <path d="M3 12 Q12 -3 21 12" fill="none" stroke="#e9e6dd" strokeWidth="1.6" strokeDasharray="2.2 2.4" strokeLinecap="round" />
+    <circle cx="3" cy="12" r="2.2" fill="#f0a35e" /><circle cx="21" cy="12" r="2.2" fill="#86b7d3" />
   </svg>
 )
 
@@ -61,39 +56,62 @@ export function ChoiceChips({ options, value = [], onChange, single = false, lab
   )
 }
 
-// Free-text tags with suggestions
+// Free-text tags. Anything typed is accepted as-is; suggestions only appear in a dropdown while typing.
 export function ChipInput({ value = [], onChange, suggestions = [], placeholder, id, max = 40 }) {
   const [text, setText] = useState('')
+  const [open, setOpen] = useState(false)
+  const [hi, setHi] = useState(0)
+  const has = (t) => value.some((v) => v.toLowerCase() === t.toLowerCase())
   const add = (raw) => {
-    const t = raw.trim().replace(/,$/, '')
-    if (!t || value.some((v) => v.toLowerCase() === t.toLowerCase()) || value.length >= max) { setText(''); return }
+    const t = raw.trim().replace(/,$/, '').trim()
+    setText(''); setHi(0)
+    if (!t || has(t) || value.length >= max) return
     onChange([...value, t])
-    setText('')
   }
-  const left = suggestions.filter((s) => !value.some((v) => v.toLowerCase() === s.toLowerCase()))
-  const match = text ? left.filter((s) => s.toLowerCase().includes(text.toLowerCase())).slice(0, 6) : []
+  const q = text.trim().toLowerCase()
+  const pool = suggestions.map((x) => (typeof x === 'string' ? { value: x } : x)).filter((x) => !has(x.value))
+  const ranked = q
+    ? [...pool.filter((x) => x.value.toLowerCase().startsWith(q)), ...pool.filter((x) => !x.value.toLowerCase().startsWith(q) && x.value.toLowerCase().includes(q))]
+    : pool
+  const exact = ranked.find((x) => x.value.toLowerCase() === q)
+  const options = [
+    ...(q && !exact ? [{ value: text.trim(), typed: true }] : []),
+    ...ranked.slice(0, 7),
+  ]
+  const show = open && q.length > 0 && options.length > 0
+  const listId = `${id}-list`
   return (
     <div className="chip-input">
-      <div className="chip-box">
+      <div className="chip-box" onClick={(e) => e.currentTarget.querySelector('input')?.focus()}>
         {value.map((v) => (
           <span key={v} className="tag">{v}
             <button type="button" aria-label={`Remove ${v}`} onClick={() => onChange(value.filter((x) => x !== v))}><Icon name="x" size={12} /></button>
           </span>
         ))}
-        <input id={id} value={text} placeholder={value.length ? '' : placeholder}
-          onChange={(e) => { const v = e.target.value; if (v.endsWith(',')) add(v); else setText(v) }}
+        <input id={id} value={text} placeholder={value.length ? 'Add another' : placeholder} autoComplete="off"
+          role="combobox" aria-expanded={show} aria-controls={listId} aria-autocomplete="list"
+          aria-activedescendant={show ? `${listId}-${hi}` : undefined}
+          onFocus={() => setOpen(true)}
+          onChange={(e) => { const v = e.target.value; setOpen(true); setHi(0); if (v.endsWith(',')) add(v); else setText(v) }}
           onKeyDown={(e) => {
-            if (e.key === 'Enter') { e.preventDefault(); add(match[0] && text.length > 1 ? match[0] : text) }
-            if (e.key === 'Backspace' && !text && value.length) onChange(value.slice(0, -1))
+            if (e.key === 'ArrowDown' && show) { e.preventDefault(); setHi((hi + 1) % options.length) }
+            else if (e.key === 'ArrowUp' && show) { e.preventDefault(); setHi((hi - 1 + options.length) % options.length) }
+            else if (e.key === 'Enter') { e.preventDefault(); add(show && q ? options[hi].value : text) }
+            else if (e.key === 'Escape') setOpen(false)
+            else if (e.key === 'Backspace' && !text && value.length) onChange(value.slice(0, -1))
           }}
-          onBlur={() => text && add(text)} />
+          onBlur={() => { if (text.trim()) add(text); setOpen(false) }} />
       </div>
-      {(match.length > 0 || (!text && left.length > 0)) && (
-        <div className="chip-suggest">
-          {(match.length ? match : left.slice(0, 10)).map((s) => (
-            <button key={s} type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => add(s)}><Icon name="plus" size={12} />{s}</button>
+      {show && (
+        <ul className="ac-list" id={listId} role="listbox">
+          {options.map((o, i) => (
+            <li key={`${o.typed ? 't' : 's'}${o.value}`} id={`${listId}-${i}`} role="option" aria-selected={i === hi}
+              className={i === hi ? 'on' : ''} onMouseEnter={() => setHi(i)}
+              onMouseDown={(e) => e.preventDefault()} onClick={() => add(o.value)}>
+              {o.typed ? <>Add “<strong>{o.value}</strong>”</> : <>{o.value}{o.hint && <span className="ac-hint">{o.hint}</span>}</>}
+            </li>
           ))}
-        </div>
+        </ul>
       )}
     </div>
   )

@@ -28,10 +28,10 @@ function Guard({ children, onboarded }) {
   return children
 }
 
+// The login page stays reachable when signed in: it offers to continue or switch account.
 function GuestOnly({ children }) {
   const { loading, user, profile } = useSession()
   if (loading || (user && !profile)) return <Loading />
-  if (user) return <Navigate to={profile.onboarded ? '/app' : '/onboarding'} replace />
   return children
 }
 

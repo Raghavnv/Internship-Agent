@@ -11,6 +11,7 @@ export function UserDataProvider({ children }) {
   const [saved, setSaved] = useState([])
   const [loaded, setLoaded] = useState(false)
   const [toast, setToast] = useState(null)
+  const [viewing, setViewing] = useState(null)   // the job open in the side panel
 
   const say = useCallback((text, action) => setToast({ text, action, id: Date.now() }), [])
 
@@ -76,6 +77,7 @@ export function UserDataProvider({ children }) {
     apps, saved, loaded, toast, closeToast: () => setToast(null), say,
     isApplied: (id) => appByJob.has(id), isSaved: (id) => savedIds.has(id),
     apply, updateApp, removeApp, toggleSave,
+    viewing, openJob: setViewing, closeJob: () => setViewing(null),
   }
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>
 }

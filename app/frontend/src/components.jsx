@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { cityName, describeArgs, postedLabel } from './format.js'
 import { Icon } from './ui.jsx'
+import { useUserData } from './lib/userdata.jsx'
 
 // Safe renderer for **bold** and "- " bullets in AI replies.
 export function RichText({ text }) {
@@ -34,70 +35,56 @@ export function coHue(name = '') {
 
 export function FitRing({ value }) {
   if (value == null) return <span className="fit-none" aria-hidden="true" />
-  const r = 15, c = 2 * Math.PI * r
+  const tier = value >= 80 ? 'hi' : value >= 60 ? 'mid' : 'lo'
   return (
-    <span className={`fit ${value >= 80 ? 'hi' : value >= 60 ? 'mid' : 'lo'}`} title="How well this matches your profile">
-      <svg viewBox="0 0 36 36" aria-hidden="true">
-        <circle cx="18" cy="18" r={r} className="ring-bg" />
-        <circle cx="18" cy="18" r={r} className="ring" strokeDasharray={c} strokeDashoffset={c * (1 - value / 100)} />
-      </svg>
+    <span className={`fit ${tier}`} title="How well this matches your profile, out of 100">
       <span className="fit-num">{value}</span>
+      <span className="fit-bar" aria-hidden="true"><i style={{ width: `${value}%` }} /></span>
       <span className="sr">fit score out of 100</span>
     </span>
   )
 }
 
-const Check = () => (
-  <svg viewBox="0 0 16 16" aria-hidden="true" className="ico"><path d="M3.5 8.5 6.5 11.5 12.5 5" /></svg>
-)
-
-export function JobRow({ job, onFocus, actions }) {
-  const city = cityName(job.locations[0] || (job.remote ? 'Remote' : ''))
-  const more = job.locations.length - 1 + (job.more_locations || 0)
+export function JobRow({ job, onFocus }) {
+  const data = useUserData()
+  const city = cityName(job.locations?.[0] || (job.remote ? 'Remote' : ''))
+  const more = (job.locations?.length || 0) - 1 + (job.more_locations || 0)
   const posted = postedLabel(job.posted)
   const flag = job.sponsorship?.includes('Citizenship') ? 'US citizens only'
-    : job.sponsorship?.includes('Does Not Offer') ? 'No visa sponsorship' : null
+    : job.sponsorship?.includes('Does Not Offer') ? 'No sponsorship' : null
   const fresh = posted === 'Posted today' || posted === 'Posted yesterday'
-  const applied = actions?.isApplied?.(job.id)
-  const saved = actions?.isSaved?.(job.id)
+  const applied = data?.isApplied?.(job.id)
+  const saved = data?.isSaved?.(job.id)
+  const open = data?.viewing && (data.viewing.id || data.viewing.job_id) === job.id
   return (
-    <li className={`job${applied ? ' is-applied' : ''}`} onMouseEnter={() => onFocus?.(job.id)} onMouseLeave={() => onFocus?.(null)}
-      onFocus={() => onFocus?.(job.id)} onBlur={() => onFocus?.(null)}>
-      <span className="avatar co-av" style={coHue(job.company)} aria-hidden="true">{(job.company || '?').trim().charAt(0)}</span>
-      <div className="job-main">
-        <h3>{job.title}</h3>
-        <p className="job-sub">
-          <span className="co">{job.company}</span>
-          <span className={`pin${job.pins?.length ? '' : ' pin-off'}`} aria-hidden="true" />
-          {city || 'Location not listed'}{more > 0 ? <span className="more-loc"> +{more}</span> : ''}
-        </p>
-        <p className="job-meta">
-          <span>{shortTerms(job.terms)}</span>
-          {posted && <span className={fresh ? 'fresh' : ''}>{posted}</span>}
-          {job.stipend && <span>{job.stipend}</span>}
-          {flag && <span className={flag.startsWith('US') ? 'flag' : ''}>{flag}</span>}
-        </p>
-      </div>
-      <FitRing value={job.fit} />
-      <div className="job-actions">
-        {actions?.toggleSave && (
-          <button type="button" className={`icon-btn${saved ? ' on' : ''}`} aria-pressed={saved}
-            aria-label={saved ? `Remove ${job.title} from saved` : `Save ${job.title} for later`}
-            title={saved ? 'Saved' : 'Save for later'} onClick={() => actions.toggleSave(job)}>
-            <Icon name="saved" size={16} />
-          </button>
-        )}
-        <a className={`apply${applied ? ' done' : ''}`} href={job.url} target="_blank" rel="noreferrer"
-          onClick={() => { if (!applied) actions?.apply?.(job) }}>
-          {applied ? <><Check />Applied</> : 'Apply'}
-          <span className="sr"> {applied ? '(in My applications), open' : 'to'} {job.title} at {job.company} (opens in a new tab)</span>
-        </a>
-      </div>
+    <li onMouseEnter={() => onFocus?.(job.id)} onMouseLeave={() => onFocus?.(null)}>
+      <button type="button" className={`job${open ? ' open' : ''}`} onClick={() => data?.openJob?.(job)}
+        onFocus={() => onFocus?.(job.id)} onBlur={() => onFocus?.(null)} aria-label={`${job.title} at ${job.company}. Open details`}>
+        <span className="avatar co-av" style={coHue(job.company)} aria-hidden="true">{(job.company || '?').trim().charAt(0)}</span>
+        <span className="job-main">
+          <span className="job-title">{job.title}</span>
+          <span className="job-sub">
+            <span className="co">{job.company}</span><span className="sep" aria-hidden="true" />
+            {city || 'Location not listed'}{more > 0 && <span className="more-loc"> +{more}</span>}
+          </span>
+          <span className="job-meta">
+            <span>{shortTerms(job.terms)}</span>
+            {posted && <span className={fresh ? 'fresh' : ''}>{posted}</span>}
+            {job.stipend && <span>{job.stipend}</span>}
+            {flag && <span className="flag">{flag}</span>}
+          </span>
+        </span>
+        <span className="job-marks">
+          {applied && <span className="mark applied">Applied</span>}
+          {saved && !applied && <span className="mark saved" title="Saved"><Icon name="saved" size={14} /><span className="sr">Saved</span></span>}
+        </span>
+        <FitRing value={job.fit} />
+      </button>
     </li>
   )
 }
 
-export function Results({ data, onFocus, limit = 5, actions, empty }) {
+export function Results({ data, onFocus, limit = 5, empty, showChips = true }) {
   const [open, setOpen] = useState(false)
   if (!data) return null
   if (data.counts) {
@@ -117,7 +104,7 @@ export function Results({ data, onFocus, limit = 5, actions, empty }) {
     )
   }
   const shown = open ? data.results : data.results.slice(0, limit)
-  const chips = data.args ? describeArgs(data.args) : []
+  const chips = showChips && data.args ? describeArgs(data.args) : []
   return (
     <div className="result">
       {chips.length > 0 && (
@@ -128,7 +115,7 @@ export function Results({ data, onFocus, limit = 5, actions, empty }) {
       {data.results.length === 0
         ? <p className="quiet">{empty || 'Nothing matched. Try a wider area or fewer filters.'}</p>
         : <ul className="jobs">{shown.map((j) => (
-          <JobRow key={j.id} job={j} onFocus={onFocus} actions={actions} />
+          <JobRow key={j.id} job={j} onFocus={onFocus} />
         ))}</ul>}
       {data.results.length > limit && (
         <button type="button" className="more" onClick={() => setOpen(!open)} aria-expanded={open}>

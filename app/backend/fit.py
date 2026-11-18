@@ -185,3 +185,68 @@ def profile_summary(p):
     if p.get("projects_summary"):
         out += f" Projects: {p['projects_summary']}."
     return out
+
+
+def _fmt_ym(v):
+    return f"{['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][(v - 1) % 12]} {(v - 1) // 12}"
+
+
+def explain(job, p):
+    """Plain-language checks behind the score: [{"ok": True|False|None, "text": str}]."""
+    title = job.get("title") or ""
+    out = []
+    hit_roles = [r for r in p["_roles"] if _RX[r].search(title)]
+    if hit_roles:
+        out.append({"ok": True, "text": f"Matches your interest in {hit_roles[0]}"})
+    elif set(p["_roles"]) & SWE_ADJACENT and _RX["Software Engineering"].search(title):
+        out.append({"ok": True, "text": "A general software role, which fits the areas you picked"})
+    elif p["_roles"]:
+        out.append({"ok": False, "text": "Outside the kinds of roles you picked"})
+    if any(_RX[r].search(title) for r in p["_avoid"]) and not hit_roles:
+        out.append({"ok": False, "text": "In an area you asked to skip"})
+    if SENIOR.search(title):
+        out.append({"ok": False, "text": "The title suggests a senior or graduate-level role"})
+    sk = [name for name, rx in p["_skills"] if rx.search(title)]
+    if sk:
+        out.append({"ok": True, "text": f"Mentions your skills: {', '.join(sk[:3])}"})
+
+    locs = job.get("locations") or []
+    is_remote = bool(job.get("remote")) or any(REMOTE_RE.search(l) for l in locs)
+    loc_hit = [l for l in locs if any(pred(l, job) for _, pred in p["_locm"])]
+    if loc_hit and p["_onsite_ok"]:
+        out.append({"ok": True, "text": f"In one of your locations ({loc_hit[0]})"})
+    elif is_remote and p["_remote_ok"]:
+        out.append({"ok": True, "text": "Remote, and you’re open to remote work"})
+    elif p["_anywhere"] and any(loc_country(l) in p["_anywhere"] for l in locs):
+        out.append({"ok": True, "text": "In a country you said anywhere in is fine"})
+    elif p["_locm"] or p["_anywhere"]:
+        out.append({"ok": False, "text": "Not in any of your locations"})
+
+    spans = [x for x in (term_months(t) for t in job.get("terms") or []) if x]
+    win = p["_win_remote"] if is_remote else p["_win_onsite"]
+    if not spans:
+        out.append({"ok": None, "text": "Dates aren’t stated, so check them before applying"})
+    elif win:
+        if any(a <= win[1] and b >= win[0] for a, b in spans):
+            out.append({"ok": True, "text": f"Overlaps when you’re free ({_fmt_ym(win[0])} to {_fmt_ym(win[1])})"})
+        else:
+            out.append({"ok": False, "text": f"Runs outside when you’re free ({_fmt_ym(win[0])} to {_fmt_ym(win[1])})"})
+
+    deg = set(job.get("degrees") or [])
+    level = p.get("degree_level") or "bachelors"
+    if deg and level in ("bachelors", "high_school", "other") and not deg & {"Bachelor's", "Associate's"}:
+        out.append({"ok": False, "text": f"Asks for a {' or '.join(sorted(deg))} degree"})
+    elif deg & {"Bachelor's", "Associate's"}:
+        out.append({"ok": True, "text": "Open to bachelor’s students"})
+
+    spons = job.get("sponsorship") or ""
+    auth = p.get("us_work_auth") or "not_applicable"
+    if loc_country((locs or [""])[0]) == "us":
+        if "Citizenship" in spons and auth != "citizen":
+            out.append({"ok": False, "text": "Open to US citizens only"})
+        elif "Does Not Offer" in spons:
+            out.append({"ok": auth != "needs_sponsorship",
+                        "text": "No visa sponsorship" + (", and you said you’d need it" if auth == "needs_sponsorship" else ", which is fine for you")})
+    if p.get("paid_only") and job.get("stipend") and re.search(r"unpaid", job["stipend"], re.I):
+        out.append({"ok": False, "text": "Unpaid, and you asked for paid roles only"})
+    return out

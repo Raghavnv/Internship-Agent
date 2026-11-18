@@ -1,11 +1,34 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { auth, DEMO, getProfile } from '../lib/backend.js'
+import { useSession } from '../lib/session.jsx'
 import { Logo } from '../ui.jsx'
+
+function Signed({ user, profile }) {
+  const nav = useNavigate()
+  const [busy, setBusy] = useState(false)
+  const name = profile?.full_name || user.email
+  return (
+    <div className="auth-card">
+      <h1>You’re already signed in</h1>
+      <p className="sub">Signed in as <strong>{name}</strong>{profile?.full_name && user.email ? ` (${user.email})` : ''}.</p>
+      <div className="auth-stack">
+        <button type="button" className="btn btn-primary btn-block" onClick={() => nav(profile?.onboarded ? '/app' : '/onboarding')}>
+          Continue to your dashboard
+        </button>
+        <button type="button" className="btn btn-ghost btn-block" disabled={busy}
+          onClick={async () => { setBusy(true); await auth.signOut(); setBusy(false) }}>
+          Sign out and use another account
+        </button>
+      </div>
+    </div>
+  )
+}
 
 export default function AuthPage({ mode }) {
   const signup = mode === 'signup'
   const nav = useNavigate()
+  const { user, profile } = useSession()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -41,57 +64,58 @@ export default function AuthPage({ mode }) {
   }
 
   async function forgot() {
-    if (!email) { setError('Enter your email above first, then click "Forgot password".'); return }
+    if (!email) { setError('Enter your email above first, then click “Forgot password”.'); return }
     try { await auth.resetPassword(email.trim()); setInfo(`If ${email} has an account, a reset link is on its way.`) } catch (err) { setError(err.message) }
   }
 
   return (
     <main className="auth">
-      <div className="auth-side" aria-hidden="true">
-        <div className="auth-quote">
-          <svg viewBox="0 0 240 120" className="auth-art">
-            <defs><linearGradient id="arcg" x1="0" x2="1"><stop offset="0" stopColor="#ffb38a" /><stop offset=".5" stopColor="#e3a6d6" /><stop offset="1" stopColor="#9aa8ff" /></linearGradient></defs>
-            <path d="M24 96 Q120 -10 216 96" className="arc" />
-            <circle cx="24" cy="96" r="7" className="home" />
-            <circle cx="216" cy="96" r="7" className="dest" />
-          </svg>
-          <p>From your city to your next internship, with every listing scored for you.</p>
-        </div>
-      </div>
       <div className="auth-main">
         <Link to="/" className="wordmark"><Logo />Internship Copilot</Link>
-        <div className="auth-card">
-          <h1>{signup ? 'Create your account' : 'Welcome back'}</h1>
-          <p className="sub">{signup ? 'Free, and set up in two minutes.' : 'Log in to see your matches and applications.'}</p>
-          {DEMO && <p className="demo-note">Demo mode: accounts are stored in this browser until Supabase is connected.</p>}
+        {user ? <Signed user={user} profile={profile} /> : (
+          <div className="auth-card">
+            <h1>{signup ? 'Create your account' : 'Log in'}</h1>
+            <p className="sub">{signup ? 'Free. Takes about two minutes to set up.' : 'Pick up where you left off.'}</p>
+            {DEMO && <p className="demo-note">Demo mode: accounts are saved only in this browser until the database is connected.</p>}
 
-          <form onSubmit={submit} className="auth-form">
-            {signup && (
-              <label>Full name
-                <input value={name} onChange={(e) => setName(e.target.value)} required autoComplete="name" />
+            <form onSubmit={submit} className="auth-form">
+              {signup && (
+                <label>Full name
+                  <input value={name} onChange={(e) => setName(e.target.value)} required autoComplete="name" />
+                </label>
+              )}
+              <label>Email
+                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" />
               </label>
-            )}
-            <label>Email
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" />
-            </label>
-            <label>
-              <span className="label-row">Password
-                {!signup && <button type="button" className="link-btn" onClick={forgot}>Forgot password?</button>}
-              </span>
-              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required
-                minLength={signup ? 8 : undefined} autoComplete={signup ? 'new-password' : 'current-password'} />
-            </label>
-            {error && <p className="form-error" role="alert">{error}</p>}
-            {info && <p className="form-info" role="status">{info}</p>}
-            <button type="submit" className="btn btn-primary btn-block" disabled={busy}>
-              {busy ? 'Please wait…' : signup ? 'Create account' : 'Log in'}
-            </button>
-          </form>
-          <p className="switch">
-            {signup ? <>Already have an account? <Link to="/login">Log in</Link></> : <>New here? <Link to="/signup">Create an account</Link></>}
-          </p>
-        </div>
+              <label>
+                <span className="label-row">Password
+                  {!signup && <button type="button" className="link-btn" onClick={forgot}>Forgot password?</button>}
+                </span>
+                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required
+                  minLength={signup ? 8 : undefined} autoComplete={signup ? 'new-password' : 'current-password'} />
+              </label>
+              {error && <p className="form-error" role="alert">{error}</p>}
+              {info && <p className="form-info" role="status">{info}</p>}
+              <button type="submit" className="btn btn-primary btn-block" disabled={busy}>
+                {busy ? 'Please wait…' : signup ? 'Create account' : 'Log in'}
+              </button>
+            </form>
+            <p className="switch">
+              {signup ? <>Already have an account? <Link to="/login">Log in</Link></> : <>New here? <Link to="/signup">Create an account</Link></>}
+            </p>
+          </div>
+        )}
       </div>
+      <aside className="auth-side" aria-hidden="true">
+        <svg viewBox="0 0 320 170" className="auth-art">
+          <path d="M40 130 Q160 -10 280 130" className="arc" />
+          <circle cx="40" cy="130" r="5" className="home" />
+          <circle cx="280" cy="130" r="5" className="dest" />
+          <text x="40" y="156" className="lbl" textAnchor="middle">You</text>
+          <text x="280" y="156" className="lbl" textAnchor="middle">Your next role</text>
+        </svg>
+        <p>Every live internship, scored against your profile, in one place.</p>
+      </aside>
     </main>
   )
 }

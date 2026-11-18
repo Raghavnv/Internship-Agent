@@ -37,6 +37,7 @@ export const getMap = () => call('/api/map')
 export const geocode = (q) => call(`/api/geocode?q=${encodeURIComponent(q)}`)
 export const searchJobs = (filters, profile) => call('/api/search', json({ ...filters, profile: profileForApi(profile) }))
 export const chat = (messages, profile) => call('/api/chat', json({ messages, profile: profileForApi(profile) }))
+export const getJob = (id, profile) => call('/api/job', json({ id, profile: profileForApi(profile) }))
 export const reviewResume = (resume_text, job) => call('/api/resume/review', json({ resume_text, job }))
 export function parseResume(file) {
   const fd = new FormData()
