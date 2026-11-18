@@ -154,7 +154,7 @@ export default function Landing() {
       <Hero meta={meta} cities={cities} />
 
       <section className="l-stats" aria-label="Live numbers">
-        {[[meta?.count, 'open internships'], [meta?.companies, 'companies hiring'], [meta?.cities, 'cities worldwide'], ['15 min', 'between refreshes']].map(([n, l]) => (
+        {[[meta?.count, 'open internships'], [meta?.companies, 'companies hiring'], [meta?.cities, 'cities worldwide']].map(([n, l]) => (
           <div key={l}><strong>{typeof n === 'number' ? n.toLocaleString('en-IN') : n || '—'}</strong><span>{l}</span></div>
         ))}
       </section>

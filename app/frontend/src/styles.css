@@ -537,7 +537,7 @@ a { color: inherit; }
 .l-stats {
   position: relative; z-index: 4;
   width: min(68rem, 100% - 2rem); margin: -2.5rem auto 0;
-  display: grid; grid-template-columns: repeat(4, 1fr);
+  display: grid; grid-template-columns: repeat(3, 1fr);
   background: var(--surface); border: 1px solid var(--hair); border-radius: 16px;
 }
 .l-stats div { padding: 1.25rem 1.5rem; display: grid; gap: 0.15rem; }
@@ -813,9 +813,8 @@ a.tile:hover { border-color: rgba(143, 168, 255, 0.4); }
   .l-hero .map { position: absolute; inset: 0 0 auto 0; height: 26rem; }
   .l-hero-copy { position: relative; left: auto; top: auto; transform: none; padding: 12rem 1.25rem 0; }
   .l-demo { position: absolute; top: 1.25rem; right: 1rem; bottom: auto; left: 1rem; width: auto; }
-  .l-stats { grid-template-columns: repeat(2, 1fr); margin-top: 3rem; }
-  .l-stats div:nth-child(3) { border-left: 0; }
-  .l-stats div:nth-child(n+3) { border-top: 1px solid var(--hair); }
+  .l-stats { margin-top: 3rem; }
+  .l-stats div { padding: 1rem 0.9rem; }
   .feat-grid { grid-template-columns: 1fr; }
   .auth { grid-template-columns: 1fr; }
   .auth-side { display: none; }
