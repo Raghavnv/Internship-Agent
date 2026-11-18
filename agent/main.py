@@ -153,6 +153,10 @@ def main():
                  f"plus a digest at {cfg['alerts']['digest_hour_ist']}:00.")
         notifier.send(intro)
         notifier.send_jobs("⭐ Top open roles", top, per)
+        if notifier.failures and not args.dry_run:
+            log.error("Couldn't deliver the first-run messages (see warnings above). Not saving state, "
+                      "so the next run tries again.")
+            return 0
         for j, _ in matched:
             st["seen"][j["id"]] = now
     else:
@@ -160,7 +164,13 @@ def main():
         later = [(j, ev) for j, ev in new if not m.is_instant(j, ev)]
         if instant:
             hdr = "🔥 *New internship just opened!*" if len(instant) == 1 else f"🔥 *{len(instant)} new internships just opened!*"
+            before = notifier.failures
             notifier.send_jobs(hdr, instant, per)
+            if notifier.failures > before:
+                # delivery failed: leave these unseen so the next run retries them
+                retry_ids = {j["id"] for j, _ in instant}
+                new = [(j, ev) for j, ev in new if j["id"] not in retry_ids]
+                log.warning("instant alerts failed; will retry %d jobs next run", len(retry_ids))
         for j, ev in later:
             st["digest_queue"].append({"job": {k: v for k, v in j.items() if k != "raw_text"}, "ev": ev})
         for j, _ in new:

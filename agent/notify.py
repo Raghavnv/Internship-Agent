@@ -79,6 +79,7 @@ class Notifier:
         # asynchronously (webhook), so by default always use approved templates.
         self.meta_prefer_text = os.getenv("META_WA_PREFER_TEXT", "").lower() in ("1", "true", "yes")
         self.sent = 0
+        self.failures = 0
 
     def text_channels(self):
         c = []
@@ -100,15 +101,17 @@ class Notifier:
         return (self.text_channels() + (["aisensy"] if self.aisensy_on() else [])
                 + (["meta"] if self.meta_on() else []))
 
-    @staticmethod
-    def _retry(name, fn, *a):
+    def _retry(self, name, fn, *a):
         for attempt in range(3):
             try:
                 fn(*a)
                 return True
             except Exception as e:
                 log.warning("%s send failed (try %d): %s", name, attempt + 1, e)
+                if isinstance(e, MetaError) and e.permanent:
+                    break  # e.g. template not approved yet: retrying now won't help
                 time.sleep(5 * (attempt + 1))
+        self.failures += 1
         return False
 
     def send(self, text):
@@ -299,6 +302,7 @@ class MetaError(RuntimeError):
         super().__init__(f"Meta {status}: {body}")
         # 131047 = re-engagement required (24h window closed); 131026/470 older variants
         self.window_closed = any(c in body for c in ("131047", "131026", '"code":470'))
+        self.permanent = 400 <= status < 500 and status != 429
 
 
 def flatten(text, limit):
