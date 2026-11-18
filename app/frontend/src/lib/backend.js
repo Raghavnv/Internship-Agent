@@ -49,11 +49,6 @@ export const auth = {
     fail(error)
     return { session: data.session }
   },
-  async google() {
-    if (DEMO) return auth.signUp('demo.student@gmail.com', 'x', 'Demo Student')
-    const { error } = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: `${location.origin}/app` } })
-    fail(error)
-  },
   async resetPassword(email) {
     if (DEMO) return
     const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}/login` })

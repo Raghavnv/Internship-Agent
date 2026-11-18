@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useUserData } from '../lib/userdata.jsx'
 import { cityName } from '../format.js'
-import { shortTerms } from '../components.jsx'
+import { coHue, shortTerms } from '../components.jsx'
 
 const STATUSES = ['Applied', 'Interviewing', 'Offer', 'Rejected']
 const fmtDate = (iso) => new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
@@ -72,7 +72,7 @@ export default function Applications() {
             const d = daysSince(a.applied_at)
             return (
               <li key={a.id} className="app-row">
-                <span className="avatar" aria-hidden="true">{(a.company || '?').charAt(0)}</span>
+                <span className="avatar co-av" style={coHue(a.company)} aria-hidden="true">{(a.company || '?').charAt(0)}</span>
                 <div className="app-main">
                   <h3><a href={a.url} target="_blank" rel="noreferrer">{a.title}</a></h3>
                   <p className="job-sub"><span className="co">{a.company}</span>{a.location && <><span className="pin" aria-hidden="true" />{cityName(a.location)}</>}</p>

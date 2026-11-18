@@ -1,6 +1,17 @@
 import { useState } from 'react'
 
-export const Logo = () => <span className="logo" aria-hidden="true" />
+// The mark: an arc from you (apricot) to the role (periwinkle).
+export const Logo = () => (
+  <svg className="logo-svg" viewBox="0 0 24 14" width="24" height="14" aria-hidden="true">
+    <defs>
+      <linearGradient id="logo-g" x1="0" x2="1" y1="0" y2="0">
+        <stop offset="0" stopColor="#ffb38a" /><stop offset=".5" stopColor="#e3a6d6" /><stop offset="1" stopColor="#9aa8ff" />
+      </linearGradient>
+    </defs>
+    <path d="M3 12 Q12 -3 21 12" fill="none" stroke="url(#logo-g)" strokeWidth="2" strokeLinecap="round" />
+    <circle cx="3" cy="12" r="2" fill="#ffb38a" /><circle cx="21" cy="12" r="2" fill="#9aa8ff" />
+  </svg>
+)
 
 const PATHS = {
   overview: 'M3 10.5 10 4l7 6.5V17a1 1 0 0 1-1 1h-3.5v-5h-5v5H4a1 1 0 0 1-1-1z',
@@ -18,20 +29,9 @@ const PATHS = {
   upload: 'M10 13V3.5M6 7.5l4-4 4 4M3.5 13v3a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-3',
   menu: 'M3 5.5h14M3 10h14M3 14.5h14',
   arrow: 'M4 10h11M11 5.5 15.5 10 11 14.5',
-  google: '',
 }
 
 export function Icon({ name, size = 18 }) {
-  if (name === 'google') {
-    return (
-      <svg width={size} height={size} viewBox="0 0 48 48" aria-hidden="true">
-        <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z" />
-        <path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z" />
-        <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.3 0-9.7-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z" />
-        <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z" />
-      </svg>
-    )
-  }
   return (
     <svg width={size} height={size} viewBox="0 0 20 20" aria-hidden="true" className="ico-s">
       <path d={PATHS[name]} />

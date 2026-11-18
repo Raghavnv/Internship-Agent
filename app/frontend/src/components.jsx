@@ -25,11 +25,18 @@ export function shortTerms(terms) {
   return t.length > 2 ? `${t[0]} + ${t.length - 1} more` : t.join(', ')
 }
 
+// A stable hue per company, so each initial gets its own quiet colour.
+export function coHue(name = '') {
+  let h = 0
+  for (const ch of name.toLowerCase()) h = (h * 31 + ch.charCodeAt(0)) % 360
+  return { '--h': h }
+}
+
 export function FitRing({ value }) {
   if (value == null) return <span className="fit-none" aria-hidden="true" />
   const r = 15, c = 2 * Math.PI * r
   return (
-    <span className="fit" title="How well this matches your profile">
+    <span className={`fit ${value >= 80 ? 'hi' : value >= 60 ? 'mid' : 'lo'}`} title="How well this matches your profile">
       <svg viewBox="0 0 36 36" aria-hidden="true">
         <circle cx="18" cy="18" r={r} className="ring-bg" />
         <circle cx="18" cy="18" r={r} className="ring" strokeDasharray={c} strokeDashoffset={c * (1 - value / 100)} />
@@ -56,7 +63,7 @@ export function JobRow({ job, onFocus, actions }) {
   return (
     <li className={`job${applied ? ' is-applied' : ''}`} onMouseEnter={() => onFocus?.(job.id)} onMouseLeave={() => onFocus?.(null)}
       onFocus={() => onFocus?.(job.id)} onBlur={() => onFocus?.(null)}>
-      <span className="avatar" aria-hidden="true">{(job.company || '?').trim().charAt(0)}</span>
+      <span className="avatar co-av" style={coHue(job.company)} aria-hidden="true">{(job.company || '?').trim().charAt(0)}</span>
       <div className="job-main">
         <h3>{job.title}</h3>
         <p className="job-sub">

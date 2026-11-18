@@ -12,7 +12,7 @@ Groq `gpt-oss-120b` (LLM with tool calling) · GitHub Actions data pipeline (`..
 | Area | What it does |
 |---|---|
 | **Landing** | Animated live map: a student somewhere asks a question, arcs draw to matching cities. How it works, features, live stats. |
-| **Sign up / log in** | Email + password and Continue with Google (Supabase Auth). |
+| **Sign up / log in** | Email + password (Supabase Auth). |
 | **Onboarding** | 6 short steps: about you, resume (auto-extracts skills), roles, where and when, eligibility (visa, pay), links. |
 | **Overview** | Greeting, numbers, top matches, quick AI ask, application pipeline, profile strength checklist. |
 | **AI Copilot** | Chat. The LLM turns questions into filters and calls `search_internships` / `count_internships` over real listings. Results land on the map. |
@@ -43,15 +43,7 @@ resume files (`supabase/schema.sql`).
    - **Site URL:** your Vercel URL, e.g. `https://internship-copilot.vercel.app`
    - **Redirect URLs:** add `https://internship-copilot.vercel.app/**` and `http://localhost:5173/**`
 
-### 2. "Continue with Google", about 10 minutes
-1. Go to **console.cloud.google.com**, create a project, then go to **APIs & Services → OAuth consent screen**. Choose **External**, add an app name and your email, then save.
-2. Go to **Credentials → Create credentials → OAuth client ID → Web application**.
-   - **Authorised redirect URI:** `https://<your-project>.supabase.co/auth/v1/callback`. Supabase shows this exact URL on its Google provider page.
-3. Copy the **Client ID** and **Client secret** into **Supabase → Authentication → Sign In / Providers → Google**, switch it on, and save.
-
-Email sign-up works without this step; Google is optional.
-
-### 3. Backend on Render
+### 2. Backend on Render
 Your service from before just needs two more environment variables (**Environment** tab):
 
 | Key | Value |
@@ -63,7 +55,7 @@ Your service from before just needs two more environment variables (**Environmen
 
 With `SUPABASE_URL` set, the API only answers signed-in users (the landing page's map and stats stay public).
 
-### 4. Frontend on Vercel
+### 3. Frontend on Vercel
 Project settings: **Root Directory** `app/frontend`, framework **Vite**. Environment variables:
 
 | Key | Value |
@@ -74,7 +66,7 @@ Project settings: **Root Directory** `app/frontend`, framework **Vite**. Environ
 
 Then **Redeploy**: `VITE_` variables only apply to new builds.
 
-### 5. Keep Supabase awake (optional)
+### 4. Keep Supabase awake (optional)
 Free Supabase projects pause after 7 days without traffic. Add `SUPABASE_URL` and `SUPABASE_ANON_KEY` as GitHub
 **repository secrets** too; the alert agent's 15-minute workflow then pings it so it never pauses.
 

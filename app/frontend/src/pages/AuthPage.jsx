@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { auth, DEMO, getProfile } from '../lib/backend.js'
-import { Icon, Logo } from '../ui.jsx'
+import { Logo } from '../ui.jsx'
 
 export default function AuthPage({ mode }) {
   const signup = mode === 'signup'
@@ -40,14 +40,6 @@ export default function AuthPage({ mode }) {
     }
   }
 
-  async function google() {
-    setError('')
-    try {
-      const r = await auth.google()
-      if (DEMO && r?.session) await afterLogin(r.session)
-    } catch (err) { setError(err.message) }
-  }
-
   async function forgot() {
     if (!email) { setError('Enter your email above first, then click "Forgot password".'); return }
     try { await auth.resetPassword(email.trim()); setInfo(`If ${email} has an account, a reset link is on its way.`) } catch (err) { setError(err.message) }
@@ -58,6 +50,7 @@ export default function AuthPage({ mode }) {
       <div className="auth-side" aria-hidden="true">
         <div className="auth-quote">
           <svg viewBox="0 0 240 120" className="auth-art">
+            <defs><linearGradient id="arcg" x1="0" x2="1"><stop offset="0" stopColor="#ffb38a" /><stop offset=".5" stopColor="#e3a6d6" /><stop offset="1" stopColor="#9aa8ff" /></linearGradient></defs>
             <path d="M24 96 Q120 -10 216 96" className="arc" />
             <circle cx="24" cy="96" r="7" className="home" />
             <circle cx="216" cy="96" r="7" className="dest" />
@@ -71,9 +64,6 @@ export default function AuthPage({ mode }) {
           <h1>{signup ? 'Create your account' : 'Welcome back'}</h1>
           <p className="sub">{signup ? 'Free, and set up in two minutes.' : 'Log in to see your matches and applications.'}</p>
           {DEMO && <p className="demo-note">Demo mode: accounts are stored in this browser until Supabase is connected.</p>}
-
-          <button type="button" className="btn btn-google" onClick={google}><Icon name="google" />Continue with Google</button>
-          <div className="or"><span>or</span></div>
 
           <form onSubmit={submit} className="auth-form">
             {signup && (
