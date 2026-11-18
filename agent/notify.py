@@ -74,7 +74,7 @@ class Notifier:
         self.meta_job_tpl = os.getenv("META_WA_JOB_TEMPLATE", "job_alert")
         self.meta_text_tpl = os.getenv("META_WA_TEXT_TEMPLATE", "agent_update")
         self.meta_lang = os.getenv("META_WA_TEMPLATE_LANG", "en")
-        self.meta_ver = os.getenv("META_WA_API_VERSION", "v23.0")
+        self.meta_ver = os.getenv("META_WA_API_VERSION", "v25.0")
         self.sent = 0
 
     def text_channels(self):
