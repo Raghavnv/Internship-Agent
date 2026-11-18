@@ -128,7 +128,8 @@ def test_meta_text_then_template_fallback(monkeypatch):
 
     monkeypatch.setattr(notify.requests, "post", fake_post)
     monkeypatch.setattr(notify.time, "sleep", lambda s: None)
-    for k, v in {"META_WA_TOKEN": "t", "META_WA_PHONE_NUMBER_ID": "123", "META_WA_TO": "+918762537925"}.items():
+    for k, v in {"META_WA_TOKEN": "t", "META_WA_PHONE_NUMBER_ID": "123", "META_WA_TO": "+918762537925",
+                 "META_WA_PREFER_TEXT": "1"}.items():
         monkeypatch.setenv(k, v)
     n = notify.Notifier()
     assert n.channels() == ["meta"]
@@ -141,3 +142,20 @@ def test_meta_text_then_template_fallback(monkeypatch):
     calls.clear()
     n.send_jobs("📰 Digest", [(a, m.evaluate(a)), (b, m.evaluate(b))], 3, compact_fallback=True)
     assert [c["type"] for c in calls] == ["text", "template"] and calls[1]["template"]["name"] == "agent_update"
+
+
+def test_meta_default_templates_only(monkeypatch):
+    from agent import notify
+    calls = []
+
+    class Resp:
+        status_code, text = 200, "{}"
+
+    monkeypatch.setattr(notify.requests, "post", lambda url, json=None, **k: calls.append(json) or Resp())
+    monkeypatch.setattr(notify.time, "sleep", lambda s: None)
+    for k, v in {"META_WA_TOKEN": "t", "META_WA_PHONE_NUMBER_ID": "123", "META_WA_TO": "918762537925"}.items():
+        monkeypatch.setenv(k, v)
+    monkeypatch.delenv("META_WA_PREFER_TEXT", raising=False)
+    n = notify.Notifier()
+    n.send("hello")
+    assert [c["type"] for c in calls] == ["template"] and calls[0]["template"]["name"] == "agent_update"

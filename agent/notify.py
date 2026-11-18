@@ -75,6 +75,9 @@ class Notifier:
         self.meta_text_tpl = os.getenv("META_WA_TEXT_TEMPLATE", "agent_update")
         self.meta_lang = os.getenv("META_WA_TEMPLATE_LANG", "en")
         self.meta_ver = os.getenv("META_WA_API_VERSION", "v25.0")
+        # Free-form text is only delivered inside the 24h window, and Meta reports the failure
+        # asynchronously (webhook), so by default always use approved templates.
+        self.meta_prefer_text = os.getenv("META_WA_PREFER_TEXT", "").lower() in ("1", "true", "yes")
         self.sent = 0
 
     def text_channels(self):
@@ -175,6 +178,8 @@ class Notifier:
 
     def _meta_try_text(self, text):
         """Free-form message: only works inside the 24h window after you last messaged the number."""
+        if not self.meta_prefer_text:
+            return False
         try:
             self._meta_post({"type": "text", "text": {"preview_url": False, "body": text[:4000]}})
             return True
