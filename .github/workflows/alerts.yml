@@ -44,6 +44,7 @@ jobs:
           META_WA_TOKEN: ${{ secrets.META_WA_TOKEN }}
           META_WA_PHONE_NUMBER_ID: ${{ secrets.META_WA_PHONE_NUMBER_ID }}
           META_WA_TO: ${{ secrets.META_WA_TO }}
+          META_WA_WABA_ID: "2498335370676576"
           META_WA_TEMPLATE_LANG: ${{ secrets.META_WA_TEMPLATE_LANG || 'en' }}
           AISENSY_API_KEY: ${{ secrets.AISENSY_API_KEY }}
           AISENSY_JOB_CAMPAIGN: ${{ secrets.AISENSY_JOB_CAMPAIGN }}
