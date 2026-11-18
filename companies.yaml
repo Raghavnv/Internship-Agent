@@ -1,0 +1,64 @@
+# Company career boards checked directly (in addition to the big Simplify feed,
+# which already covers 1,000+ US companies like Google, Microsoft, Amazon, Meta, Apple, Nvidia...).
+#
+# These are mainly here to catch India / Bangalore internships, which the US feed misses.
+# Only jobs whose title says intern / internship / co-op / trainee / apprentice are kept.
+#
+# Add a company: find its careers page. If the URL looks like
+#   boards.greenhouse.io/<name>  or job-boards.greenhouse.io/<name>  -> add <name> under greenhouse
+#   jobs.lever.co/<name>                                             -> add under lever
+#   jobs.ashbyhq.com/<name>                                          -> add under ashby
+# A name that doesn't exist is skipped and listed in the run log (no harm done).
+
+greenhouse:
+  - databricks
+  - stripe
+  - rubrik
+  - postman
+  - okta
+  - twilio
+  - mongodb
+  - gitlab
+  - cloudflare
+  - elastic
+  - samsara
+  - airbnb
+  - coinbase
+  - discord
+  - figma
+  - anthropic
+  - scaleai
+  - pinterest
+  - dropbox
+  - robinhood
+  - phonepe
+  - groww
+  - zeta
+  - druva
+  - hackerrank
+  - sprinklr
+  - browserstack
+  - chargebee
+
+lever:
+  - cred
+  - meesho
+  - zepto
+  - jar-app
+  - plivo
+  - paytm
+  - upstox
+  - palantir
+  - spotify
+
+ashby:
+  - sarvam
+  - openai
+  - ramp
+  - notion
+  - linear
+  - replit
+  - cohere
+  - perplexity
+  - elevenlabs
+  - deepgram

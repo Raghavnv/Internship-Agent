@@ -1,0 +1,199 @@
+# ─────────────────────────────────────────────────────────────
+#  Raghav's internship alert agent: preferences
+#  Edit this file on GitHub any time; the next run picks it up.
+# ─────────────────────────────────────────────────────────────
+
+profile:
+  name: Raghav Venkat
+  # Pulled from your resume. Used to rank matches and explain why a role fits.
+  skills: [python, java, c, javascript, fastapi, rest, postgresql, mysql, react,
+           pytorch, xgboost, yolo, computer vision, llm, rag, chromadb, machine learning,
+           ai, backend, full stack, deployment, forward deployed]
+
+# Which internship windows work for you
+windows:
+  # Onsite / hybrid: only summer (June–September 2027)
+  onsite_terms: ["Summer 2027"]
+  # Remote: anything that overlaps January–June 2027 or the summer
+  remote_terms: ["Winter 2027", "Spring 2027", "Summer 2027"]
+  # Listings with no stated term are kept only if posted within this many days
+  undated_max_age_days: 45
+
+locations:
+  # Instant alerts for these (US metros you named + Bangalore)
+  preferred:
+    - austin
+    - round rock
+    - dallas
+    - irving
+    - plano
+    - frisco
+    - richardson
+    - houston
+    - sugar land
+    - the woodlands
+    # Bay Area
+    - sf
+    - san francisco
+    - bay area
+    - san jose
+    - santa clara
+    - sunnyvale
+    - mountain view
+    - palo alto
+    - menlo park
+    - cupertino
+    - redwood city
+    - san mateo
+    - foster city
+    - fremont
+    - milpitas
+    - oakland
+    - berkeley
+    - emeryville
+    - south san francisco
+    # India
+    - bangalore
+    - bengaluru
+  # Remote roles are always considered (only the term rules above apply)
+  include_remote: true
+  # Other US cities (NYC, Seattle, ...) go to the daily digest instead of instant alerts.
+  # Set to false to drop them entirely.
+  other_us_in_digest: true
+  # Other Indian cities (Hyderabad, Pune, ...) go to the daily digest
+  other_india_in_digest: true
+
+roles:
+  # Whole-word matches, case-insensitive. A trailing * means "starts with" (data scien* = data science/scientist).
+  # A title must contain at least one of these to count
+  include_keywords:
+    - software
+    - swe
+    - sde
+    - developer
+    - backend
+    - back-end
+    - back end
+    - full stack
+    - full-stack
+    - fullstack
+    - machine learning
+    - ml
+    - ml engineer
+    - ai
+    - artificial intelligence
+    - deep learning
+    - llm
+    - genai
+    - generative
+    - nlp
+    - computer vision
+    - data scien*
+    - applied scien*
+    - research engineer
+    - research intern
+    - data engineer*
+    - foundation model*
+    - reinforcement learning
+    - robotics software
+    - automation engineer*
+    - quantitative develop*
+    - research scientist
+    - forward deploy*
+    - platform
+    - infrastructure
+    - cloud
+    - devops
+    - site reliability
+    - sre
+    - python
+    - api
+    - engineering intern
+    - engineer intern
+    - technology intern
+    - tech intern
+  # Anything with these in the title is dropped
+  exclude_keywords:
+    - frontend
+    - front-end
+    - front end
+    - ui developer
+    - ui/ux
+    - ux
+    - web design
+    - design engineer*
+    - designer
+    - graphic
+    - hardware
+    - mechanical
+    - electrical
+    - analog
+    - asic
+    - fpga
+    - rf
+    - silicon
+    - sales
+    - marketing
+    - business analyst
+    - finance
+    - accounting
+    - recruit*
+    - human resources
+    - phd
+    - ph.d
+    - doctoral
+    - mba
+    - senior
+    - staff
+    - principal
+    - manager
+    - teaching
+    - quality engineer*
+    - test engineer*
+    - student researcher
+    - content writ*
+    - video
+    - social media
+    - customer support
+    - telecaller
+  # "Frontend" is fine if the role is also full stack
+  frontend_ok_if: ["full stack", "full-stack", "fullstack"]
+
+# Things that mark a listing as dodgy (mostly for Internshala)
+scam_filters:
+  - registration fee
+  - training fee
+  - security deposit
+  - pay to
+  - paid training
+  - certificate fee
+  - investment required
+
+us_work_authorization:
+  # You're legally authorised to work in the US and willing to relocate, so
+  # "Does Not Offer Sponsorship" roles are always INCLUDED (shown with a small tag).
+  # Citizenship-only roles (often defense/government) are also included and tagged.
+  # Set this to true if you want those dropped.
+  drop_citizenship_required: false
+
+# Well-known / reputable companies get a ranking boost and a ⭐ tag.
+top_companies: [google, alphabet, deepmind, microsoft, amazon, aws, apple, meta, nvidia, netflix, openai,
+  anthropic, salesforce, adobe, oracle, ibm, intel, amd, qualcomm, cisco, tesla, uber, airbnb, stripe,
+  databricks, snowflake, linkedin, tiktok, bytedance, palantir, servicenow, intuit, paypal, visa,
+  mastercard, jpmorgan, jp morgan chase, goldman sachs, morgan stanley, citadel, two sigma,
+  jane street, de shaw, bloomberg, capital one, american express, atlassian, cloudflare, datadog,
+  mongodb, workday, vmware, broadcom, dell, hp, hpe, samsung, sony, zoox, waymo, cruise, scale ai,
+  figma, notion, coinbase, robinhood, pinterest, snap, reddit, discord, spotify, doordash, lyft,
+  instacart, dropbox, box, zoom, okta, twilio, rubrik, nutanix, texas instruments, toyota,
+  dell technologies, at&t, charles schwab, usaa, fidelity, chevron, exxonmobil, american airlines,
+  southwest airlines, h-e-b, indeed, ups, walmart, target, home depot, lowe's, ibm research,
+  flipkart, razorpay, phonepe, swiggy, zomato, cred, meesho, zepto, groww, postman, freshworks,
+  zoho, sarvam, infosys research, tcs research, microsoft research, google research]
+
+alerts:
+  # Instant WhatsApp alerts for score >= this (0–100). Others go into the digest.
+  instant_min_score: 60
+  # Daily digest time (India time, 24h)
+  digest_hour_ist: 20
+  # Max jobs per WhatsApp message
+  jobs_per_message: 3
