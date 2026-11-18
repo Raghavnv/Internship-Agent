@@ -192,9 +192,20 @@ class Notifier:
             return False
 
     def _meta_template(self, name, params):
-        self._meta_post({"type": "template", "template": {
-            "name": name, "language": {"code": self.meta_lang},
-            "components": [{"type": "body", "parameters": [{"type": "text", "text": p} for p in params]}]}})
+        langs = [self.meta_lang] + [l for l in ("en", "en_US", "en_GB") if l != self.meta_lang]
+        for i, lang in enumerate(langs):
+            try:
+                self._meta_post({"type": "template", "template": {
+                    "name": name, "language": {"code": lang},
+                    "components": [{"type": "body", "parameters": [{"type": "text", "text": p} for p in params]}]}})
+                if lang != self.meta_lang:
+                    log.info("template %s works with language %s; remembering it", name, lang)
+                    self.meta_lang = lang
+                return
+            except MetaError as e:
+                # 132001 = this name/language pair doesn't exist; try the next English variant
+                if "132001" not in str(e) or i == len(langs) - 1:
+                    raise
 
     def _meta_text_or_template(self, text, tpl, params):
         if self._meta_try_text(text):
