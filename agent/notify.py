@@ -212,12 +212,16 @@ class Notifier:
                 nums = requests.get(f"{g}/{w}/phone_numbers", params={"fields": "id,display_phone_number"},
                                     headers=h, timeout=30).json().get("data", [])
                 tpls = requests.get(f"{g}/{w}/message_templates",
-                                    params={"fields": "name,language,status,category", "limit": 100},
+                                    params={"fields": "name,language,status,category,components", "limit": 100},
                                     headers=h, timeout=30).json()
                 print(f"DIAG account {w} ({info.get('name')}): numbers={[(n['id'], n['display_phone_number']) for n in nums]}")
                 for t in tpls.get("data", []):
                     print(f"DIAG   template name={t.get('name')!r} language={t.get('language')} "
                           f"status={t.get('status')} category={t.get('category')}")
+                    if not t.get("name", "").startswith(("jaspers", "hello")):
+                        for c in t.get("components", []):
+                            if c.get("type") == "BODY":
+                                print("DIAG     body:", repr(c.get("text", ""))[:400])
                 if "error" in tpls:
                     print("DIAG   templates error:", tpls["error"].get("message"))
         except Exception as e:
