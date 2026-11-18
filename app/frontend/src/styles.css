@@ -994,3 +994,5 @@ a.tile:hover { border-color: rgba(143, 168, 255, 0.4); }
   .timeline > li::before { background: #1a3fbf; box-shadow: none; }
   .timeline > li { break-inside: avoid; }
 }
+
+#how .how { margin-top: 2.5rem; }
