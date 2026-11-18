@@ -59,6 +59,14 @@ Tests: `cd app/backend && python -m pytest -q` (uses a fake LLM and `tests/sampl
 3. **Environment variable:** `VITE_API_URL` = `https://<your-service>.onrender.com`
 4. Deploy. Then put the Vercel URL into Render's `ALLOWED_ORIGINS`.
 
+## Use it like a Mac app
+
+Once deployed, open your Vercel URL and:
+- **Safari:** File → **Add to Dock**. It gets its own icon and window.
+- **Chrome / Edge:** the install icon at the right of the address bar → **Install**.
+
+For a menu-bar widget with notifications (works even before deploying), see [widget/README.md](../widget/README.md).
+
 ## Configuration (backend env vars)
 
 | Variable | Default | What it does |
