@@ -1,7 +1,8 @@
 // The questions asked in onboarding, also used (all at once) on the Profile page.
 import { useRef, useState } from 'react'
 import { parseResume } from './lib/api.js'
-import { uploadResume } from './lib/backend.js'
+import { projects as P, uploadResume } from './lib/backend.js'
+import { fillEmpty } from './lib/resumeMerge.js'
 import { COMPANY_TYPES, DEGREE_LEVELS, LOCATIONS, ROLES, SKILLS, US_AUTH, WORK_MODES, YEARS, fromMonth, toMonth } from './lib/options.js'
 import { ChipInput, ChoiceChips, Field, Icon, Spinner } from './ui.jsx'
 
@@ -44,18 +45,18 @@ function Resume({ d, setDraft, userId }) {
     if (!f) return
     setBusy(true); setErr(''); setMsg('')
     try {
-      const [parsed, path] = await Promise.all([parseResume(f), uploadResume(userId, f)])
-      const p = parsed.profile || {}
-      const merged = { ...d, resume_path: path, resume_text: parsed.text }
-      for (const k of ['full_name', 'college', 'degree', 'major', 'grad_year', 'linkedin', 'github', 'portfolio', 'headline']) {
-        if (p[k] && !d[k]) merged[k] = p[k]
-      }
-      const union = (a = [], b = []) => [...a, ...b.filter((x) => !a.some((y) => y.toLowerCase() === String(x).toLowerCase()))]
-      merged.skills = union(d.skills, p.skills)
-      merged.roles = union(d.roles, (p.roles || []).filter((r) => ROLES.includes(r)))
-      setDraft(merged)
-      const n = (p.skills || []).length
-      setMsg(n ? `Read your resume and added ${n} skills${p.roles?.length ? ` and ${p.roles.length} role interests` : ''}. Check them on the next step.` : 'Saved your resume. Add your skills on the next step.')
+      const [parsed, path, existing] = await Promise.all([parseResume(f), uploadResume(userId, f), P.list().catch(() => [])])
+      const found = parsed.profile || {}
+      const { patch, newProjects } = fillEmpty(d, existing || [], found)
+      for (const [i, p] of newProjects.entries()) await P.save({ ...p, position: (existing || []).length + i })
+      setDraft({ ...d, ...patch, resume_path: path, resume_text: parsed.text, resume_updated_at: new Date().toISOString() })
+      const bits = [
+        (found.skills || []).length && `${found.skills.length} skills`,
+        (found.experience || []).length && `${found.experience.length} ${found.experience.length === 1 ? 'role' : 'roles'} of experience`,
+        newProjects.length && `${newProjects.length} ${newProjects.length === 1 ? 'project' : 'projects'}`,
+        (found.education || []).length && 'your education',
+      ].filter(Boolean)
+      setMsg(bits.length ? `Read your resume and filled in ${bits.join(', ')}. You can review everything on your Profile later.` : 'Saved your resume. Add your skills on the next step.')
     } catch (ex) {
       setErr(ex.message)
     } finally {

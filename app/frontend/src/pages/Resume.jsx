@@ -1,17 +1,16 @@
-import { useRef, useState } from 'react'
-import { parseResume, reviewResume } from '../lib/api.js'
-import { resumeUrl, uploadResume } from '../lib/backend.js'
+import { useState } from 'react'
+import { reviewResume } from '../lib/api.js'
+import { resumeUrl } from '../lib/backend.js'
+import ResumeImport from '../ResumeImport.jsx'
 import { useSession } from '../lib/session.jsx'
 import { useUserData } from '../lib/userdata.jsx'
 import { RichText } from '../components.jsx'
 import { Icon, Spinner } from '../ui.jsx'
 
 export default function Resume() {
-  const { user, profile, update } = useSession()
+  const { profile } = useSession()
   const { apps, saved } = useUserData()
-  const ref = useRef(null)
-  const [busy, setBusy] = useState(false)
-  const [msg, setMsg] = useState('')
+  const [importing, setImporting] = useState(false)
   const [err, setErr] = useState('')
   const [target, setTarget] = useState('')
   const [custom, setCustom] = useState({ title: '', company: '', notes: '' })
@@ -22,20 +21,6 @@ export default function Resume() {
     ...saved.map((s) => ({ key: `s:${s.job_id}`, job: s.job, label: `${s.job.title} at ${s.job.company} (saved)` })),
     ...apps.map((a) => ({ key: `a:${a.id}`, job: { title: a.title, company: a.company, locations: [a.location], terms: a.terms }, label: `${a.title} at ${a.company} (applied)` })),
   ]
-
-  async function onFile(e) {
-    const f = e.target.files?.[0]
-    e.target.value = ''
-    if (!f) return
-    setBusy(true); setErr(''); setMsg('')
-    try {
-      const [parsed, path] = await Promise.all([parseResume(f), uploadResume(user.id, f)])
-      const p = parsed.profile || {}
-      const newSkills = (p.skills || []).filter((s) => !(profile.skills || []).some((x) => x.toLowerCase() === s.toLowerCase()))
-      await update({ resume_path: path, resume_text: parsed.text, skills: [...(profile.skills || []), ...newSkills] })
-      setMsg(newSkills.length ? `Resume saved. Added ${newSkills.length} new skills to your profile: ${newSkills.slice(0, 6).join(', ')}${newSkills.length > 6 ? '…' : ''}` : 'Resume saved.')
-    } catch (ex) { setErr(ex.message) } finally { setBusy(false) }
-  }
 
   async function open() {
     try { const u = await resumeUrl(profile.resume_path); if (u) window.open(u, '_blank', 'noopener') } catch (ex) { setErr(ex.message) }
@@ -67,14 +52,12 @@ export default function Resume() {
           </div>
           <div className="rp-actions">
             {has && profile.resume_path && !profile.resume_path.startsWith('demo/') && <button type="button" className="btn btn-ghost btn-sm" onClick={open}>View</button>}
-            <button type="button" className="btn btn-primary btn-sm" onClick={() => ref.current?.click()} disabled={busy}>
-              {busy ? 'Reading…' : has ? 'Replace' : 'Upload resume'}
+            <button type="button" className="btn btn-primary btn-sm" onClick={() => setImporting(true)}>
+              {has ? 'Upload a new version' : 'Upload resume'}
             </button>
-            <input ref={ref} type="file" accept="application/pdf" hidden onChange={onFile} />
           </div>
         </div>
-        {busy && <p className="quiet small"><Spinner /> Reading your resume and pulling out your skills…</p>}
-        {msg && <p className="form-info" role="status">{msg}</p>}
+        <p className="quiet small rp-note">Uploading also lets the AI update your profile. You review every change before it&rsquo;s applied.</p>
       </section>
 
       <section className="panel" aria-labelledby="rv-h">
@@ -106,6 +89,7 @@ export default function Resume() {
         )}
         {err && <p className="form-error" role="alert">{err}</p>}
       </section>
+      <ResumeImport open={importing} onClose={() => setImporting(false)} />
     </main>
   )
 }
