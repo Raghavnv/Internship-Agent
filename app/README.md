@@ -8,6 +8,13 @@ Chat with every live internship your alert agent tracks (~5,000 roles, refreshed
 
 The home screen is a live dot-matrix map of every open internship. Ask a question and arcs draw from Bangalore to each matching city; each answer lists its roles with company, city, dates, a fit-score ring and an Apply link.
 
+## What's in the app
+
+- **Landing page:** live map, a "How it works" walkthrough, live counts for your cities, and your best matches to apply for now.
+- **Chat search:** ask anything; results appear under each answer and on the map.
+- **My applications:** clicking Apply saves the role. Track status (Applied, Interviewing, Offer, Rejected), add notes,
+  and export/import a backup. Saved in your browser on this device (no account needed).
+
 ## How it works
 
 ```
