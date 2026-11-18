@@ -176,6 +176,39 @@ class Notifier:
             raise MetaError(r.status_code, r.text[:400])
         return r
 
+    def meta_diagnose(self):
+        """Print which WhatsApp accounts and templates this token can see (used by --test on failure)."""
+        g = f"https://graph.facebook.com/{self.meta_ver}"
+        h = {"Authorization": f"Bearer {self.meta_token}"}
+        try:
+            pn = requests.get(f"{g}/{self.meta_pnid}", params={"fields": "display_phone_number,verified_name"},
+                              headers=h, timeout=30).json()
+            print("DIAG phone number:", pn)
+            dbg = requests.get(f"{g}/debug_token", params={"input_token": self.meta_token},
+                               headers=h, timeout=30).json().get("data", {})
+            print("DIAG token valid:", dbg.get("is_valid"), "expires:", dbg.get("expires_at"),
+                  "scopes:", dbg.get("scopes"))
+            wabas = set()
+            for gs in dbg.get("granular_scopes", []):
+                if gs.get("scope", "").startswith("whatsapp_business"):
+                    wabas.update(gs.get("target_ids") or [])
+            print("DIAG WhatsApp accounts this token can use:", sorted(wabas) or "NONE")
+            for w in sorted(wabas):
+                info = requests.get(f"{g}/{w}", params={"fields": "name"}, headers=h, timeout=30).json()
+                nums = requests.get(f"{g}/{w}/phone_numbers", params={"fields": "id,display_phone_number"},
+                                    headers=h, timeout=30).json().get("data", [])
+                tpls = requests.get(f"{g}/{w}/message_templates",
+                                    params={"fields": "name,language,status,category", "limit": 100},
+                                    headers=h, timeout=30).json()
+                print(f"DIAG account {w} ({info.get('name')}): numbers={[(n['id'], n['display_phone_number']) for n in nums]}")
+                for t in tpls.get("data", []):
+                    print(f"DIAG   template name={t.get('name')!r} language={t.get('language')} "
+                          f"status={t.get('status')} category={t.get('category')}")
+                if "error" in tpls:
+                    print("DIAG   templates error:", tpls["error"].get("message"))
+        except Exception as e:
+            print("DIAG failed:", e)
+
     def _meta_try_text(self, text):
         """Free-form message: only works inside the 24h window after you last messaged the number."""
         if not self.meta_prefer_text:

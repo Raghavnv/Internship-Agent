@@ -89,6 +89,8 @@ def main():
         ok = notifier.send("👋 Hi Raghav! Your internship alert agent is connected. "
                            "You'll get new matching roles here as soon as they're posted.")
         print("channels:", notifier.channels() or "none configured (printed instead)", "ok:", ok)
+        if not ok and notifier.meta_on():
+            notifier.meta_diagnose()
         return 0 if ok else 1
 
     if not notifier.channels() and not args.dry_run:
