@@ -204,8 +204,8 @@ export default function App() {
 
       {home ? (
         <main className="home">
-          <h1>Find the internship<br /><em>that fits you.</em></h1>
-          <p className="lead">Ask in your own words. I search every live listing, refreshed every 15 minutes.</p>
+          <h1>Find your next internship</h1>
+          <p className="lead">Search every live listing in plain words. Refreshed every 15 minutes.</p>
           {composer}
           {error && <p className="error" role="alert">{error}</p>}
           <ul className="suggest">
