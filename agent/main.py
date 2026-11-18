@@ -81,6 +81,13 @@ def export_jobs(jobs, evs, st):
     for j in jobs:
         rec = {k: j.get(k) for k in keep if j.get(k) not in (None, [], "")}
         rec["first_seen"] = int(st["seen"].get(j["id"]) or time.time())
+        try:
+            from .geo import geocode
+            g = [geocode(l) for l in j.get("locations") or []]
+            if any(g):
+                rec["geo"] = [list(x) if x else None for x in g]
+        except Exception:  # geocoding is a nice-to-have; never break the run
+            pass
         ev = evs.get(j["id"])
         if ev:
             rec["fit"] = {"score": ev["score"], "bucket": ev["bucket"], "tags": ev["tags"]}

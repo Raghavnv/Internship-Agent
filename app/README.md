@@ -6,7 +6,7 @@ Chat with every live internship your alert agent tracks (~5,000 roles, refreshed
 > "Remote ML internships I could do between January and June"
 > "Which companies have the most openings in Texas?"
 
-Each answer comes with its matching roles underneath: company, city, dates, a fit-score ring and an Apply link.
+The home screen is a live dot-matrix map of every open internship. Ask a question and arcs draw from Bangalore to each matching city; each answer lists its roles with company, city, dates, a fit-score ring and an Apply link.
 
 ## How it works
 

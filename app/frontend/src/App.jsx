@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
-import { chat, getMeta, searchJobs, setPasscode } from './api.js'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { chat, getMap, getMeta, searchJobs, setPasscode } from './api.js'
 import { cityName, describeArgs, postedLabel } from './format.js'
+import WorldMap from './WorldMap.jsx'
 
 const SUGGESTIONS = [
   'Backend roles in Austin or Dallas this summer',
@@ -49,24 +50,26 @@ function FitRing({ value }) {
   )
 }
 
-function JobRow({ job }) {
+function JobRow({ job, onFocus }) {
   const city = cityName(job.locations[0] || (job.remote ? 'Remote' : ''))
   const more = job.locations.length - 1 + (job.more_locations || 0)
   const posted = postedLabel(job.posted)
   const flag = job.sponsorship?.includes('Citizenship') ? 'US citizens only' : null
+  const fresh = posted === 'Posted today' || posted === 'Posted yesterday'
   return (
-    <li className="job">
+    <li className="job" onMouseEnter={() => onFocus?.(job.id)} onMouseLeave={() => onFocus?.(null)}
+      onFocus={() => onFocus?.(job.id)} onBlur={() => onFocus?.(null)}>
       <span className="avatar" aria-hidden="true">{(job.company || '?').trim().charAt(0)}</span>
       <div className="job-main">
         <h3>{job.title}</h3>
         <p className="job-sub">
-          {job.company}
-          <span className="sep" aria-hidden="true" />
-          {city || 'Location not listed'}{more > 0 ? `, +${more}` : ''}
+          <span className="co">{job.company}</span>
+          <span className={`pin${job.pins?.length ? '' : ' pin-off'}`} aria-hidden="true" />
+          {city || 'Location not listed'}{more > 0 ? <span className="more-loc"> +{more}</span> : ''}
         </p>
         <p className="job-meta">
           <span>{shortTerms(job.terms)}</span>
-          {posted && <span>{posted}</span>}
+          {posted && <span className={fresh ? 'fresh' : ''}>{posted}</span>}
           {job.stipend && <span>{job.stipend}</span>}
           {flag && <span className="flag">{flag}</span>}
         </p>
@@ -79,7 +82,7 @@ function JobRow({ job }) {
   )
 }
 
-function Results({ data, compact }) {
+function Results({ data, onFocus, limit = 5 }) {
   const [open, setOpen] = useState(false)
   if (!data) return null
   if (data.counts) {
@@ -98,7 +101,7 @@ function Results({ data, compact }) {
       </div>
     )
   }
-  const shown = open || compact === false ? data.results : data.results.slice(0, 5)
+  const shown = open ? data.results : data.results.slice(0, limit)
   const chips = data.args ? describeArgs(data.args) : []
   return (
     <div className="result">
@@ -109,18 +112,22 @@ function Results({ data, compact }) {
       )}
       {data.results.length === 0
         ? <p className="quiet">Nothing matched. Try a wider area or fewer filters.</p>
-        : <ul className="jobs">{shown.map((j) => <JobRow key={j.id} job={j} />)}</ul>}
-      {data.results.length > 5 && compact !== false && (
+        : <ul className="jobs">{shown.map((j) => <JobRow key={j.id} job={j} onFocus={onFocus} />)}</ul>}
+      {data.results.length > limit && (
         <button type="button" className="more" onClick={() => setOpen(!open)} aria-expanded={open}>
-          {open ? 'Show fewer' : `Show ${data.results.length - 5} more`}
+          {open ? 'Show fewer' : `Show ${data.results.length - limit} more`}
         </button>
       )}
     </div>
   )
 }
 
+const toPins = (results = []) =>
+  results.flatMap((j) => (j.pins || []).map(([lat, lng]) => ({ lat, lng, key: j.id })))
+
 export default function App() {
   const [meta, setMeta] = useState(null)
+  const [mapData, setMapData] = useState({ cities: [], home: null })
   const [picks, setPicks] = useState(null)
   const [needCode, setNeedCode] = useState(false)
   const [code, setCode] = useState('')
@@ -128,6 +135,7 @@ export default function App() {
   const [input, setInput] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  const [focus, setFocus] = useState(null)
   const endRef = useRef(null)
   const inputRef = useRef(null)
 
@@ -135,13 +143,20 @@ export default function App() {
     getMeta().then((m) => {
       setMeta(m)
       setNeedCode(false)
-      searchJobs({ fit_only: true, sort: 'fit', limit: 5 }).then(setPicks).catch(() => {})
+      getMap().then(setMapData).catch(() => {})
+      searchJobs({ fit_only: true, sort: 'fit', limit: 6 }).then(setPicks).catch(() => {})
     }).catch((e) => {
       if (e.status === 401) setNeedCode(true)
       else setError('The server is waking up. Try again in about 30 seconds.')
     })
   useEffect(() => { loadMeta() }, [])
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' }) }, [messages, busy])
+
+  const lastResults = useMemo(() => {
+    for (let i = messages.length - 1; i >= 0; i--) if (messages[i].last?.results) return messages[i].last.results
+    return null
+  }, [messages])
+  const pins = useMemo(() => toPins(lastResults || (messages.length ? [] : picks?.results)), [lastResults, picks, messages.length])
 
   async function ask(text) {
     const q = text.trim()
@@ -186,7 +201,7 @@ export default function App() {
     <form className="composer" onSubmit={(e) => { e.preventDefault(); ask(input) }}>
       <label htmlFor="q" className="sr">Ask about internships</label>
       <textarea id="q" ref={inputRef} rows={1} value={input}
-        placeholder={home ? 'Ask for any internship…' : 'Ask a follow-up…'}
+        placeholder={home ? 'Try “ML internships in Houston that start in June”' : 'Ask a follow-up…'}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ask(input) } }} />
       <button type="submit" disabled={busy || !input.trim()} aria-label="Send">
@@ -194,47 +209,73 @@ export default function App() {
       </button>
     </form>
   )
+  const nCities = mapData.cities.length
+  const map = (
+    <WorldMap cities={mapData.cities} home={mapData.home} pins={pins} focus={focus} compact={!home}
+      onCity={(c) => ask(`Internships in ${c}`)} />
+  )
 
   return (
     <div className={`app ${home ? 'is-home' : 'is-thread'}`}>
       <header className="top">
-        <span className="wordmark">Internship Copilot</span>
-        {meta && <span className="live"><span className="dot" aria-hidden="true" />{meta.count.toLocaleString('en-IN')} live listings</span>}
+        <span className="wordmark"><span className="logo" aria-hidden="true" />Internship Copilot</span>
+        {meta && <span className="live"><span className="dot" aria-hidden="true" />Live, updated {meta.updated_human.replace(/^\d+ \w+ \d{4}, /, '')}</span>}
       </header>
 
       {home ? (
         <main className="home">
-          <h1>Find your next internship</h1>
-          <p className="lead">Search every live listing in plain words. Refreshed every 15 minutes.</p>
-          {composer}
-          {error && <p className="error" role="alert">{error}</p>}
-          <ul className="suggest">
-            {SUGGESTIONS.map((s) => <li key={s}><button type="button" onClick={() => ask(s)}>{s}</button></li>)}
-          </ul>
+          <section className="hero">
+            {map}
+            <div className="hero-copy">
+              <h1>Where will you<br />intern next?</h1>
+              <p className="stats">
+                <span><strong>{meta ? meta.count.toLocaleString('en-IN') : '—'}</strong> open internships</span>
+                <span><strong>{nCities || '—'}</strong> cities</span>
+                <span><strong>15 min</strong> refresh</span>
+              </p>
+            </div>
+            <div className="legend" aria-hidden="true">
+              <span><i className="lg-home" />You, Bangalore</span>
+              <span><i className="lg-dest" />Open roles</span>
+            </div>
+          </section>
+          <div className="ask">
+            {composer}
+            {error && <p className="error" role="alert">{error}</p>}
+            <ul className="suggest">
+              {SUGGESTIONS.map((s) => <li key={s}><button type="button" onClick={() => ask(s)}>{s}</button></li>)}
+            </ul>
+          </div>
           {picks?.results?.length > 0 && (
             <section className="picks" aria-labelledby="picks-h">
-              <h2 id="picks-h">Picked for you</h2>
-              <Results data={{ results: picks.results }} compact={false} />
+              <div className="section-head">
+                <h2 id="picks-h">Picked for you</h2>
+                <p>Your strongest matches right now, ranked by the alert agent. Hover one to see it on the map.</p>
+              </div>
+              <Results data={{ results: picks.results }} onFocus={setFocus} limit={6} />
             </section>
           )}
         </main>
       ) : (
-        <main className="thread">
-          {messages.map((m, i) => (
-            <article key={i} className={`turn ${m.role}`}>
-              {m.role === 'user' ? <p className="q">{m.content}</p> : (
-                <>
-                  <div className="a"><RichText text={m.content} /></div>
-                  <Results data={m.last} />
-                </>
-              )}
-            </article>
-          ))}
-          {busy && <article className="turn assistant"><p className="thinking"><span /><span /><span /><span className="sr">Searching</span></p></article>}
-          {error && <p className="error" role="alert">{error}</p>}
-          <div ref={endRef} />
-          <div className="dock">{composer}</div>
-        </main>
+        <>
+          <div className="band">{map}</div>
+          <main className="thread">
+            {messages.map((m, i) => (
+              <article key={i} className={`turn ${m.role}`}>
+                {m.role === 'user' ? <p className="q">{m.content}</p> : (
+                  <>
+                    <div className="a"><RichText text={m.content} /></div>
+                    <Results data={m.last} onFocus={setFocus} />
+                  </>
+                )}
+              </article>
+            ))}
+            {busy && <article className="turn assistant"><p className="thinking"><span /><span /><span /><span className="sr">Searching</span></p></article>}
+            {error && <p className="error" role="alert">{error}</p>}
+            <div ref={endRef} />
+            <div className="dock">{composer}</div>
+          </main>
+        </>
       )}
     </div>
   )

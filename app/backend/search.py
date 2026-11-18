@@ -261,14 +261,35 @@ def match(jobs, *, keywords=None, any_keywords=None, exclude_keywords=None, comp
 def compact(j, matched_locs=None):
     locs = j.get("locations") or []
     shown = (matched_locs or [])[:3] or locs[:3]
+    geo = j.get("geo") or []
+    pins = []
+    for l in shown:
+        try:
+            g = geo[locs.index(l)]
+        except (ValueError, IndexError):
+            g = None
+        if g:
+            pins.append(g[:2])
     posted = j.get("posted")
     return {
         "id": j["id"], "title": j.get("title"), "company": j.get("company"), "url": j.get("url"),
         "locations": shown, "more_locations": max(0, len(locs) - len(shown)), "terms": j.get("terms") or [],
         "remote": bool(j.get("remote")), "posted": date.fromtimestamp(posted).isoformat() if posted else None,
         "category": j.get("category"), "sponsorship": j.get("sponsorship"), "stipend": j.get("stipend"),
-        "fit": (j.get("fit") or {}).get("score"), "source": j.get("source"),
+        "fit": (j.get("fit") or {}).get("score"), "source": j.get("source"), "pins": pins,
     }
+
+
+def city_map(jobs, top=600):
+    """Listing counts per geocoded city, for the map's base layer."""
+    agg = {}
+    for j in jobs:
+        for g in {tuple(g) for g in (j.get("geo") or []) if g}:
+            k = (round(g[0], 2), round(g[1], 2))
+            a = agg.setdefault(k, [g[0], g[1], g[2], 0])
+            a[3] += 1
+    rows = sorted(agg.values(), key=lambda r: -r[3])[:top]
+    return [{"lat": r[0], "lng": r[1], "city": r[2], "count": r[3]} for r in rows]
 
 
 def aggregate(jobs, group_by="company", top=15, now=None, **filters):

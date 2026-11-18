@@ -16,7 +16,7 @@ from pydantic import BaseModel, Field
 
 import llm
 from data import store
-from search import search
+from search import city_map, search
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
 IST = timezone(timedelta(hours=5, minutes=30))
@@ -72,6 +72,17 @@ def get_meta():
     m["top_companies"] = Counter(j.get("company") for j in jobs).most_common(8)
     m["passcode_required"] = bool(PASSCODE)
     return m
+
+
+_map_cache = {"at": 0.0, "data": None}
+
+
+@app.get("/api/map", dependencies=[Depends(guard)])
+def get_map():
+    jobs = store.get()
+    if _map_cache["at"] != store.loaded_at:
+        _map_cache.update(at=store.loaded_at, data=city_map(jobs))
+    return {"cities": _map_cache["data"], "home": {"lat": 12.972, "lng": 77.594, "city": "Bengaluru"}}
 
 
 @app.post("/api/search", dependencies=[Depends(guard)])

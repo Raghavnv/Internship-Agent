@@ -27,3 +27,4 @@ async function call(path, options = {}) {
 export const getMeta = () => call('/api/meta')
 export const chat = (messages) => call('/api/chat', { method: 'POST', body: JSON.stringify({ messages }) })
 export const searchJobs = (filters) => call('/api/search', { method: 'POST', body: JSON.stringify(filters) })
+export const getMap = () => call('/api/map')
