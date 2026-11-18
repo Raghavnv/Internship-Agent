@@ -1,0 +1,76 @@
+{
+ "updated": 1795012952,
+ "count": 4,
+ "jobs": [
+  {
+   "id": "a",
+   "source": "Simplify",
+   "company": "PayPal",
+   "title": "Backend Software Engineer Intern",
+   "url": "https://paypal.example/1",
+   "locations": [
+    "Austin, TX"
+   ],
+   "terms": [
+    "Summer 2027"
+   ],
+   "posted": 1794926552,
+   "category": "Software",
+   "degrees": [
+    "Bachelor's"
+   ],
+   "sponsorship": "Other",
+   "first_seen": 1795012952,
+   "fit": {
+    "score": 90,
+    "bucket": "preferred",
+    "tags": []
+   }
+  },
+  {
+   "id": "b",
+   "source": "Simplify",
+   "company": "NVIDIA",
+   "title": "Machine Learning Intern",
+   "url": "https://nvidia.example/2",
+   "locations": [
+    "Santa Clara, CA"
+   ],
+   "terms": [
+    "Summer 2027"
+   ],
+   "posted": 1794753752,
+   "category": "AI/ML/Data",
+   "first_seen": 1795012952
+  },
+  {
+   "id": "c",
+   "source": "Simplify",
+   "company": "Acme AI",
+   "title": "AI Engineer Intern",
+   "url": "https://acme.example/3",
+   "locations": [
+    "Remote in USA"
+   ],
+   "terms": [
+    "Spring 2027"
+   ],
+   "remote": true,
+   "posted": 1794148952,
+   "category": "AI/ML/Data",
+   "first_seen": 1795012952
+  },
+  {
+   "id": "d",
+   "source": "Internshala",
+   "company": "Sarvam",
+   "title": "ML Research Intern",
+   "url": "https://sarvam.example/4",
+   "locations": [
+    "Bengaluru, Karnataka, India"
+   ],
+   "first_seen": 1795012952,
+   "stipend": "\u20b9 40,000 /month"
+  }
+ ]
+}

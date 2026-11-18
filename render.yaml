@@ -1,0 +1,22 @@
+# Render blueprint for the Internship Copilot API (app/backend).
+# Render dashboard -> New -> Blueprint -> pick this repo. You'll be asked for the secret values.
+services:
+  - type: web
+    name: internship-copilot-api
+    runtime: python
+    plan: free
+    rootDir: app/backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: GROQ_API_KEY
+        sync: false
+      - key: APP_PASSCODE
+        sync: false
+      - key: ALLOWED_ORIGINS
+        sync: false
+      - key: LLM_MODEL
+        value: openai/gpt-oss-120b

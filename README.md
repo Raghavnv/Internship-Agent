@@ -1,4 +1,9 @@
-# 🔔 Internship Alert Agent (WhatsApp)
+# 🔔 Internship Alert Agent (WhatsApp) + ✈️ Internship Copilot
+
+This repo has two parts:
+- **`agent/`**: checks for new internships every 15 minutes and sends matches to WhatsApp (this page).
+- **`app/`**: Internship Copilot, an AI chat app over all the live listings. See [app/README.md](app/README.md).
+
 
 Checks for new internships **every 15 minutes** and sends matching ones straight to your WhatsApp,
 so you can apply within minutes of a posting going live.
