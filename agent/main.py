@@ -92,7 +92,9 @@ def main():
         return 0 if ok else 1
 
     if not notifier.channels() and not args.dry_run:
-        log.warning("No WhatsApp/Telegram secrets set: messages will only be printed in the log.")
+        log.warning("No WhatsApp/Telegram secrets set yet: skipping this run (nothing saved). "
+                    "Add the secrets from README.md and the next run will start normally.")
+        return 0
 
     st = load_state()
     first_run = not st["seen"]
