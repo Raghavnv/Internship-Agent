@@ -970,7 +970,9 @@ a.tile:hover { border-color: rgba(143, 168, 255, 0.4); }
   .folio-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
-  .pf-hero-side { grid-auto-flow: row; }
+  .pf-hero { display: flex; flex-direction: column; align-items: stretch; }
+  .pf-hero-side { display: grid; grid-auto-flow: row; min-width: 0; }
+  .pf-complete { margin: 0.25rem 0 0; }
   .folio-head { align-items: flex-start; }
 }
 
@@ -985,6 +987,7 @@ a.tile:hover { border-color: rgba(143, 168, 255, 0.4); }
   .folio-head { border-color: #ddd; }
   .folio h1, .folio h3, .folio strong, .folio-bio, .timeline ul { color: #111 !important; }
   .folio .quiet, .folio h2, .pf-meta, .proj-card p, .timeline h3 span { color: #555 !important; }
+  .folio .pf-head { color: #333 !important; }
   .pf-meta a { color: #1a3fbf !important; }
   .avatar { background: #eef1f7 !important; color: #333 !important; }
   .proj-card { background: #fff; border-color: #ddd; break-inside: avoid; }

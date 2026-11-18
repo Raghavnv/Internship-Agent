@@ -20,8 +20,8 @@ Groq `gpt-oss-120b` (LLM with tool calling) · GitHub Actions data pipeline (`..
 | **Applications** | Tracker: Applied, Interviewing, Offer, Rejected; notes; follow-up nudges; CSV export. Clicking Apply anywhere adds a role here. |
 | **Saved** | Bookmarked roles. |
 | **Resume** | Private PDF upload (Supabase Storage), skill extraction, AI feedback and rewritten bullets for a chosen role. |
-| **Portfolio** | Headline, bio, links, projects with a live preview card. |
-| **Profile** | Edit every onboarding answer. Fit scores update immediately. |
+| **Profile** | Full profile: basics and contact, about, experience, education, projects, skills, certifications and achievements, languages and links, internship preferences. Each section edits in place. **Update from resume**: the AI reads a PDF and proposes changes you tick to apply. |
+| **Portfolio** | Read-only showcase built from the profile, with **Download PDF** (print-styled). |
 
 **Fit scores are per user** (`backend/fit.py`): role interests, skills, preferred locations, remote/in-person
 availability windows vs. the internship's dates, degree level, US work authorisation vs. sponsorship, pay and recency.
@@ -35,7 +35,7 @@ resume files (`supabase/schema.sql`).
 
 ### 1. Supabase (database + login), about 10 minutes
 1. Go to **supabase.com**, sign in with GitHub, and click **New project**. Name it `internship-copilot`, set a database password (save it somewhere), and choose the **Mumbai** region (closest to you).
-2. When it's ready, open **SQL Editor → New query**, paste the whole of [`supabase/schema.sql`](supabase/schema.sql) and click **Run**. You should see "Success". This creates the tables, the privacy rules and the private `resumes` storage bucket.
+2. When it's ready, open **SQL Editor → New query**, paste the whole of [`supabase/schema.sql`](supabase/schema.sql) and click **Run**. (Re-run it after updates: it's safe to run again and adds any new columns.) You should see "Success". This creates the tables, the privacy rules and the private `resumes` storage bucket.
 3. Open **Project Settings → API** (or **Connect**) and copy:
    - **Project URL**, e.g. `https://abcd1234.supabase.co`
    - **anon / publishable key** (the public one, *not* the `service_role` / secret key)
