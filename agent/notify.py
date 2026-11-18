@@ -192,6 +192,20 @@ class Notifier:
             for gs in dbg.get("granular_scopes", []):
                 if gs.get("scope", "").startswith("whatsapp_business"):
                     wabas.update(gs.get("target_ids") or [])
+            if os.getenv("META_WA_WABA_ID"):
+                wabas.add(os.getenv("META_WA_WABA_ID"))
+            for path in ("me/assigned_whatsapp_business_accounts", "me/businesses"):
+                r = requests.get(f"{g}/{path}", params={"fields": "id,name"}, headers=h, timeout=30).json()
+                print(f"DIAG {path}:", r.get("data", r.get("error", {}).get("message")))
+                if path.endswith("accounts"):
+                    wabas.update(x["id"] for x in r.get("data", []))
+                else:
+                    for b in r.get("data", []):
+                        for kind in ("owned_whatsapp_business_accounts", "client_whatsapp_business_accounts"):
+                            rr = requests.get(f"{g}/{b['id']}/{kind}", params={"fields": "id,name"},
+                                              headers=h, timeout=30).json()
+                            print(f"DIAG   business {b.get('name')} {kind}:", rr.get("data", rr.get("error", {}).get("message")))
+                            wabas.update(x["id"] for x in rr.get("data", []))
             print("DIAG WhatsApp accounts this token can use:", sorted(wabas) or "NONE")
             for w in sorted(wabas):
                 info = requests.get(f"{g}/{w}", params={"fields": "name"}, headers=h, timeout=30).json()
