@@ -36,6 +36,7 @@ Click the briefcase, hold **Option**, then choose **Plugin settings** (or edit t
 |---|---|---|
 | `VAR_MIN_FIT` | 60 | Only count roles with at least this fit score |
 | `VAR_NOTIFY` | true | Mac notification for new strong matches |
+| `VAR_NOTIFY_FIT` | 80 | Only notify for new roles with at least this fit |
 | `VAR_APP_URL` | empty | Your deployed Internship Copilot URL, adds an "Open Internship Copilot" item |
 | `VAR_WATCH` | empty | Companies to watch, comma separated, e.g. `Stripe, Google, Hugging Face` |
 
@@ -46,3 +47,10 @@ The `15m` in the file name is the refresh interval; rename it (e.g. `internships
 ```bash
 node widget/test.js path/to/jobs.json
 ```
+
+## Briefcase not showing?
+
+Run `~/SwiftBarPlugins/internships.15m.js | head -3` in Terminal. If it prints a number and `sfimage=briefcase`,
+the widget works and macOS is hiding the icon: on Macs with a notch, items that don't fit are dropped.
+Install [Ice](https://icemenubar.app) (`brew install --cask jordanbaird-ice`) and move the briefcase to its
+Visible section, and check System Settings → Menu Bar → Allow in the Menu Bar → SwiftBar.

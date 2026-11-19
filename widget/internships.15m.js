@@ -6,6 +6,7 @@
 // <xbar.var>string(VAR_APP_URL=""): Your deployed Internship Copilot URL (optional)</xbar.var>
 // <xbar.var>number(VAR_MIN_FIT=60): Only show roles with at least this fit score</xbar.var>
 // <xbar.var>boolean(VAR_NOTIFY=true): Show a Mac notification for new strong matches</xbar.var>
+// <xbar.var>number(VAR_NOTIFY_FIT=80): Only notify for new roles with at least this fit score</xbar.var>
 // <xbar.var>string(VAR_WATCH=""): Companies to watch, comma separated (e.g. Stripe, Google). You're notified when they open</xbar.var>
 // <swiftbar.hideRunInTerminal>true</swiftbar.hideRunInTerminal>
 // <swiftbar.hideDisablePlugin>true</swiftbar.hideDisablePlugin>
@@ -176,16 +177,23 @@ function main() {
     let seen = []
     const prev = $.NSString.stringWithContentsOfFileEncodingError(file, $.NSUTF8StringEncoding, $())
     if (!prev.isNil()) { try { seen = JSON.parse(ObjC.unwrap(prev)) } catch (e) { seen = [] } }
+    const notifyFit = Number(env('VAR_NOTIFY_FIT', '80'))
     const unseen = fresh.filter((j) => !seen.includes(j.id))
-    if (unseen.length) {
+    const strong = unseen.filter((j) => j.fit.score >= notifyFit)
+    // remember everything we've seen, but only ping for strong fits
+    if (unseen.length && !strong.length) {
+      $(JSON.stringify([...unseen.map((j) => j.id), ...seen].slice(0, 1000))).writeToFileAtomicallyEncodingError(file, true, $.NSUTF8StringEncoding, $())
+    }
+    if (strong.length) {
       const app = Application.currentApplication()
       app.includeStandardAdditions = true
-      const top = unseen[0]
-      const body = unseen.length === 1
-        ? `${top.company}, ${(top.locations || ['Remote'])[0].split(',')[0]} (fit ${top.fit.score})`
-        : `${top.company} and ${unseen.length - 1} more`
-      app.displayNotification(body, { withTitle: unseen.length === 1 ? top.title : `${unseen.length} new internships for you`, soundName: 'Glass' })
-      const keep = [...unseen.map((j) => j.id), ...seen].slice(0, 500)
+      const top = strong[0]
+      const where = (top.locations || ['Remote'])[0].split(',')[0]
+      const body = strong.length === 1
+        ? `${top.company}, ${where} · fit ${top.fit.score}`
+        : `${top.title} at ${top.company} (fit ${top.fit.score}) and ${strong.length - 1} more. Click the briefcase to see them.`
+      app.displayNotification(body, { withTitle: strong.length === 1 ? top.title : `${strong.length} strong new matches`, soundName: 'Glass' })
+      const keep = [...unseen.map((j) => j.id), ...seen].slice(0, 1000)
       $(JSON.stringify(keep)).writeToFileAtomicallyEncodingError(file, true, $.NSUTF8StringEncoding, $())
     }
   }
