@@ -107,7 +107,8 @@ function buildMenu(payload, opts) {
     ]
   }
   const out = []
-  out.push(fresh.length ? `${fresh.length} | sfimage=briefcase.fill` : '| sfimage=briefcase')
+  // plain text title (an emoji always renders; SF Symbols can fail silently on some macOS versions)
+  out.push(fresh.length ? `💼 ${fresh.length}` : '💼')
   out.push('---')
   const upd = new Date(payload.updated * 1000)
   const hh = String(upd.getHours()).padStart(2, '0'), mm = String(upd.getMinutes()).padStart(2, '0')
