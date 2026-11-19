@@ -24,6 +24,9 @@ const PATHS = {
   upload: 'M10 13V3.5M6 7.5l4-4 4 4M3.5 13v3a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-3',
   menu: 'M3 5.5h14M3 10h14M3 14.5h14',
   arrow: 'M4 10h11M11 5.5 15.5 10 11 14.5',
+  calendar: 'M4 5h12a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zM3 9h14M7 3v4M13 3v4',
+  more: 'M5 10h.01M10 10h.01M15 10h.01',
+  extension: 'M8 3.5a1.5 1.5 0 0 1 3 0V5h3a1 1 0 0 1 1 1v3h1.5a1.5 1.5 0 0 1 0 3H15v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3h1.5a1.5 1.5 0 0 0 0-3H4V6a1 1 0 0 1 1-1h3z',
 }
 
 export function Icon({ name, size = 18 }) {
@@ -129,4 +132,17 @@ export function Field({ label, hint, htmlFor, children, wide }) {
 
 export function Spinner({ label = 'Loading' }) {
   return <span className="spinner" role="status"><span className="sr">{label}</span></span>
+}
+
+// Copies text and briefly confirms.
+export function CopyButton({ text, label = 'Copy', className = '' }) {
+  const [done, setDone] = useState(false)
+  return (
+    <button type="button" className={`copy-btn ${className}`} onClick={async () => {
+      try { await navigator.clipboard.writeText(text) } catch {
+        const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove()
+      }
+      setDone(true); setTimeout(() => setDone(false), 1400)
+    }}>{done ? 'Copied' : label}</button>
+  )
 }

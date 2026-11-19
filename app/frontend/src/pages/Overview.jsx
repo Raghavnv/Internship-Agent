@@ -6,8 +6,9 @@ import { useUserData } from '../lib/userdata.jsx'
 import { Results } from '../components.jsx'
 import { CountUp, DayArea, FitSpread, RankBars, SkeletonRows } from '../charts.jsx'
 import { Icon } from '../ui.jsx'
+import { STATUSES, statusKey } from '../lib/options.js'
+import { upcoming } from '../lib/calendar.js'
 
-const STATUSES = ['Applied', 'Interviewing', 'Offer', 'Rejected']
 
 function greeting() {
   const h = new Date().getHours()
@@ -40,6 +41,7 @@ export default function Overview() {
     { ok: Boolean(profile?.linkedin || profile?.github), text: 'Add LinkedIn or GitHub', to: '/app/profile' },
   ]
   const todo = checks.filter((c) => !c.ok)
+  const soon = upcoming(data.apps)
 
   return (
     <main className="page">
@@ -96,11 +98,32 @@ export default function Overview() {
             {data.apps.length === 0 ? <p className="quiet small">Nothing yet. Roles you apply to are tracked here.</p> : (
               <ul className="pipe">
                 {STATUSES.map((s) => (
-                  <li key={s}><i className={`dot-${s.toLowerCase()}`} aria-hidden="true" />{s}<strong>{byStatus[s]}</strong></li>
+                  <li key={s}><i className={`dot-${statusKey(s)}`} aria-hidden="true" />{s}<strong>{byStatus[s]}</strong></li>
                 ))}
               </ul>
             )}
           </section>
+
+          {soon.length > 0 && (
+            <section className="side-card" aria-labelledby="up-h">
+              <div className="sec-head"><h2 id="up-h">Coming up</h2><Link to="/app/applications" className="link">Board</Link></div>
+              <ul className="mini-list">
+                {soon.slice(0, 4).map((x) => (
+                  <li key={x.kind + x.app.id}>
+                    <button type="button" onClick={() => nav('/app/applications')}>
+                      <strong>{x.kind === 'interview' ? 'Interview' : 'Follow up'}: {x.app.company}</strong>
+                      <span className={x.kind === 'follow' && x.at < Date.now() ? 'late' : ''}>
+                        {x.kind === 'interview'
+                          ? new Date(x.at).toLocaleString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' })
+                          : x.at < Date.now() ? `Overdue since ${new Date(x.at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}` : `Due ${new Date(x.at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}`}
+                        {' · '}{x.app.title}
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
           {data.saved.length > 0 && (
             <section className="side-card" aria-labelledby="sv-h">

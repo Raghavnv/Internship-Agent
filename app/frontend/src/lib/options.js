@@ -56,3 +56,7 @@ export const COMPANY_TYPES = ['Big tech', 'Startups', 'Finance and fintech', 'Re
 // "2027-06" (month input) <-> "2027-06-01" (date column)
 export const toMonth = (d) => (d ? String(d).slice(0, 7) : '')
 export const fromMonth = (m, end = false) => (m ? `${m}-${end ? '28' : '01'}` : null)
+
+// application pipeline stages, in order
+export const STATUSES = ['Applied', 'Online assessment', 'Interviewing', 'Offer', 'Rejected']
+export const statusKey = (s) => (s || '').toLowerCase().replace(/\s+/g, '-')

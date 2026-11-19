@@ -1,0 +1,30 @@
+:root { --bg: #0f1416; --sunk: #0b0f11; --surface: #141b1e; --raise: #1a2327; --line: #222d31; --line-2: #2f3c41; --text: #e9e6dd; --muted: #98a2a0; --faint: #67726f; --home: #f0a35e; --dest: #86b7d3; --ok: #9fcb8c; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { width: 340px; margin: 0; padding: 14px; background: var(--bg); color: var(--text); font: 13px/1.5 system-ui, -apple-system, 'Segoe UI', sans-serif; }
+header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; font-size: 13px; }
+h1 { margin: 0 0 6px; font-size: 15px; }
+h2 { margin: 16px 0 6px; font-size: 12px; font-weight: 500; color: var(--muted); }
+p { margin: 0 0 10px; color: var(--muted); }
+b { color: var(--text); font-weight: 600; }
+textarea { width: 100%; margin-bottom: 10px; padding: 8px; background: var(--sunk); color: var(--text); border: 1px solid var(--line-2); border-radius: 8px; font: 11px ui-monospace, monospace; resize: vertical; }
+textarea:focus { outline: none; border-color: var(--dest); }
+button { font: inherit; cursor: pointer; }
+.primary { width: 100%; min-height: 36px; background: var(--home); color: #20150a; border: 1px solid #c98140; border-radius: 8px; font-weight: 600; box-shadow: inset 0 1px 0 rgba(255,236,214,.55), 0 1px 2px rgba(0,0,0,.45); }
+.primary:hover { background: #f5b072; }
+.primary:active { transform: translateY(1px); }
+.primary:disabled { opacity: .5; }
+.who { margin-bottom: 8px; }
+.status { min-height: 18px; margin: 8px 0 4px; color: var(--text); }
+.status.ok { color: #c3ddb8; }
+.status.warn { color: #f3c193; }
+.tip { font-size: 12px; color: var(--faint); }
+.err { color: #f1b3a3; }
+.fields { list-style: none; margin: 0; padding: 0; max-height: 220px; overflow-y: auto; border-top: 1px solid var(--line); }
+.fields li { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--line); }
+.fields .k { flex: none; width: 78px; color: var(--faint); font-size: 11px; }
+.fields .v { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fields button { flex: none; padding: 2px 8px; background: var(--raise); color: var(--muted); border: 1px solid var(--line-2); border-radius: 6px; font-size: 11px; }
+.fields button:hover { color: var(--text); }
+footer { display: flex; justify-content: space-between; margin-top: 12px; }
+.link { padding: 0; background: none; border: 0; color: var(--dest); font-size: 12px; }
+.link.quiet { color: var(--faint); }

@@ -60,7 +60,7 @@ create table if not exists public.applications (
   location text,
   terms text[] default '{}',
   fit int,
-  status text not null default 'Applied' check (status in ('Applied','Interviewing','Offer','Rejected')),
+  status text not null default 'Applied' check (status in ('Applied','Online assessment','Interviewing','Offer','Rejected')),
   notes text default '',
   applied_at timestamptz default now(),
   updated_at timestamptz default now(),
@@ -164,3 +164,14 @@ create policy "own resumes update" on storage.objects for update
 drop policy if exists "own resumes delete" on storage.objects;
 create policy "own resumes delete" on storage.objects for delete
   using (bucket_id = 'resumes' and (storage.foldername(name))[1] = auth.uid()::text);
+
+
+-- ─────────────────────────────────────────────────────────────
+-- v4: pipeline board (online-assessment stage, interview + follow-up dates)
+-- ─────────────────────────────────────────────────────────────
+alter table public.applications drop constraint if exists applications_status_check;
+alter table public.applications add constraint applications_status_check
+  check (status in ('Applied','Online assessment','Interviewing','Offer','Rejected'));
+alter table public.applications add column if not exists interview_at timestamptz;
+alter table public.applications add column if not exists follow_up_on date;
+alter table public.applications add column if not exists stage_changed_at timestamptz default now();

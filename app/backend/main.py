@@ -14,6 +14,7 @@ from fastapi import Depends, FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
+import coach
 import fit as fitlib
 import jobdetail
 import llm
@@ -159,6 +160,39 @@ def post_job(body: JobIn, user: dict = Depends(limited("job", 600))):
         out["fit"] = fitlib.score(j, prof)[0]
         checks = fitlib.explain(j, prof)
     return {"job": out, "checks": checks, "description": jobdetail.description(j.get("url", ""))}
+
+
+class CoachIn(BaseModel):
+    id: str | None = Field(default=None, max_length=300)
+    job: dict | None = None                     # used when the listing isn't live any more
+    description: str | None = Field(default=None, max_length=20000)   # pasted by the user
+    profile: dict = Field(default_factory=dict)
+    projects: list = Field(default_factory=list)
+
+
+def _coach_job(body: CoachIn) -> dict:
+    j = job_by_id(body.id) if body.id else None
+    j = j or body.job
+    if not j:
+        raise HTTPException(404, "This listing is no longer live.")
+    return j
+
+
+@app.post("/api/tailor")
+def post_tailor(body: CoachIn, user: dict = Depends(limited("coach", RESUME_PER_HOUR * 2))):
+    """Keywords this listing wants that you have / lack, and your bullets rewritten for it."""
+    j = _coach_job(body)
+    desc = (body.description or "").strip()
+    if not desc:
+        d = jobdetail.description(j.get("url", ""))
+        desc = "\n".join(b["text"] for b in (d or {}).get("blocks", []))
+    return coach.tailor(j, desc, body.profile, body.projects[:20])
+
+
+@app.post("/api/referral")
+def post_referral(body: CoachIn, user: dict = Depends(limited("coach", RESUME_PER_HOUR * 2))):
+    """A LinkedIn connection note and follow-up message asking for a referral."""
+    return coach.referral(_coach_job(body), body.profile, body.projects[:20])
 
 
 @app.post("/api/chat")

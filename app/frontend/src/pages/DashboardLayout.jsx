@@ -16,6 +16,7 @@ const NAV = [
   { to: '/app/resume', icon: 'resume', label: 'Resume' },
   { to: '/app/portfolio', icon: 'portfolio', label: 'Portfolio' },
   { to: '/app/profile', icon: 'profile', label: 'Profile' },
+  { to: '/app/autofill', icon: 'extension', label: 'Autofill' },
 ]
 
 function Toast() {

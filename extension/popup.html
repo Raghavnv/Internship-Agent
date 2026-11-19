@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Internship Copilot Autofill</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header>
+    <svg viewBox="0 0 24 14" width="22" height="13" aria-hidden="true"><path d="M3 12 Q12 -3 21 12" fill="none" stroke="#e9e6dd" stroke-width="1.6" stroke-dasharray="2.2 2.4" stroke-linecap="round"/><circle cx="3" cy="12" r="2.2" fill="#f0a35e"/><circle cx="21" cy="12" r="2.2" fill="#86b7d3"/></svg>
+    <strong>Internship Copilot</strong>
+  </header>
+
+  <section id="connect" hidden>
+    <h1>Connect your profile</h1>
+    <p>In Internship Copilot, open <b>Autofill</b> in the sidebar, click <b>Copy profile code</b>, then paste it here.</p>
+    <textarea id="code" rows="4" placeholder="Paste your profile code"></textarea>
+    <p id="connect-err" class="err" hidden></p>
+    <button id="save" class="primary">Save profile</button>
+  </section>
+
+  <section id="ready" hidden>
+    <p class="who">Filling as <b id="who"></b></p>
+    <button id="fill" class="primary">Fill this page</button>
+    <p id="status" class="status" role="status"></p>
+    <p class="tip">Fills empty fields only and highlights them. On Workday, click <b>Add</b> under Work Experience and Education first, then fill. Check dropdowns, and upload your resume yourself.</p>
+
+    <h2>Copy a field</h2>
+    <ul id="fields" class="fields"></ul>
+
+    <footer>
+      <button id="update" class="link">Paste a new profile code</button>
+      <button id="forget" class="link quiet">Remove profile</button>
+    </footer>
+  </section>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -92,3 +92,41 @@ def test_insights():
     assert len(b["by_day"]) == 30 and len(b["fit_bins"]) == 5
     assert b["total"] >= 0 and isinstance(b["companies"], list)
     assert sum(b["fit_bins"]) <= b["total"] and b["remote"] + b["onsite"] == b["total"]
+
+
+def test_terms_and_tailor_without_llm(monkeypatch):
+    import coach
+    jd = "We use Python, FastAPI and PostgreSQL on AWS. Experience with Kafka and Docker is a plus. Grade C or above."
+    t = coach.terms_in(jd)
+    assert {"Python", "FastAPI", "PostgreSQL", "AWS", "Kafka", "Docker"} <= set(t) and "C" not in t
+
+    def no_llm(*a, **k):
+        raise RuntimeError("no key")
+    monkeypatch.setattr(coach.resume_ai, "_complete", no_llm)
+    p = {"skills": ["Python", "FastAPI"], "experience": [{"title": "Intern", "company": "Sensesys", "bullets": ["Built APIs with PostgreSQL"]}]}
+    out = coach.tailor({"title": "Backend Intern", "company": "Acme"}, jd, p)
+    assert {"Python", "FastAPI", "PostgreSQL"} <= set(out["matched"]) and "Kafka" in out["missing"]
+    assert out["coverage"] and "error" in out
+
+
+def test_tailor_keeps_only_real_bullets(monkeypatch):
+    import coach, json as _j
+    monkeypatch.setattr(coach.resume_ai, "_complete", lambda *a, **k: _j.dumps({
+        "summary": "Backend-focused CS student", "bullets": [{"id": 0, "rewritten": "Built REST APIs on PostgreSQL", "why": "Backend"},
+                                                            {"id": 9, "rewritten": "Invented", "why": "x"}], "advice": ["Add Kafka"]}))
+    p = {"experience": [{"title": "Intern", "company": "Sensesys", "bullets": ["Built APIs with PostgreSQL"]}]}
+    out = coach.tailor({"title": "Backend Intern", "company": "Acme"}, "Python PostgreSQL", p)
+    assert len(out["bullets"]) == 1 and out["bullets"][0]["original"] == "Built APIs with PostgreSQL"
+
+
+def test_referral_endpoint_fallback(monkeypatch):
+    import coach
+
+    def no_llm(*a, **k):
+        raise RuntimeError("no key")
+    monkeypatch.setattr(coach.resume_ai, "_complete", no_llm)
+    jid = main.store.get()[0]["id"]
+    r = client.post("/api/referral", json={"id": jid, "profile": {"full_name": "Raghav Venkat", "college": "RV College of Engineering"}})
+    assert r.status_code == 200, r.text
+    b = r.json()
+    assert len(b["note"]) <= 300 and "RV College" in b["note"] and "[Name]" in b["message"]

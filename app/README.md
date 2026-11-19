@@ -95,3 +95,14 @@ Tests: `cd app/backend && python -m pytest -q` (fake LLM, sample data, auth and 
 ## Use it like a Mac app
 On the deployed site: Safari → **File → Add to Dock**, or Chrome → install icon in the address bar.
 For a menu-bar widget with notifications, see [`../widget`](../widget/README.md).
+
+## Applying faster
+| Feature | Where |
+|---|---|
+| **Autofill** Workday, Greenhouse, Lever, Ashby forms from your profile, incl. work experience and role descriptions | Sidebar → Autofill (Chrome extension in [`../extension`](../extension/README.md)) |
+| **Tailor your resume**: skills the listing asks for that you show / lack, bullets reworded for it (never invented) | Any role → details panel |
+| **Find a referral**: LinkedIn searches for alumni, recruiters and engineers, plus a drafted note and message | Any role → details panel |
+| **Pipeline board**: Applied → Online assessment → Interviewing → Offer / Rejected, interview dates with Google Calendar / .ics, follow-up reminders | Applications |
+
+After pulling this version, re-run `app/supabase/schema.sql` in the Supabase SQL editor (adds the online-assessment
+stage and the interview / follow-up date columns). After changing the extension, run `python extension/build.py`.

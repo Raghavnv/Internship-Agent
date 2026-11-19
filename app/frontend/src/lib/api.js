@@ -38,6 +38,21 @@ export const geocode = (q) => call(`/api/geocode?q=${encodeURIComponent(q)}`)
 export const searchJobs = (filters, profile) => call('/api/search', json({ ...filters, profile: profileForApi(profile) }))
 export const chat = (messages, profile) => call('/api/chat', json({ messages, profile: profileForApi(profile) }))
 export const getInsights = (filters, profile) => call('/api/insights', json({ ...filters, profile: profileForApi(profile) }))
+// richer profile for resume tailoring and referral drafts (never stored server-side)
+export function profileForCoach(p) {
+  if (!p) return {}
+  const keys = ['full_name', 'college', 'degree', 'major', 'year_of_study', 'grad_year', 'headline', 'bio', 'skills', 'experience', 'education']
+  const out = Object.fromEntries(keys.filter((k) => p[k] != null && p[k] !== '').map((k) => [k, p[k]]))
+  if (p.resume_text) out.resume_text = p.resume_text.slice(0, 12000)
+  return out
+}
+const coachBody = (job, profile, projects, description) => json({
+  id: job.id || job.job_id, job: { title: job.title, company: job.company, url: job.url, locations: job.locations || [] },
+  description: description || undefined, profile: profileForCoach(profile),
+  projects: (projects || []).map(({ title, description: d, tech }) => ({ title, description: d, tech })),
+})
+export const tailorResume = (job, profile, projects, description) => call('/api/tailor', coachBody(job, profile, projects, description))
+export const draftReferral = (job, profile, projects) => call('/api/referral', coachBody(job, profile, projects))
 export const getJob = (id, profile) => call('/api/job', json({ id, profile: profileForApi(profile) }))
 export const reviewResume = (resume_text, job) => call('/api/resume/review', json({ resume_text, job }))
 export function parseResume(file) {

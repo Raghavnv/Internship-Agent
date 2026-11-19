@@ -6,6 +6,7 @@ import { useUserData } from './lib/userdata.jsx'
 import { cityCode, cityName, postedLabel } from './format.js'
 import { coHue, shortTerms } from './components.jsx'
 import { Icon, Spinner } from './ui.jsx'
+import { Referral, Tailor } from './Coach.jsx'
 
 const km = (a, b) => {
   const r = (d) => (d * Math.PI) / 180
@@ -129,6 +130,9 @@ export default function JobPanel() {
               </ul>
             </section>
           )}
+
+          {(state === 'ok' || state === 'gone') && <Tailor job={j} profile={profile} hasDescription={Boolean(full?.description)} />}
+          {(state === 'ok' || state === 'gone') && <Referral job={j} profile={profile} />}
 
           {state === 'ok' && (
             <section className="jp-sec" aria-labelledby="jp-desc">
