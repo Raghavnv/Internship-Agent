@@ -12,8 +12,12 @@ import time
 import httpx
 from fastapi import Header, HTTPException
 
-SUPABASE_URL = (os.getenv("SUPABASE_URL") or "").rstrip("/")
-SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY") or os.getenv("SUPABASE_PUBLISHABLE_KEY") or ""
+# This project's Supabase, used unless the environment says otherwise. The publishable key is public by design.
+DEFAULT_URL = "https://icshgjbbopvofolbubzy.supabase.co"
+DEFAULT_KEY = "sb_publishable_-n_mclgKx56etZXt61ZX_Q_fganxL1j"
+_local = os.getenv("ALLOW_LOCAL_AUTH") == "1"
+SUPABASE_URL = (os.getenv("SUPABASE_URL") or ("" if _local else DEFAULT_URL)).rstrip("/")
+SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY") or os.getenv("SUPABASE_PUBLISHABLE_KEY") or DEFAULT_KEY
 _cache: dict[str, tuple[float, dict]] = {}
 TTL = 300
 

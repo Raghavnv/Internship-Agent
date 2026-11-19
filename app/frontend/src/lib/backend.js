@@ -1,9 +1,12 @@
 // Data layer: Supabase auth, Postgres tables and storage.
-// Needs VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY at build time; without them the app shows a setup screen.
+// Uses this project's Supabase by default; VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY override it (e.g. for a fork).
+// The publishable key is meant to be public: row-level security on every table keeps each user's data private.
 import { createClient } from '@supabase/supabase-js'
 
-const URL_ = (import.meta.env.VITE_SUPABASE_URL || '').trim().replace(/\/+$/, '')
-const KEY = (import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || '').trim()
+const DEFAULT_URL = 'https://icshgjbbopvofolbubzy.supabase.co'
+const DEFAULT_KEY = 'sb_publishable_-n_mclgKx56etZXt61ZX_Q_fganxL1j'
+const URL_ = (import.meta.env.VITE_SUPABASE_URL || DEFAULT_URL).trim().replace(/\/+$/, '')
+const KEY = (import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || DEFAULT_KEY).trim()
 export const CONFIGURED = Boolean(URL_ && KEY)
 
 const sb = CONFIGURED ? createClient(URL_, KEY, { auth: { persistSession: true, autoRefreshToken: true } }) : null
