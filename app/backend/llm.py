@@ -55,6 +55,8 @@ FILTER_PROPS = {
     "exclude_citizenship_required": {"type": "boolean"},
     "undergrad_only": {"type": "boolean", "description": "Drop Master's/PhD/MBA-only roles."},
     "fit_only": {"type": "boolean", "description": "Only roles that are a strong fit for the user's profile."},
+    "closing_within_days": {"type": "integer",
+                            "description": "Only roles whose stated application deadline is within this many days."},
 }
 TOOLS = [
     {"type": "function", "function": {
@@ -62,8 +64,8 @@ TOOLS = [
         "description": "Search the live internship listings. Returns the total count and the top results.",
         "parameters": {"type": "object", "properties": {
             **FILTER_PROPS,
-            "sort": {"type": "string", "enum": ["relevance", "newest", "fit"],
-                     "description": "'fit' = best match for the user's profile."},
+            "sort": {"type": "string", "enum": ["relevance", "newest", "fit", "closing"],
+                     "description": "'fit' = best match for the user's profile; 'closing' = soonest deadline first."},
             "limit": {"type": "integer", "description": "1-50, default 15."},
         }}}},
     {"type": "function", "function": {

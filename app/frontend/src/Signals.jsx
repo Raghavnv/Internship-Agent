@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { useWatch } from './lib/watch.js'
 import { Icon } from './ui.jsx'
+import { closesDate, closesLabel, closesLevel } from './lib/deadline.js'
 
 const fmt = (iso, withYear = false) => new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', ...(withYear ? { year: 'numeric' } : {}) })
 const LEVELS = ['very_low', 'low', 'fair', 'good']
@@ -51,6 +52,13 @@ export function Odds({ signals, referred, onReferred, company }) {
   return (
     <section className="jp-sec" aria-labelledby="jp-odds">
       <h3 id="jp-odds">Your odds</h3>
+      {signals.deadline && signals.deadline.days >= 0 && (
+        <p className={`jp-deadline ${closesLevel(signals.deadline.days)}`}>
+          <Icon name="calendar" size={14} />
+          {closesLabel(signals.deadline.days)}
+          <span>Applications close {closesDate(signals.deadline.closes)}, as stated in the posting.</span>
+        </p>
+      )}
       <div className="odds">
         <div className={`odd odd-${c.level}`}>
           <p className="odd-k">{c.estimated ? 'Applicants so far (estimate)' : 'Applicants so far'}</p>

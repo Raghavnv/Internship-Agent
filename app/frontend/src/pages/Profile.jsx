@@ -292,6 +292,16 @@ export default function Profile() {
         </dl>
       </Panel>
 
+      <section className="panel pf-panel" aria-labelledby="p-mail">
+        <div className="panel-head"><h2 id="p-mail">Morning email</h2></div>
+        <label className="ck">
+          <input type="checkbox" checked={profile.digest_email !== false}
+            onChange={async (e) => { try { await update({ digest_email: e.target.checked }); say(e.target.checked ? 'Morning email on' : 'Morning email off') } catch (err) { say(err.message) } }} />
+          <span>Email me at 8:30 am on days there’s something new: the best new matches, deadlines this week, watched companies that opened, and follow-ups due.</span>
+        </label>
+        <p className="quiet small">Sent to {user.email}. Nothing is sent on quiet days.</p>
+      </section>
+
       <ResumeImport open={importing} onClose={() => setImporting(false)} onApplied={loadProjects} />
     </main>
   )

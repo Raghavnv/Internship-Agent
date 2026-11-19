@@ -16,7 +16,7 @@ Groq `gpt-oss-120b` (LLM with tool calling) · GitHub Actions data pipeline (`..
 | **Onboarding** | 6 short steps: about you, resume (auto-extracts skills), roles, where and when, eligibility (visa, pay), links. |
 | **Overview** | Greeting, numbers, top matches, quick AI ask, application pipeline, profile strength checklist. |
 | **AI Copilot** | Chat. The LLM turns questions into filters and calls `search_internships` / `count_internships` over real listings. Results land on the map. |
-| **Explore** | Manual filters (cities, roles, keyword, remote, recency, sort, "strong fits only") with the map. |
+| **Explore** | Manual filters (cities, roles, keyword, remote, recency, sort, "strong fits only") with the map. Stated application deadlines show as "Closes in 3 days"; sort by **Closing soon**. |
 | **Applications** | Tracker: Applied, Interviewing, Offer, Rejected; notes; follow-up nudges; CSV export. Clicking Apply anywhere adds a role here. |
 | **Saved** | Bookmarked roles. |
 | **Resume** | Private PDF upload (Supabase Storage), skill extraction, AI feedback and rewritten bullets for a chosen role. |
@@ -66,7 +66,36 @@ Project settings: **Root Directory** `app/frontend`, framework **Vite**. Environ
 
 Then **Redeploy**: `VITE_` variables only apply to new builds.
 
-### 4. Keep Supabase awake (optional)
+### 4. Live Refresh (optional, recommended)
+GitHub only runs the scheduled check every hour or few. With these, pressing **Refresh** starts a fresh check of every
+job board right away (about a minute), and an outside timer keeps it running every 15 minutes:
+
+1. **GitHub token:** github.com → Settings → Developer settings → Fine-grained tokens → Generate. Repository access:
+   only `Internship-Agent`. Permissions: **Actions: Read and write**. Copy the token.
+2. **Render → Environment:** add `GITHUB_TOKEN` (the token) and `CRON_SECRET` (any long random word).
+3. **cron-job.org:** free account → Create cronjob → URL
+   `https://<your-render-url>/api/cron/tick?key=<CRON_SECRET>`, every 15 minutes. This also keeps the free Render
+   server awake, so the site doesn't take 50 seconds to wake up.
+
+Runs are spaced at least 10 minutes apart however often people press Refresh.
+
+### 5. Morning email (optional)
+`.github/workflows/digest.yml` emails each user at about 8:30 am IST on days with something new: the best new
+matches, roles closing this week, watched companies that opened, interviews and follow-ups due. Users switch it off
+under Profile. Add these **GitHub repository secrets**:
+
+| Secret | Value |
+|---|---|
+| `SUPABASE_URL` | Project URL |
+| `SUPABASE_SECRET_KEY` | Supabase → Project Settings → API Keys → **Secret key** (`sb_secret_…`). Never put this in Vercel or the frontend. |
+| `SMTP_USER` | the Gmail address that sends the emails |
+| `SMTP_PASS` | a Gmail **app password** (Google Account → Security → 2-Step Verification → App passwords) |
+| `APP_URL` | your Vercel URL (optional) |
+
+For another provider (Brevo, Resend SMTP…) also set `SMTP_HOST` and `SMTP_PORT`. Test it from **Actions → Morning
+email digest → Run workflow**, with your address in "only" and "dry run" ticked to see the email in the log first.
+
+### 6. Keep Supabase awake (optional)
 Free Supabase projects pause after 7 days without traffic. Add `SUPABASE_URL` and `SUPABASE_ANON_KEY` as GitHub
 **repository secrets** too; the alert agent's 15-minute workflow then pings it so it never pauses.
 

@@ -1,0 +1,48 @@
+name: Morning email digest
+
+on:
+  schedule:
+    # 02:47 UTC = 08:17 IST. GitHub can start scheduled runs late, so it usually lands by ~8:30.
+    - cron: "47 2 * * *"
+  workflow_dispatch:
+    inputs:
+      only:
+        description: "Send only to this email address (leave empty for everyone)"
+        required: false
+      dry_run:
+        description: "Build the emails and print them in the log, send nothing"
+        type: boolean
+        default: false
+
+concurrency:
+  group: email-digest
+  cancel-in-progress: false
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Send the morning emails
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          DIGEST_FROM: ${{ secrets.DIGEST_FROM }}
+          APP_URL: ${{ secrets.APP_URL }}
+          ONLY: ${{ github.event.inputs.only }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+        run: |
+          set --
+          if [ -n "$ONLY" ]; then set -- "$@" --only "$ONLY"; fi
+          if [ "$DRY_RUN" = "true" ]; then set -- "$@" --dry-run; fi
+          python -m agent.email_digest "$@"

@@ -57,12 +57,18 @@ const PROFILE_COLS = ['full_name', 'based_in', 'college', 'degree', 'major', 'de
   'skills', 'roles', 'avoid_roles', 'locations', 'work_modes', 'remote_from', 'remote_to', 'onsite_from', 'onsite_to',
   'us_work_auth', 'paid_only', 'min_stipend_inr', 'company_types', 'headline', 'bio', 'linkedin', 'github', 'portfolio',
   'resume_path', 'resume_text', 'onboarded', 'phone', 'education', 'experience', 'certifications', 'achievements',
-  'spoken_languages', 'other_links', 'resume_updated_at', 'watch_companies']
+  'spoken_languages', 'other_links', 'resume_updated_at', 'watch_companies', 'digest_email']
 
 export async function saveProfile(userId, fields) {
   const clean = Object.fromEntries(Object.entries(fields).filter(([k]) => PROFILE_COLS.includes(k))
     .map(([k, v]) => [k, v === '' ? null : v]))
-  const { data, error } = await sb.from('profiles').upsert({ id: userId, ...clean }).select().single()
+  let { data, error } = await sb.from('profiles').upsert({ id: userId, ...clean }).select().single()
+  // a column from a newer schema version that hasn't been added yet: save everything else
+  const missing = error && /Could not find the '(\w+)' column/.exec(error.message || '')
+  if (missing && missing[1] in clean) {
+    delete clean[missing[1]]
+    ;({ data, error } = await sb.from('profiles').upsert({ id: userId, ...clean }).select().single())
+  }
   fail(error)
   return data
 }

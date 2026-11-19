@@ -181,3 +181,10 @@ alter table public.applications add column if not exists stage_changed_at timest
 -- v5: companies you're watching for openings
 -- ─────────────────────────────────────────────────────────────
 alter table public.profiles add column if not exists watch_companies text[] default '{}';
+
+
+-- ─────────────────────────────────────────────────────────────
+-- v6: morning email digest (sent by .github/workflows/digest.yml)
+-- ─────────────────────────────────────────────────────────────
+alter table public.profiles add column if not exists digest_email boolean default true;
+alter table public.profiles add column if not exists digest_sent_at timestamptz;

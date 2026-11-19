@@ -3,6 +3,7 @@ import { cityName, describeArgs, postedLabel } from './format.js'
 import { Icon } from './ui.jsx'
 import { useUserData } from './lib/userdata.jsx'
 import { lastVisit } from './lib/updates.js'
+import { closesDate, closesIn, closesLabel, closesLevel } from './lib/deadline.js'
 
 // Safe renderer for **bold** and "- " bullets in AI replies.
 export function RichText({ text }) {
@@ -61,6 +62,8 @@ export function JobRow({ job, onFocus, index = 0 }) {
   const applied = data?.isApplied?.(job.id)
   const saved = data?.isSaved?.(job.id)
   const open = data?.viewing && (data.viewing.id || data.viewing.job_id) === job.id
+  const left = closesIn(job)
+  const closes = closesLabel(left)
   return (
     <li onMouseEnter={() => onFocus?.(job.id)} onMouseLeave={() => onFocus?.(null)} style={{ '--i': Math.min(index, 14) }}>
       <button type="button" className={`job${open ? ' open' : ''}`} onClick={() => data?.openJob?.(job)}
@@ -73,6 +76,7 @@ export function JobRow({ job, onFocus, index = 0 }) {
             {city || 'Location not listed'}{more > 0 && <span className="more-loc"> +{more}</span>}
           </span>
           <span className="job-meta">
+            {closes && <span className={`closes ${closesLevel(left)}`} title={`Applications close ${closesDate(job.closes)}`}>{closes}</span>}
             {remote && <span className="pill">Remote</span>}
             <span>{shortTerms(job.terms)}</span>
             {posted && <span>{posted}</span>}

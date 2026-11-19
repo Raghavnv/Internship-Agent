@@ -15,6 +15,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 import coach
+import collector
+import deadlines
 import fit as fitlib
 import jobdetail
 import llm
@@ -171,12 +173,19 @@ def post_job(body: JobIn, user: dict = Depends(limited("job", 600))):
         prof = fitlib.prepare(body.profile)
         out["fit"] = fitlib.score(j, prof)[0]
         checks = fitlib.explain(j, prof)
+    desc = jobdetail.description(j.get("url", ""))
+    if desc and not j.get("closes"):
+        d = deadlines.from_blocks(desc.get("blocks"))
+        if d:
+            j["closes"] = deadlines.to_ts(d)      # kept on the listing until the next data reload
+            out["closes"], out["closes_in"] = j["closes"], deadlines.days_left(j["closes"])
     signals = {
+        "deadline": {"closes": j.get("closes"), "days": deadlines.days_left(j.get("closes"))} if j.get("closes") else None,
         "freshness": market.freshness(j),
         "competition": market.competition(j, out.get("fit"), body.referred, big_employers()),
         "opening": market.opening(store.openings, j.get("company") or ""),
     }
-    return {"job": out, "checks": checks, "signals": signals, "description": jobdetail.description(j.get("url", ""))}
+    return {"job": out, "checks": checks, "signals": signals, "description": desc}
 
 
 class UpdatesIn(BaseModel):
@@ -188,6 +197,7 @@ class UpdatesIn(BaseModel):
 @app.post("/api/updates")
 def post_updates(body: UpdatesIn, user: dict = Depends(limited("updates", 240))):
     """How many listings (and strong fits) appeared since `since`, and how fresh the data is."""
+    collect = collector.kick("refresh") if body.refresh else None
     reloaded = store.refresh() if body.refresh else False
     jobs = store.get()
     since = body.since or 0
@@ -198,7 +208,24 @@ def post_updates(body: UpdatesIn, user: dict = Depends(limited("updates", 240)))
         prof = fitlib.prepare(body.profile)
         fits = sum(1 for j in new if (fitlib.score(j, prof)[0] or 0) >= 55)
     return {"updated": store.updated, "count": len(jobs), "new": len(new), "new_fits": fits,
-            "reloaded": reloaded, "checked_at": int(time.time())}
+            "reloaded": reloaded, "checked_at": int(time.time()),
+            # a fresh check is running on GitHub: the client keeps polling until `updated` moves
+            "collecting": bool(collect and collect["running"]) or (collector.since_dispatch() < 300 and collector.running()),
+            "live_fetch": collector.configured()}
+
+
+CRON_SECRET = os.getenv("CRON_SECRET", "")
+
+
+@app.api_route("/api/cron/tick", methods=["GET", "HEAD"])
+def cron_tick(key: str = ""):
+    """Pinged by an outside timer (cron-job.org) every 15 minutes: starts a listings check and
+    keeps the server awake. Needs ?key= matching CRON_SECRET."""
+    if not CRON_SECRET or key != CRON_SECRET:
+        raise HTTPException(404, "Not found")
+    started = collector.kick("timer")
+    store.refresh(min_age=45)
+    return {"ok": True, "started": started["started"], "updated": store.updated}
 
 
 class OpeningsIn(BaseModel):

@@ -1147,3 +1147,14 @@ input[type=checkbox], input[type=radio] { accent-color: var(--dest); width: 0.95
 @media (prefers-reduced-motion: no-preference) { .new-pill { animation: row-in 300ms ease both; } .new-pill i { animation: blink 1.6s ease-in-out infinite; } }
 .unseen { display: inline-block; width: 6px; height: 6px; margin: 0 0.45rem 0.12em 0; vertical-align: middle; border-radius: 50%; background: var(--home); }
 @media (max-width: 640px) { .refresh-bar { justify-content: flex-start; } }
+
+/* application deadlines */
+.job-meta .closes { color: var(--muted); }
+.job-meta .closes.soon { color: #f3c193; }
+.job-meta .closes.urgent { color: #f1b3a3; font-weight: 500; }
+.job-meta .closes.urgent::before { content: ""; display: inline-block; width: 6px; height: 6px; margin-right: 0.35rem; border-radius: 50%; background: var(--warn); vertical-align: 0.08em; }
+.jp-deadline { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin: 0 0 0.75rem; padding: 0.5rem 0.7rem; border: 1px solid var(--line-2); border-radius: 8px; background: var(--sunk); font-weight: 500; }
+.jp-deadline span { flex-basis: 100%; color: var(--muted); font-weight: 400; font-size: 0.84rem; }
+.jp-deadline.urgent { border-color: rgba(229, 139, 116, 0.45); color: #f1b3a3; }
+.jp-deadline.soon { color: #f3c193; }
+.pad-s { margin: 0.25rem 0 0.75rem; }

@@ -73,7 +73,7 @@ def write_matches_page(matched):
     (ROOT / "MATCHES.md").write_text("\n".join(lines) + "\n")
 
 
-def export_jobs(jobs, evs, st):
+def export_jobs(jobs, evs, st, closes=None):
     """Full listing dump for the AI search app (published to the `data` branch by the workflow)."""
     keep = ("id", "source", "company", "title", "url", "locations", "terms", "remote", "posted",
             "sponsorship", "category", "degrees", "stipend")
@@ -89,6 +89,8 @@ def export_jobs(jobs, evs, st):
         if reposts.get(j.get("_raw_id")):
             rec["reposts"] = reposts[j["_raw_id"]]
         rec["first_seen"] = int(st["seen"].get(j["id"]) or time.time())
+        if (closes or {}).get(j["id"], 0) > time.time() - 86400:
+            rec["closes"] = closes[j["id"]]
         try:
             from .geo import geocode
             g = [geocode(l) for l in j.get("locations") or []]
@@ -155,7 +157,13 @@ def main():
     for k, v in sorted(health.items()):
         log.info("source %-28s %s", k, v)
     write_matches_page(matched)
-    export_jobs(jobs, {j["id"]: ev for j, ev in matched}, st)
+    try:
+        from . import deadlines_scan
+        closes = deadlines_scan.scan(jobs, st)
+    except Exception as e:  # deadlines are extras; never break the run
+        log.warning("deadline scan failed: %s", e)
+        closes = {}
+    export_jobs(jobs, {j["id"]: ev for j, ev in matched}, st, closes)
     (ROOT / "STATUS.md").write_text(
         f"# Source status\n_Last run {datetime.now(IST):%d %b %Y, %I:%M %p} IST: "
         f"{len(jobs)} listings fetched, {len(matched)} match._\n\n| Source | Status |\n|---|---|\n"

@@ -69,7 +69,7 @@ const PROFILE_COLS = ['full_name', 'based_in', 'college', 'degree', 'major', 'de
   'skills', 'roles', 'avoid_roles', 'locations', 'work_modes', 'remote_from', 'remote_to', 'onsite_from', 'onsite_to',
   'us_work_auth', 'paid_only', 'min_stipend_inr', 'company_types', 'headline', 'bio', 'linkedin', 'github', 'portfolio',
   'resume_path', 'resume_text', 'onboarded', 'phone', 'education', 'experience', 'certifications', 'achievements',
-  'spoken_languages', 'other_links', 'resume_updated_at', 'watch_companies']
+  'spoken_languages', 'other_links', 'resume_updated_at', 'watch_companies', 'digest_email']
 
 export async function saveProfile(userId, fields) {
   const clean = Object.fromEntries(Object.entries(fields).filter(([k]) => PROFILE_COLS.includes(k))

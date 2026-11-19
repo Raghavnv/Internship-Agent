@@ -182,11 +182,14 @@ export default function Explore() {
             <label className="sort">
               <span>Sort</span>
               <select className="select" value={sort} onChange={(e) => setSort(e.target.value)}>
-                <option value="fit">Best fit</option><option value="newest">Newest</option><option value="relevance">Relevance</option>
+                <option value="fit">Best fit</option><option value="newest">Newest</option><option value="closing">Closing soon</option><option value="relevance">Relevance</option>
               </select>
             </label>
           </div>
           {err && <p className="form-error">{err}</p>}
+          {res && sort === 'closing' && res.results.length > 0 && !res.results[0].closes && (
+            <p className="quiet small pad-s">None of these listings state an application deadline, so they’re in fit order.</p>
+          )}
           {!res && !err && <SkeletonRows n={8} />}
           {res && <div className={busy ? 'is-busy' : ''}><Grouped results={res.results.slice(0, limit)} byFit={sort === 'fit'} onFocus={setFocus} /></div>}
           {res && res.total > res.results.length && res.results.length >= limit && (

@@ -9,6 +9,7 @@ import { CountUp, DayArea, FitSpread, RankBars, SkeletonRows } from '../charts.j
 import { Icon } from '../ui.jsx'
 import { STATUSES, statusKey } from '../lib/options.js'
 import { upcoming } from '../lib/calendar.js'
+import { closesIn, closesLabel, closesLevel } from '../lib/deadline.js'
 
 
 function greeting() {
@@ -24,6 +25,7 @@ export default function Overview() {
   const [fresh, setFresh] = useState(null)
   const [mk, setMk] = useState(null)
   const [ops, setOps] = useState(null)
+  const [closing, setClosing] = useState(null)
   const [err, setErr] = useState('')
   const [q, setQ] = useState('')
   const [nonce, setNonce] = useState(0)
@@ -34,6 +36,7 @@ export default function Overview() {
     searchJobs({ fit_only: true, posted_within_days: 7, sort: 'newest', limit: 1 }, profile).then(setFresh).catch(() => {})
     getInsights({}, profile).then(setMk).catch(() => {})
     getOpenings(profile.watch_companies || []).then(setOps).catch(() => {})
+    searchJobs({ fit_only: true, closing_within_days: 14, sort: 'closing', limit: 4 }, profile).then(setClosing).catch(() => {})
   }, [profile, nonce])
 
   const first = (profile?.full_name || '').split(' ')[0]
@@ -108,6 +111,22 @@ export default function Overview() {
               </ul>
             )}
           </section>
+
+          {closing?.results?.length > 0 && (
+            <section className="side-card" aria-labelledby="cl-h">
+              <div className="sec-head"><h2 id="cl-h">Closing soon</h2><span className="quiet small">next 2 weeks</span></div>
+              <ul className="mini-list">
+                {closing.results.map((j) => {
+                  const d = closesIn(j)
+                  return (
+                    <li key={j.id}><button type="button" onClick={() => data.openJob?.(j)}>
+                      <strong>{j.company}</strong>
+                      <span className={closesLevel(d) === 'urgent' ? 'late' : ''}>{closesLabel(d)} · {j.title}</span></button></li>
+                  )
+                })}
+              </ul>
+            </section>
+          )}
 
           {ops && (ops.soon.length > 0 || ops.watching.some((o) => o.status === 'open')) && (
             <section className="side-card" aria-labelledby="os-h">

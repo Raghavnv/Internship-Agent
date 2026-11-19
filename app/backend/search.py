@@ -145,14 +145,26 @@ def ym(s):
 
 
 # ── main search ─────────────────────────────────────────────────────
-SORTS = ("relevance", "newest", "fit")
+SORTS = ("relevance", "newest", "fit", "closing")
 
 
 def search(jobs, *, sort="relevance", limit=20, offset=0, now=None, **filters):
     hits = match(jobs, now=now, **filters)
     fits = {id(h[3]): h[2] for h in hits}
-    key = {"newest": lambda h: (-h[1], -h[0]), "fit": lambda h: (-h[2], -h[0], -h[1])}.get(
-        sort, lambda h: (-h[0], -h[1]))
+    now = now or time.time()
+
+    def urgency(j):
+        """A bump for roles that close within a week, so they don't sink below ones that can wait."""
+        c = j.get("closes")
+        if not c:
+            return 0
+        days = (c - now) / 86400
+        return 8 if days <= 3 else 4 if days <= 7 else 0
+
+    key = {"newest": lambda h: (-h[1], -h[0]),
+           "fit": lambda h: (-(h[2] + urgency(h[3]) if h[2] else 0), -h[0], -h[1]),
+           "closing": lambda h: (h[3].get("closes") or 9e12, -h[2], -h[0])}.get(
+        sort, lambda h: (-(h[0] + urgency(h[3]) / 4), -h[1]))
     hits.sort(key=key)
     # same role reposted (same company + title + first city) -> keep the best-ranked copy
     seen, uniq = set(), []
@@ -172,7 +184,7 @@ def match(jobs, *, keywords=None, any_keywords=None, exclude_keywords=None, comp
            exclude_companies=None, locations=None, remote=None, start_month=None, end_month=None, terms=None,
            include_undated=True, posted_within_days=None, categories=None, needs_sponsorship=False,
            exclude_citizenship_required=False, undergrad_only=False, fit_only=False, now=None, profile=None,
-           min_fit=55, hide_stale=False):
+           min_fit=55, hide_stale=False, closing_within_days=None):
     """Returns [(relevance, posted, fit, job, matched_locations)] for listings passing every filter."""
     now = now or time.time()
     kw_all = [word_re(k) for k in (keywords or []) if norm(k)]
@@ -201,6 +213,11 @@ def match(jobs, *, keywords=None, any_keywords=None, exclude_keywords=None, comp
         if kw_all and not all(r.search(text) for r in kw_all):
             continue
         if hide_stale and freshness(j, now)["level"] == "ghost":
+            continue
+        closes = j.get("closes") or 0
+        if closes and closes < now:
+            continue                      # deadline passed: the role can't be applied to any more
+        if closing_within_days is not None and not (closes and closes - now <= closing_within_days * 86400):
             continue
         if kw_any and not any(r.search(text) for r in kw_any):
             continue
@@ -282,8 +299,10 @@ def compact(j, matched_locs=None, fit=None):
             pins.append(g[:2])
     posted = j.get("posted")
     from market import freshness
+    from deadlines import days_left
     fr = freshness(j)
     return {
+        "closes": j.get("closes"), "closes_in": days_left(j.get("closes")),
         "fresh": fr["level"], "reposts": j.get("reposts") or 0, "first_seen": j.get("first_seen"),
         "id": j["id"], "title": j.get("title"), "company": j.get("company"), "url": j.get("url"),
         "locations": shown, "more_locations": max(0, len(locs) - len(shown)), "terms": j.get("terms") or [],
