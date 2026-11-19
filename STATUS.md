@@ -1,5 +1,5 @@
 # Source status
-_Last run 19 Nov 2026, 07:36 PM IST: 5276 listings fetched, 1185 match._
+_Last run 20 Nov 2026, 01:07 AM IST: 5246 listings fetched, 1179 match._
 
 | Source | Status |
 |---|---|
@@ -51,4 +51,4 @@ _Last run 19 Nov 2026, 07:36 PM IST: 5276 listings fetched, 1185 match._
 | lever:spotify | ok |
 | lever:upstox | HTTP 404 (board name probably wrong) |
 | lever:zepto | HTTP 404 (board name probably wrong) |
-| simplify | ok (5082 listings) |
+| simplify | ok (5053 listings) |

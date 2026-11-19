@@ -1,5 +1,142 @@
 {
-"digest_queue": [],
+"deadlines": {
+"gh:cloudflare:8383449": 0,
+"gh:cloudflare:8394342": 0,
+"simplify:00b1c762-9ca4-4c23-afff-d070ee8279e6": 0,
+"simplify:0590c67b-538d-436a-97a1-2344effdb7cb": 0,
+"simplify:0a6bcf68-1dac-49d0-a6da-1adca0fd22c3": 0,
+"simplify:1344faa8-1ac5-42aa-9e6f-7777257aca98": 0,
+"simplify:257fb63b-2043-4128-8ca6-1ccc68542d8c": 0,
+"simplify:2f406251-cd61-4118-99af-c862671e6b0b": 0,
+"simplify:382e68bd-7f9a-433c-a906-cf3b15984178": 0,
+"simplify:3966d53c-f47c-411d-add7-e02180c0f986": 0,
+"simplify:40ef9e3b-1493-4170-b639-2beafbc6c791": 0,
+"simplify:520e9dc3-4b51-497a-a614-d9034a3244a2": 0,
+"simplify:54de568b-e42f-497c-b9c2-77927e5e338f": 0,
+"simplify:606c64dc-f35a-44e7-a1d2-74e2b99d8fd8": 0,
+"simplify:6748ee09-8ba9-42eb-a423-934641666a7c": 1797618540,
+"simplify:75359d3c-071a-4952-b187-7bdc22a0f482": 0,
+"simplify:7766a454-005e-4e27-8359-8572fd17712f": 0,
+"simplify:77908349-6d07-4a91-b136-136a9a8ec5ba": 0,
+"simplify:79c63349-953a-4d76-82a2-2c01a95745f7": 0,
+"simplify:899ceff5-26e3-46f7-ab8d-a9703c3ae26d": 1796149740,
+"simplify:8eb1a21e-c57a-44e4-a936-098c9e7c642a": 0,
+"simplify:9471de0a-cf90-4c82-aa36-9f7cad855d2a": 0,
+"simplify:94d67853-2e95-463b-b69e-6982d75a3c27": 0,
+"simplify:9ebeb8b0-e1e7-483c-8646-705fcf78e1f5": 0,
+"simplify:a0a9a463-cbbe-44f5-981d-80691bcf8600": 0,
+"simplify:a8d87113-aa75-4085-aa94-8b2b2fee847a": 0,
+"simplify:b0ce7f24-559f-4b1c-bed2-b832cc9c2944": 0,
+"simplify:bee8e5de-03d0-4cf7-9457-e9ec51642c89": 0,
+"simplify:c069db03-8351-4057-bd8c-ad4c630ac0e6": 0,
+"simplify:c9a8405e-a813-4db7-a08e-18e55bae5e72": 0,
+"simplify:d1679382-59b0-4635-9085-d9f03996edce": 0,
+"simplify:d5a4e4de-19f7-4b33-af36-7e2512eefca5": 0,
+"simplify:d9d64ad1-bfcf-465d-90e1-bad73dcb61da": 0,
+"simplify:da95f3d5-7184-4537-9adc-647349c0c2a4": 0,
+"simplify:e0a4ae5b-f142-4d19-802f-89beac33b2da": 0,
+"simplify:f1e8f352-3cfb-4c29-aed1-c4c57d3bdb5d": 0,
+"simplify:f5c0fd6f-a358-4c5b-8523-ec698800634b": 0
+},
+"digest_queue": [
+{
+"ev": {
+"bucket": "remote",
+"loc": "Remote (India)",
+"reasons": [
+"matches your machine learning, ai"
+],
+"score": 61,
+"tags": [
+"dates not stated - check"
+],
+"term_known": false
+},
+"job": {
+"company": "Reducate.ai",
+"id": "internshala:3337666",
+"india_only": true,
+"locations": [
+"Remote (India)"
+],
+"posted": null,
+"remote": true,
+"source": "Internshala",
+"sponsorship": null,
+"stipend": "\u20b9 2,000 /month",
+"terms": [],
+"title": "Artificial Intelligence (AI)",
+"url": "https://internshala.com/internship/detail/work-from-home-artificial-intelligence-ai-internship-at-reducateai1795100130"
+}
+},
+{
+"ev": {
+"bucket": "other_us",
+"loc": "Reston, VA",
+"reasons": [
+"matches your computer vision, ai"
+],
+"score": 60,
+"tags": [
+"dates not stated - check"
+],
+"term_known": false
+},
+"job": {
+"_raw_id": "a8d87113-aa75-4085-aa94-8b2b2fee847a",
+"category": "AI/ML/Data",
+"company": "Scout Space",
+"degrees": [
+"Bachelor's",
+"Master's"
+],
+"id": "simplify:a8d87113-aa75-4085-aa94-8b2b2fee847a",
+"locations": [
+"Reston, VA"
+],
+"posted": 1795086663,
+"remote": false,
+"source": "Simplify",
+"sponsorship": "Other",
+"stipend": null,
+"terms": [],
+"title": "Computer Vision Engineer Intern - AI/ML",
+"url": "https://job-boards.greenhouse.io/scoutspace/jobs/5489231008"
+}
+},
+{
+"ev": {
+"bucket": "other_us",
+"loc": "Logan, UT",
+"reasons": [],
+"score": 52,
+"tags": [
+"dates not stated - check"
+],
+"term_known": false
+},
+"job": {
+"_raw_id": "ec63f3d6-689a-45ea-aa6a-980217419acf",
+"category": "Software",
+"company": "Space Dynamics Laboratory",
+"degrees": [
+"Bachelor's"
+],
+"id": "simplify:ec63f3d6-689a-45ea-aa6a-980217419acf",
+"locations": [
+"Logan, UT"
+],
+"posted": 1795101750,
+"remote": false,
+"source": "Simplify",
+"sponsorship": "Other",
+"stipend": null,
+"terms": [],
+"title": "Software Engineering Assistant Intern",
+"url": "https://spacedynamicslaboratory.applytojob.com/apply/qi2jNoCwKX/Student-Software-Engineering-Assistant"
+}
+}
+],
 "last_digest": null,
 "seen": {
 "gh:coinbase:8175510": 1795096978.5146687,
@@ -124,6 +261,7 @@
 "internshala:3337541": 1795096978.5146687,
 "internshala:3337546": 1795096978.5146687,
 "internshala:3337564": 1795096978.5146687,
+"internshala:3337666": 1795117049.4749043,
 "lever:palantir:130ee501-bd22-4d44-b651-39581ef97743": 1795096978.5146687,
 "lever:palantir:45e4617d-d658-4b30-8dc9-378ca84a027a": 1795096978.5146687,
 "lever:palantir:b3d81928-6c26-432f-8a0a-36602c2eefcb": 1795096978.5146687,
@@ -796,6 +934,7 @@
 "simplify:a8655c72-8299-4087-b0ad-d93807cef979": 1795096978.5146687,
 "simplify:a86847f9-91cf-42bb-b30b-3037df0475a3": 1795096978.5146687,
 "simplify:a8c12424-098d-4d97-9658-8820b0fdac3e": 1795096978.5146687,
+"simplify:a8d87113-aa75-4085-aa94-8b2b2fee847a": 1795117049.4749043,
 "simplify:a8fce259-7cd2-44ea-a7ab-787260c1308e": 1795096978.5146687,
 "simplify:a9900edf-029b-4f1e-98cb-a9a1c96f11b3": 1795096978.5146687,
 "simplify:a9b15888-79e1-4d34-b682-700189ca37f3": 1795096978.5146687,
@@ -1095,6 +1234,7 @@
 "simplify:ec223388-d88d-4b7b-ad95-bc08ce04bd3c": 1795096978.5146687,
 "simplify:ec241207-37cb-48f4-aa65-cf19d960f7a2": 1795096978.5146687,
 "simplify:ec44a0f2-7cf0-4dd9-84b2-cdc746efb42e": 1795096978.5146687,
+"simplify:ec63f3d6-689a-45ea-aa6a-980217419acf": 1795117049.4749043,
 "simplify:ec960685-32ba-4b85-a1ed-2584192d31aa": 1795096978.5146687,
 "simplify:ecc69c92-2354-4bcc-8af5-c5e605953496": 1795096978.5146687,
 "simplify:ecfcd54c-d907-4dac-8649-56d9a8f24394": 1795096978.5146687,
@@ -1190,10 +1330,10 @@
 },
 "source_counts": {
 "internshala": {
-"last_ok": 1795097162.034774
+"last_ok": 1795117049.4749043
 },
 "simplify": {
-"last_ok": 1795097162.034774
+"last_ok": 1795117049.4749043
 }
 },
 "warned": {}
