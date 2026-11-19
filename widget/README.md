@@ -1,7 +1,12 @@
 # Menu-bar widget (macOS)
 
 A briefcase in your Mac's menu bar that shows how many **new internships that fit you** were posted in the
-last 24 hours. Click it for the list (company, city, dates, fit score) and open any Apply link directly.
+last 24 hours. Click it for:
+
+- companies you **watch**, and whether they've opened (with a Mac notification the day one does)
+- companies that **usually open this week**, predicted from past seasons
+- new matches from the last 24 hours and your best fits (likely ghost listings are skipped), each with an Apply link
+
 You also get a Mac notification when a new strong match appears.
 
 It reads the listings your alert agent publishes every 15 minutes (the `data` branch of this repo), so it
@@ -32,6 +37,7 @@ Click the briefcase, hold **Option**, then choose **Plugin settings** (or edit t
 | `VAR_MIN_FIT` | 60 | Only count roles with at least this fit score |
 | `VAR_NOTIFY` | true | Mac notification for new strong matches |
 | `VAR_APP_URL` | empty | Your deployed Internship Copilot URL, adds an "Open Internship Copilot" item |
+| `VAR_WATCH` | empty | Companies to watch, comma separated, e.g. `Stripe, Google, Hugging Face` |
 
 The `15m` in the file name is the refresh interval; rename it (e.g. `internships.5m.js`) to change it.
 
