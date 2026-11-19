@@ -54,3 +54,16 @@ def test_competition_estimate_and_caps():
     assert small["high"] < 150 and small["level"] == "good"
     real = market.competition({"company": "X", "title": "Intern", "applicants": 312, "posted": now}, now=now)
     assert not real["estimated"] and real["low"] == real["high"] == 312
+
+
+def test_updates_endpoint():
+    import os
+    os.environ.setdefault("ALLOW_LOCAL_AUTH", "1")
+    os.environ.setdefault("DATA_FILE", str(Path(__file__).parent / "sample_jobs.json"))
+    from fastapi.testclient import TestClient
+    import main
+    c = TestClient(main.app)
+    a = c.post("/api/updates", json={"since": 0, "profile": {"roles": ["Software Engineering"], "locations": ["Remote"]}}).json()
+    assert a["count"] > 0 and a["new"] == a["count"] and a["new_fits"] <= a["new"]
+    b = c.post("/api/updates", json={"since": int(time.time()) + 10, "refresh": True}).json()
+    assert b["new"] == 0 and "updated" in b

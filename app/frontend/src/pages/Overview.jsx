@@ -4,6 +4,7 @@ import { getInsights, getOpenings, searchJobs } from '../lib/api.js'
 import { useSession } from '../lib/session.jsx'
 import { useUserData } from '../lib/userdata.jsx'
 import { Results } from '../components.jsx'
+import RefreshBar from '../RefreshBar.jsx'
 import { CountUp, DayArea, FitSpread, RankBars, SkeletonRows } from '../charts.jsx'
 import { Icon } from '../ui.jsx'
 import { STATUSES, statusKey } from '../lib/options.js'
@@ -25,6 +26,7 @@ export default function Overview() {
   const [ops, setOps] = useState(null)
   const [err, setErr] = useState('')
   const [q, setQ] = useState('')
+  const [nonce, setNonce] = useState(0)
 
   useEffect(() => {
     if (!profile) return
@@ -32,7 +34,7 @@ export default function Overview() {
     searchJobs({ fit_only: true, posted_within_days: 7, sort: 'newest', limit: 1 }, profile).then(setFresh).catch(() => {})
     getInsights({}, profile).then(setMk).catch(() => {})
     getOpenings(profile.watch_companies || []).then(setOps).catch(() => {})
-  }, [profile])
+  }, [profile, nonce])
 
   const first = (profile?.full_name || '').split(' ')[0]
   const byStatus = Object.fromEntries(STATUSES.map((s) => [s, data.apps.filter((a) => a.status === s).length]))
@@ -55,6 +57,7 @@ export default function Overview() {
               {fresh?.total ? <>, and <strong><CountUp value={fresh.total} /></strong> of them were posted this week.</> : '.'}</> : 'Finding roles that fit you…'}
           </p>
         </div>
+        <RefreshBar onReload={() => setNonce((n) => n + 1)} />
       </header>
 
       <form className="quick-ask" onSubmit={(e) => { e.preventDefault(); if (q.trim()) nav(`/app/copilot?q=${encodeURIComponent(q.trim())}`) }}>

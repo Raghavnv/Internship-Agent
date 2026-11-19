@@ -179,6 +179,28 @@ def post_job(body: JobIn, user: dict = Depends(limited("job", 600))):
     return {"job": out, "checks": checks, "signals": signals, "description": jobdetail.description(j.get("url", ""))}
 
 
+class UpdatesIn(BaseModel):
+    since: int = 0                  # unix time of the user's last visit
+    profile: dict | None = None
+    refresh: bool = False           # True when they pressed Refresh: re-read the data now
+
+
+@app.post("/api/updates")
+def post_updates(body: UpdatesIn, user: dict = Depends(limited("updates", 240))):
+    """How many listings (and strong fits) appeared since `since`, and how fresh the data is."""
+    reloaded = store.refresh() if body.refresh else False
+    jobs = store.get()
+    since = body.since or 0
+    added = lambda j: max(j.get("first_seen") or 0, j.get("posted") or 0) > since
+    new = [j for j in jobs if added(j)]
+    fits = 0
+    if body.profile and new:
+        prof = fitlib.prepare(body.profile)
+        fits = sum(1 for j in new if (fitlib.score(j, prof)[0] or 0) >= 55)
+    return {"updated": store.updated, "count": len(jobs), "new": len(new), "new_fits": fits,
+            "reloaded": reloaded, "checked_at": int(time.time())}
+
+
 class OpeningsIn(BaseModel):
     watch: list[str] = Field(default_factory=list, max_length=100)
 

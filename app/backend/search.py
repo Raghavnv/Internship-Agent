@@ -284,7 +284,7 @@ def compact(j, matched_locs=None, fit=None):
     from market import freshness
     fr = freshness(j)
     return {
-        "fresh": fr["level"], "reposts": j.get("reposts") or 0,
+        "fresh": fr["level"], "reposts": j.get("reposts") or 0, "first_seen": j.get("first_seen"),
         "id": j["id"], "title": j.get("title"), "company": j.get("company"), "url": j.get("url"),
         "locations": shown, "more_locations": max(0, len(locs) - len(shown)), "terms": j.get("terms") or [],
         "remote": bool(j.get("remote")), "posted": date.fromtimestamp(posted).isoformat() if posted else None,

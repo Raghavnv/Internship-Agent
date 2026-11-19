@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { cityName, describeArgs, postedLabel } from './format.js'
 import { Icon } from './ui.jsx'
 import { useUserData } from './lib/userdata.jsx'
+import { lastVisit } from './lib/updates.js'
 
 // Safe renderer for **bold** and "- " bullets in AI replies.
 export function RichText({ text }) {
@@ -55,6 +56,8 @@ export function JobRow({ job, onFocus, index = 0 }) {
   const days = job.posted ? Math.floor((Date.now() - new Date(job.posted)) / 86400000) : null
   const fresh = days != null && days <= 3
   const remote = job.remote || /remote/i.test(job.locations?.[0] || '')
+  const since = lastVisit()
+  const unseen = since > 0 && Math.max(job.first_seen || 0, job.posted || 0) > since
   const applied = data?.isApplied?.(job.id)
   const saved = data?.isSaved?.(job.id)
   const open = data?.viewing && (data.viewing.id || data.viewing.job_id) === job.id
@@ -64,7 +67,7 @@ export function JobRow({ job, onFocus, index = 0 }) {
         onFocus={() => onFocus?.(job.id)} onBlur={() => onFocus?.(null)} aria-label={`${job.title} at ${job.company}. Open details`}>
         <span className="avatar co-av" style={coHue(job.company)} aria-hidden="true">{(job.company || '?').trim().charAt(0)}</span>
         <span className="job-main">
-          <span className="job-title">{job.title}{fresh && <span className="badge-new">New</span>}</span>
+          <span className="job-title">{unseen && <i className="unseen" title="Added since your last visit" />}{job.title}{fresh && <span className="badge-new">New</span>}</span>
           <span className="job-sub">
             <span className="co">{job.company}</span><span className="sep" aria-hidden="true" />
             {city || 'Location not listed'}{more > 0 && <span className="more-loc"> +{more}</span>}

@@ -6,6 +6,7 @@ import { useSession } from '../lib/session.jsx'
 import { JobRow } from '../components.jsx'
 import { CountUp, ModeSplit, RankBars, SkeletonRows } from '../charts.jsx'
 import WorldMap from '../WorldMap.jsx'
+import RefreshBar from '../RefreshBar.jsx'
 import { ChipInput, Icon, Spinner } from '../ui.jsx'
 
 const ROLE_WORDS = {
@@ -103,6 +104,7 @@ export default function Explore() {
           <h1>Job listings</h1>
           <p className="sub">Every live internship, filtered your way and ranked by how well it fits you. Select one to read the full description.</p>
         </div>
+        <RefreshBar onReload={run} />
       </header>
 
       <section className="ex-hero" aria-label="Summary of these results">
