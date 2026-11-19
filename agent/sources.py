@@ -33,14 +33,21 @@ SIMPLIFY_FEEDS = [
 ]
 
 
+RAW = []   # last full feed (open + closed listings), used for opening dates and repost signals
+
+
 def fetch_simplify():
     jobs = []
+    RAW.clear()
     for feed in SIMPLIFY_FEEDS:
-        for x in _get(feed).json():
+        data = _get(feed).json()
+        RAW.extend(data)
+        for x in data:
             if not x.get("active") or not x.get("is_visible", True):
                 continue
             locs = x.get("locations") or []
             jobs.append({
+                "_raw_id": x["id"],
                 "id": f"simplify:{x['id']}",
                 "source": "Simplify",
                 "company": x.get("company_name", "").strip(),

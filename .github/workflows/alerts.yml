@@ -77,7 +77,7 @@ jobs:
       - name: Publish listings for the search app (data branch, no history)
         if: ${{ github.event.inputs.mode != 'test' && hashFiles('data/jobs.json') != '' }}
         run: |
-          mkdir -p /tmp/pub && cp data/jobs.json /tmp/pub/ && cd /tmp/pub
-          git init -q -b data && git add jobs.json
+          mkdir -p /tmp/pub && cp data/jobs.json /tmp/pub/ && (cp data/openings.json /tmp/pub/ 2>/dev/null || true) && cd /tmp/pub
+          git init -q -b data && git add .
           git -c user.name="internship-bot" -c user.email="internship-bot@users.noreply.github.com" commit -qm "listings $(date -u +%FT%TZ)"
           git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" data

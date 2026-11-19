@@ -53,7 +53,8 @@ const coachBody = (job, profile, projects, description) => json({
 })
 export const tailorResume = (job, profile, projects, description) => call('/api/tailor', coachBody(job, profile, projects, description))
 export const draftReferral = (job, profile, projects) => call('/api/referral', coachBody(job, profile, projects))
-export const getJob = (id, profile) => call('/api/job', json({ id, profile: profileForApi(profile) }))
+export const getJob = (id, profile, referred = false) => call('/api/job', json({ id, profile: profileForApi(profile), referred }))
+export const getOpenings = (watch = []) => call('/api/openings', json({ watch }))
 export const reviewResume = (resume_text, job) => call('/api/resume/review', json({ resume_text, job }))
 export function parseResume(file) {
   const fd = new FormData()

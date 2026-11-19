@@ -7,6 +7,7 @@ import { cityCode, cityName, postedLabel } from './format.js'
 import { coHue, shortTerms } from './components.jsx'
 import { Icon, Spinner } from './ui.jsx'
 import { Referral, Tailor } from './Coach.jsx'
+import { Odds } from './Signals.jsx'
 
 const km = (a, b) => {
   const r = (d) => (d * Math.PI) / 180
@@ -47,6 +48,7 @@ export default function JobPanel() {
   const data = useUserData()
   const job = data.viewing
   const [full, setFull] = useState(null)
+  const [referred, setReferred] = useState(false)
   const [state, setState] = useState('idle')
   const closeRef = useRef(null)
   const lastFocus = useRef(null)
@@ -55,7 +57,7 @@ export default function JobPanel() {
     if (!job) return
     lastFocus.current = document.activeElement
     closeRef.current?.focus()
-    setFull(null); setState('loading')
+    setFull(null); setState('loading'); setReferred(false)
     let alive = true
     getJob(job.id || job.job_id, profile)
       .then((r) => alive && (setFull(r), setState('ok')))
@@ -131,6 +133,8 @@ export default function JobPanel() {
             </section>
           )}
 
+          {state === 'ok' && <Odds signals={full.signals} referred={referred} company={j.company}
+            onReferred={(v) => { setReferred(v); getJob(j.id, profile, v).then((r) => setFull((f) => ({ ...f, signals: r.signals }))).catch(() => {}) }} />}
           {(state === 'ok' || state === 'gone') && <Tailor job={j} profile={profile} hasDescription={Boolean(full?.description)} />}
           {(state === 'ok' || state === 'gone') && <Referral job={j} profile={profile} />}
 

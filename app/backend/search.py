@@ -172,7 +172,7 @@ def match(jobs, *, keywords=None, any_keywords=None, exclude_keywords=None, comp
            exclude_companies=None, locations=None, remote=None, start_month=None, end_month=None, terms=None,
            include_undated=True, posted_within_days=None, categories=None, needs_sponsorship=False,
            exclude_citizenship_required=False, undergrad_only=False, fit_only=False, now=None, profile=None,
-           min_fit=55):
+           min_fit=55, hide_stale=False):
     """Returns [(relevance, posted, fit, job, matched_locations)] for listings passing every filter."""
     now = now or time.time()
     kw_all = [word_re(k) for k in (keywords or []) if norm(k)]
@@ -192,11 +192,15 @@ def match(jobs, *, keywords=None, any_keywords=None, exclude_keywords=None, comp
         from fit import prepare, score as fit_score
         prof = prepare(profile)
     hits = []
+    if hide_stale:
+        from market import freshness
     for j in jobs:
         title = j.get("title", "")
         company = j.get("company", "")
         text = f"{title} {company}"
         if kw_all and not all(r.search(text) for r in kw_all):
+            continue
+        if hide_stale and freshness(j, now)["level"] == "ghost":
             continue
         if kw_any and not any(r.search(text) for r in kw_any):
             continue
@@ -277,7 +281,10 @@ def compact(j, matched_locs=None, fit=None):
         if g:
             pins.append(g[:2])
     posted = j.get("posted")
+    from market import freshness
+    fr = freshness(j)
     return {
+        "fresh": fr["level"], "reposts": j.get("reposts") or 0,
         "id": j["id"], "title": j.get("title"), "company": j.get("company"), "url": j.get("url"),
         "locations": shown, "more_locations": max(0, len(locs) - len(shown)), "terms": j.get("terms") or [],
         "remote": bool(j.get("remote")), "posted": date.fromtimestamp(posted).isoformat() if posted else None,

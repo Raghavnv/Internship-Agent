@@ -77,9 +77,17 @@ def export_jobs(jobs, evs, st):
     """Full listing dump for the AI search app (published to the `data` branch by the workflow)."""
     keep = ("id", "source", "company", "title", "url", "locations", "terms", "remote", "posted",
             "sponsorship", "category", "degrees", "stipend")
+    from . import signals
+    try:
+        reposts = signals.reposts(sources.RAW) if sources.RAW else {}
+    except Exception as e:  # signals are extras; never break the run
+        log.warning("repost signals failed: %s", e)
+        reposts = {}
     out = []
     for j in jobs:
         rec = {k: j.get(k) for k in keep if j.get(k) not in (None, [], "")}
+        if reposts.get(j.get("_raw_id")):
+            rec["reposts"] = reposts[j["_raw_id"]]
         rec["first_seen"] = int(st["seen"].get(j["id"]) or time.time())
         try:
             from .geo import geocode
@@ -97,6 +105,13 @@ def export_jobs(jobs, evs, st):
     d.mkdir(exist_ok=True)
     (d / "jobs.json").write_text(json.dumps({"updated": int(time.time()), "count": len(out), "jobs": out},
                                             separators=(",", ":"), ensure_ascii=False))
+    if sources.RAW:
+        try:
+            op = signals.openings(sources.RAW)
+            op["updated"] = int(time.time())
+            (d / "openings.json").write_text(json.dumps(op, separators=(",", ":"), ensure_ascii=False))
+        except Exception as e:
+            log.warning("openings export failed: %s", e)
 
 
 def main():

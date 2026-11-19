@@ -19,6 +19,7 @@ class Store:
     def __init__(self):
         self.jobs: list[dict] = []
         self.updated = 0
+        self.openings: dict = {}
         self.loaded_at = 0.0
         self._lock = threading.Lock()
 
@@ -32,8 +33,24 @@ class Store:
             payload = r.json()
         self.jobs = payload.get("jobs", [])
         self.updated = payload.get("updated", 0)
+        self.openings = self._load_openings()
         self.loaded_at = time.time()
         log.info("loaded %d listings (data updated %s)", len(self.jobs), self.updated)
+
+    def _load_openings(self):
+        """openings.json sits next to jobs.json; it's optional (older data branches don't have it)."""
+        try:
+            if DATA_FILE:
+                path = os.path.join(os.path.dirname(DATA_FILE), "openings.json")
+                if not os.path.exists(path):
+                    return self.openings
+                with open(path, encoding="utf-8") as f:
+                    return json.load(f)
+            r = httpx.get(DATA_URL.rsplit("/", 1)[0] + "/openings.json", timeout=30, follow_redirects=True)
+            return r.json() if r.status_code == 200 else self.openings
+        except Exception as e:
+            log.warning("openings not loaded: %s", e)
+            return self.openings
 
     def get(self):
         """Returns the listings, refreshing in the background when they're stale."""

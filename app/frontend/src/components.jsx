@@ -75,6 +75,8 @@ export function JobRow({ job, onFocus, index = 0 }) {
             {posted && <span>{posted}</span>}
             {job.stipend && <span>{job.stipend}</span>}
             {flag && <span className="flag">{flag}</span>}
+            {job.fresh === 'ghost' && <span className="ghost" title="Up for a long time or reposted several times">Possible ghost listing</span>}
+            {job.fresh === 'stale' && <span className="stale-tag" title="Up for a while">Getting stale</span>}
           </span>
         </span>
         <span className="job-marks">

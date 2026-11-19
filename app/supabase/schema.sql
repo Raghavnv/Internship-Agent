@@ -175,3 +175,9 @@ alter table public.applications add constraint applications_status_check
 alter table public.applications add column if not exists interview_at timestamptz;
 alter table public.applications add column if not exists follow_up_on date;
 alter table public.applications add column if not exists stage_changed_at timestamptz default now();
+
+
+-- ─────────────────────────────────────────────────────────────
+-- v5: companies you're watching for openings
+-- ─────────────────────────────────────────────────────────────
+alter table public.profiles add column if not exists watch_companies text[] default '{}';

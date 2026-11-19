@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { getInsights, searchJobs } from '../lib/api.js'
+import { getInsights, getOpenings, searchJobs } from '../lib/api.js'
 import { useSession } from '../lib/session.jsx'
 import { useUserData } from '../lib/userdata.jsx'
 import { Results } from '../components.jsx'
@@ -22,6 +22,7 @@ export default function Overview() {
   const [top, setTop] = useState(null)
   const [fresh, setFresh] = useState(null)
   const [mk, setMk] = useState(null)
+  const [ops, setOps] = useState(null)
   const [err, setErr] = useState('')
   const [q, setQ] = useState('')
 
@@ -30,6 +31,7 @@ export default function Overview() {
     searchJobs({ fit_only: true, sort: 'fit', limit: 10 }, profile).then(setTop).catch((e) => setErr(e.message))
     searchJobs({ fit_only: true, posted_within_days: 7, sort: 'newest', limit: 1 }, profile).then(setFresh).catch(() => {})
     getInsights({}, profile).then(setMk).catch(() => {})
+    getOpenings(profile.watch_companies || []).then(setOps).catch(() => {})
   }, [profile])
 
   const first = (profile?.full_name || '').split(' ')[0]
@@ -103,6 +105,22 @@ export default function Overview() {
               </ul>
             )}
           </section>
+
+          {ops && (ops.soon.length > 0 || ops.watching.some((o) => o.status === 'open')) && (
+            <section className="side-card" aria-labelledby="os-h">
+              <div className="sec-head"><h2 id="os-h">Opening soon</h2><Link to="/app/openings" className="link">All</Link></div>
+              <ul className="mini-list">
+                {ops.watching.filter((o) => o.status === 'open' && o.open_roles > 0).slice(0, 2).map((o) => (
+                  <li key={'w' + o.company}><button type="button" onClick={() => nav(`/app/explore?q=${encodeURIComponent(o.company)}`)}>
+                    <strong>{o.company} is open</strong><span className="ok-t">{o.open_roles} role{o.open_roles === 1 ? '' : 's'} · you’re watching it</span></button></li>
+                ))}
+                {ops.soon.filter((o) => o.days_until >= 0).slice(0, 3).map((o) => (
+                  <li key={o.company}><button type="button" onClick={() => nav('/app/openings')}>
+                    <strong>{o.company}</strong><span>Usually opens {new Date(o.expected_on).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}{o.days_until === 0 ? ', today' : `, in ${o.days_until}d`}</span></button></li>
+                ))}
+              </ul>
+            </section>
+          )}
 
           {soon.length > 0 && (
             <section className="side-card" aria-labelledby="up-h">

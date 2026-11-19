@@ -76,7 +76,7 @@ TOOLS = [
             "top": {"type": "integer"},
         }, "required": ["group_by"]}}},
 ]
-ALLOWED = set(FILTER_PROPS) | {"sort", "limit", "group_by", "top"}
+ALLOWED = set(FILTER_PROPS) | {"sort", "limit", "group_by", "top", "hide_stale"}
 
 
 def system_prompt(meta, profile=None):

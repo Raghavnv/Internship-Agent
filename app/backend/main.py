@@ -18,6 +18,7 @@ import coach
 import fit as fitlib
 import jobdetail
 import llm
+import market
 import resume as resume_ai
 from auth import current_user
 from data import store
@@ -141,6 +142,17 @@ def job_by_id(jid: str):
 class JobIn(BaseModel):
     id: str = Field(max_length=300)
     profile: dict | None = None
+    referred: bool = False
+
+
+_big: dict = {"key": None, "set": set()}
+
+
+def big_employers():
+    jobs = store.get()
+    if _big["key"] is not id(jobs):
+        _big.update(key=id(jobs), set=market.big_employers(jobs))
+    return _big["set"]
 
 
 @app.post("/api/job")
@@ -159,7 +171,23 @@ def post_job(body: JobIn, user: dict = Depends(limited("job", 600))):
         prof = fitlib.prepare(body.profile)
         out["fit"] = fitlib.score(j, prof)[0]
         checks = fitlib.explain(j, prof)
-    return {"job": out, "checks": checks, "description": jobdetail.description(j.get("url", ""))}
+    signals = {
+        "freshness": market.freshness(j),
+        "competition": market.competition(j, out.get("fit"), body.referred, big_employers()),
+        "opening": market.opening(store.openings, j.get("company") or ""),
+    }
+    return {"job": out, "checks": checks, "signals": signals, "description": jobdetail.description(j.get("url", ""))}
+
+
+class OpeningsIn(BaseModel):
+    watch: list[str] = Field(default_factory=list, max_length=100)
+
+
+@app.post("/api/openings")
+def post_openings(body: OpeningsIn, user: dict = Depends(current_user)):
+    """Companies opening soon by their past pattern, ones that just opened, and the user's watch list."""
+    store.get()
+    return market.calendar(store.openings, store.get(), watch=body.watch)
 
 
 class CoachIn(BaseModel):

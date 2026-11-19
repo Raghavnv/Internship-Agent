@@ -102,7 +102,12 @@ For a menu-bar widget with notifications, see [`../widget`](../widget/README.md)
 | **Autofill** Workday, Greenhouse, Lever, Ashby forms from your profile, incl. work experience and role descriptions | Sidebar → Autofill (Chrome extension in [`../extension`](../extension/README.md)) |
 | **Tailor your resume**: skills the listing asks for that you show / lack, bullets reworded for it (never invented) | Any role → details panel |
 | **Find a referral**: LinkedIn searches for alumni, recruiters and engineers, plus a drafted note and message | Any role → details panel |
+| **Opening soon**: when each company opens its summer internships, predicted from the last three seasons, with a watch list | Sidebar → Opening soon; also in every role's panel |
+| **Your odds**: estimated applicants so far and the chance a person reviews your application (labelled as an estimate), plus a freshness / ghost-listing score from age and reposts | Any role → details panel; "Hide likely ghost listings" in Job listings |
 | **Pipeline board**: Applied → Online assessment → Interviewing → Offer / Rejected, interview dates with Google Calendar / .ics, follow-up reminders | Applications |
+
+Opening history comes from past snapshots of SimplifyJobs' listings (`agent/openings_history.json`, rebuilt with
+`agent/build_history.py`); the agent adds the current season and publishes `openings.json` next to `jobs.json`.
 
 After pulling this version, re-run `app/supabase/schema.sql` in the Supabase SQL editor (adds the online-assessment
 stage and the interview / follow-up date columns). After changing the extension, run `python extension/build.py`.

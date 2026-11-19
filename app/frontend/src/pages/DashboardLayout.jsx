@@ -10,6 +10,7 @@ const NAV = [
   { to: '/app', end: true, icon: 'overview', label: 'Overview' },
   { to: '/app/copilot', icon: 'copilot', label: 'AI Copilot' },
   { to: '/app/explore', icon: 'explore', label: 'Job listings' },
+  { to: '/app/openings', icon: 'calendar', label: 'Opening soon' },
   { to: '/app/applications', icon: 'applications', label: 'Applications', count: 'apps' },
   { to: '/app/saved', icon: 'saved', label: 'Saved', count: 'saved' },
   { divider: 'Your profile' },

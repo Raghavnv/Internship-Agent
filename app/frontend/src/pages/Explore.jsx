@@ -55,6 +55,7 @@ export default function Explore() {
   const [remote, setRemote] = useState('any')
   const [posted, setPosted] = useState(0)
   const [fitOnly, setFitOnly] = useState(true)
+  const [hideStale, setHideStale] = useState(true)
   const [sort, setSort] = useState('fit')
   const [res, setRes] = useState(null)
   const [busy, setBusy] = useState(false)
@@ -73,7 +74,7 @@ export default function Explore() {
     if (locations === null) return
     const t = setTimeout(run, 250)
     return () => clearTimeout(t)
-  }, [locations, roles, keyword, remote, posted, fitOnly, sort, limit])
+  }, [locations, roles, keyword, remote, posted, fitOnly, hideStale, sort, limit])
 
   async function run() {
     setBusy(true); setErr('')
@@ -81,7 +82,7 @@ export default function Explore() {
     const f = {
       any_keywords: any.length ? any : undefined, keywords: keyword.trim() ? [keyword.trim()] : undefined,
       locations: locations?.length ? locations : undefined, remote: remote === 'any' ? undefined : remote,
-      posted_within_days: posted || undefined, fit_only: fitOnly || undefined, sort, limit,
+      posted_within_days: posted || undefined, fit_only: fitOnly || undefined, hide_stale: hideStale || undefined, sort, limit,
     }
     try {
       const [r, m] = await Promise.all([searchJobs(f, profile), getInsights({ ...f, sort: undefined, limit: undefined }, profile).catch(() => null)])
@@ -172,6 +173,9 @@ export default function Explore() {
             </p>
             <label className="ck small">
               <input type="checkbox" checked={fitOnly} onChange={(e) => setFitOnly(e.target.checked)} /><span>Strong fits only</span>
+            </label>
+            <label className="ck small" title="Listings up for months or reposted again and again">
+              <input type="checkbox" checked={hideStale} onChange={(e) => setHideStale(e.target.checked)} /><span>Hide likely ghost listings</span>
             </label>
             <label className="sort">
               <span>Sort</span>
