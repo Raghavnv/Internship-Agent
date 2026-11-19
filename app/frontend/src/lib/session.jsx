@@ -1,6 +1,6 @@
 // Auth + profile context shared by every page.
 import { createContext, useCallback, useContext, useEffect, useState } from 'react'
-import { auth, getProfile, saveProfile } from './backend.js'
+import { auth, CONFIGURED, getProfile, saveProfile } from './backend.js'
 import { geocode } from './api.js'
 
 const Ctx = createContext(null)
@@ -12,6 +12,7 @@ export function SessionProvider({ children }) {
   const [home, setHome] = useState(null)
 
   useEffect(() => {
+    if (!CONFIGURED) { setSession(null); return }
     let alive = true
     auth.getSession().then((s) => alive && setSession(s || null))
     const off = auth.onChange((s) => setSession(s || null))

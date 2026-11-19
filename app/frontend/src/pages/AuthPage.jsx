@@ -1,8 +1,90 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { auth, DEMO, getProfile } from '../lib/backend.js'
+import { auth, getProfile } from '../lib/backend.js'
 import { useSession } from '../lib/session.jsx'
 import { Logo } from '../ui.jsx'
+
+function Shell({ children }) {
+  return (
+    <main className="auth">
+      <div className="auth-main">
+        <Link to="/" className="wordmark"><Logo />Internship Copilot</Link>
+        {children}
+      </div>
+      <Side />
+    </main>
+  )
+}
+
+// Shown when the site was built without the Supabase settings, instead of a fake login.
+export function SetupNeeded() {
+  return (
+    <Shell>
+      <div className="auth-card">
+        <h1>Sign-in isn’t connected yet</h1>
+        <p className="sub">This site was deployed without its account settings, so nobody can sign in or sign up.</p>
+        <p className="setup-help">If you run this site, add these two environment variables in Vercel, then redeploy without the build cache:</p>
+        <ul className="setup-list"><li><code>VITE_SUPABASE_URL</code></li><li><code>VITE_SUPABASE_ANON_KEY</code></li></ul>
+        <Link to="/" className="btn btn-ghost btn-block">Back to the home page</Link>
+      </div>
+    </Shell>
+  )
+}
+
+// Where the "reset your password" email lands. Supabase signs the person in from the link.
+export function ResetPassword() {
+  const { user, loading } = useSession()
+  const nav = useNavigate()
+  const [pw, setPw] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+  async function submit(e) {
+    e.preventDefault()
+    if (pw.length < 8) { setError('Use at least 8 characters for your password.'); return }
+    setBusy(true); setError('')
+    try { await auth.updatePassword(pw); nav('/app', { replace: true }) } catch (err) { setError(err.message) } finally { setBusy(false) }
+  }
+  return (
+    <Shell>
+      <div className="auth-card">
+        {loading ? null : user ? (
+          <>
+            <h1>Choose a new password</h1>
+            <p className="sub">For {user.email}.</p>
+            <form onSubmit={submit} className="auth-form">
+              <label>New password
+                <input type="password" value={pw} onChange={(e) => setPw(e.target.value)} required minLength={8} autoComplete="new-password" />
+              </label>
+              {error && <p className="form-error" role="alert">{error}</p>}
+              <button type="submit" className="btn btn-primary btn-block" disabled={busy}>{busy ? 'Saving…' : 'Save password'}</button>
+            </form>
+          </>
+        ) : (
+          <>
+            <h1>This link has expired</h1>
+            <p className="sub">Reset links work once and only for a short time. Ask for a new one from the login page.</p>
+            <Link to="/login" className="btn btn-primary btn-block">Go to log in</Link>
+          </>
+        )}
+      </div>
+    </Shell>
+  )
+}
+
+function Side() {
+  return (
+    <aside className="auth-side" aria-hidden="true">
+      <svg viewBox="0 0 320 170" className="auth-art">
+        <path d="M40 130 Q160 -10 280 130" className="arc" />
+        <circle cx="40" cy="130" r="5" className="home" />
+        <circle cx="280" cy="130" r="5" className="dest" />
+        <text x="40" y="156" className="lbl" textAnchor="middle">You</text>
+        <text x="280" y="156" className="lbl" textAnchor="middle">Your next role</text>
+      </svg>
+      <p>Every live internship, scored against your profile, in one place.</p>
+    </aside>
+  )
+}
 
 function Signed({ user, profile }) {
   const nav = useNavigate()
@@ -57,6 +139,8 @@ export default function AuthPage({ mode }) {
     } catch (err) {
       const m = err.message || ''
       setError(/invalid login/i.test(m) ? 'That email and password don’t match. Check them and try again.'
+        : /not confirmed/i.test(m) ? 'Confirm your email first: open the link we sent you, then log in.'
+        : /rate limit|too many/i.test(m) ? 'Too many attempts. Wait a minute and try again.'
         : /already registered/i.test(m) ? 'There’s already an account with that email. Log in instead.' : m)
     } finally {
       setBusy(false)
@@ -69,14 +153,11 @@ export default function AuthPage({ mode }) {
   }
 
   return (
-    <main className="auth">
-      <div className="auth-main">
-        <Link to="/" className="wordmark"><Logo />Internship Copilot</Link>
+    <Shell>
         {user ? <Signed user={user} profile={profile} /> : (
           <div className="auth-card">
             <h1>{signup ? 'Create your account' : 'Log in'}</h1>
             <p className="sub">{signup ? 'Free. Takes about two minutes to set up.' : 'Pick up where you left off.'}</p>
-            {DEMO && <p className="demo-note">Demo mode: accounts are saved only in this browser until the database is connected.</p>}
 
             <form onSubmit={submit} className="auth-form">
               {signup && (
@@ -105,17 +186,6 @@ export default function AuthPage({ mode }) {
             </p>
           </div>
         )}
-      </div>
-      <aside className="auth-side" aria-hidden="true">
-        <svg viewBox="0 0 320 170" className="auth-art">
-          <path d="M40 130 Q160 -10 280 130" className="arc" />
-          <circle cx="40" cy="130" r="5" className="home" />
-          <circle cx="280" cy="130" r="5" className="dest" />
-          <text x="40" y="156" className="lbl" textAnchor="middle">You</text>
-          <text x="280" y="156" className="lbl" textAnchor="middle">Your next role</text>
-        </svg>
-        <p>Every live internship, scored against your profile, in one place.</p>
-      </aside>
-    </main>
+    </Shell>
   )
 }

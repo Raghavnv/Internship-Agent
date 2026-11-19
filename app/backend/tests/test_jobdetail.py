@@ -5,6 +5,7 @@ from pathlib import Path
 
 HERE = Path(__file__).parent
 sys.path.insert(0, str(HERE.parent))
+os.environ.setdefault("ALLOW_LOCAL_AUTH", "1")
 os.environ.setdefault("DATA_FILE", str(HERE / "sample_jobs.json"))
 
 from fastapi.testclient import TestClient  # noqa: E402
@@ -82,3 +83,12 @@ def test_job_endpoint(monkeypatch):
     body = r.json()
     assert body["job"]["id"] == jid and isinstance(body["checks"], list) and body["description"]["blocks"][0]["text"] == "Desc"
     assert client.post("/api/job", json={"id": "nope"}).status_code == 404
+
+
+def test_insights():
+    r = client.post("/api/insights", json={"profile": {"roles": ["Software Engineering"], "locations": ["Remote"]}})
+    assert r.status_code == 200, r.text
+    b = r.json()
+    assert len(b["by_day"]) == 30 and len(b["fit_bins"]) == 5
+    assert b["total"] >= 0 and isinstance(b["companies"], list)
+    assert sum(b["fit_bins"]) <= b["total"] and b["remote"] + b["onsite"] == b["total"]

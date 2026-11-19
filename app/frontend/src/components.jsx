@@ -45,31 +45,34 @@ export function FitRing({ value }) {
   )
 }
 
-export function JobRow({ job, onFocus }) {
+export function JobRow({ job, onFocus, index = 0 }) {
   const data = useUserData()
   const city = cityName(job.locations?.[0] || (job.remote ? 'Remote' : ''))
   const more = (job.locations?.length || 0) - 1 + (job.more_locations || 0)
   const posted = postedLabel(job.posted)
   const flag = job.sponsorship?.includes('Citizenship') ? 'US citizens only'
     : job.sponsorship?.includes('Does Not Offer') ? 'No sponsorship' : null
-  const fresh = posted === 'Posted today' || posted === 'Posted yesterday'
+  const days = job.posted ? Math.floor((Date.now() - new Date(job.posted)) / 86400000) : null
+  const fresh = days != null && days <= 3
+  const remote = job.remote || /remote/i.test(job.locations?.[0] || '')
   const applied = data?.isApplied?.(job.id)
   const saved = data?.isSaved?.(job.id)
   const open = data?.viewing && (data.viewing.id || data.viewing.job_id) === job.id
   return (
-    <li onMouseEnter={() => onFocus?.(job.id)} onMouseLeave={() => onFocus?.(null)}>
+    <li onMouseEnter={() => onFocus?.(job.id)} onMouseLeave={() => onFocus?.(null)} style={{ '--i': Math.min(index, 14) }}>
       <button type="button" className={`job${open ? ' open' : ''}`} onClick={() => data?.openJob?.(job)}
         onFocus={() => onFocus?.(job.id)} onBlur={() => onFocus?.(null)} aria-label={`${job.title} at ${job.company}. Open details`}>
         <span className="avatar co-av" style={coHue(job.company)} aria-hidden="true">{(job.company || '?').trim().charAt(0)}</span>
         <span className="job-main">
-          <span className="job-title">{job.title}</span>
+          <span className="job-title">{job.title}{fresh && <span className="badge-new">New</span>}</span>
           <span className="job-sub">
             <span className="co">{job.company}</span><span className="sep" aria-hidden="true" />
             {city || 'Location not listed'}{more > 0 && <span className="more-loc"> +{more}</span>}
           </span>
           <span className="job-meta">
+            {remote && <span className="pill">Remote</span>}
             <span>{shortTerms(job.terms)}</span>
-            {posted && <span className={fresh ? 'fresh' : ''}>{posted}</span>}
+            {posted && <span>{posted}</span>}
             {job.stipend && <span>{job.stipend}</span>}
             {flag && <span className="flag">{flag}</span>}
           </span>

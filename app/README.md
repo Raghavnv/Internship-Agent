@@ -53,7 +53,7 @@ Your service from before just needs two more environment variables (**Environmen
 | `GROQ_API_KEY` | (already set) |
 | `ALLOWED_ORIGINS` | your Vercel URL |
 
-With `SUPABASE_URL` set, the API only answers signed-in users (the landing page's map and stats stay public).
+The API only answers signed-in users (the landing page's map and stats stay public), so `SUPABASE_URL` is required. For local development without Supabase, set `ALLOW_LOCAL_AUTH=1`.
 
 ### 3. Frontend on Vercel
 Project settings: **Root Directory** `app/frontend`, framework **Vite**. Environment variables:
@@ -82,11 +82,13 @@ uvicorn main:app --reload                    # http://localhost:8000/api/health
 
 # frontend (new terminal)
 cd app/frontend && npm install
+cp .env.example .env.local                   # add your Supabase URL + key
 npm run dev                                  # http://localhost:5173
 ```
 
-Without `VITE_SUPABASE_*` the frontend runs in **demo mode**: sign-up, profile, applications and saved roles live
-in your browser, so you can try everything before setting up Supabase.
+The frontend needs `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (put them in `app/frontend/.env.local`);
+without them the login page explains what's missing. For automated browser tests only, `vite build --mode e2e`
+swaps the data layer for a localStorage stand-in (`src/lib/backend.fake.js`), which is never part of a normal build.
 
 Tests: `cd app/backend && python -m pytest -q` (fake LLM, sample data, auth and resume parsing covered).
 

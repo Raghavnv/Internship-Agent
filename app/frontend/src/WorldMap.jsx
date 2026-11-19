@@ -74,7 +74,7 @@ export default function WorldMap({ cities = [], home, pins = [], focus, onCity, 
     const o = off.getContext('2d')
     o.scale(dpr, dpr)
     const step = compact ? 6 : Math.max(6, Math.round(w / 170))
-    o.fillStyle = 'rgba(170,186,182,0.17)'
+    o.fillStyle = 'rgba(170,186,182,0.22)'
     for (let y = step / 2; y < h; y += step) {
       for (let x = step / 2; x < w; x += step) {
         if (data[(Math.floor(y) * w + Math.floor(x)) * 4 + 3] > 0) {

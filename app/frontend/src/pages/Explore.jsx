@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react'
-import { searchJobs } from '../lib/api.js'
-import { useLocationSuggestions } from '../lib/mapdata.js'
+import { useSearchParams } from 'react-router-dom'
+import { getInsights, searchJobs } from '../lib/api.js'
+import { toPins, useLocationSuggestions, useMapData } from '../lib/mapdata.js'
 import { useSession } from '../lib/session.jsx'
-import { Results } from '../components.jsx'
+import { JobRow } from '../components.jsx'
+import { CountUp, ModeSplit, RankBars, SkeletonRows } from '../charts.jsx'
+import WorldMap from '../WorldMap.jsx'
 import { ChipInput, Icon, Spinner } from '../ui.jsx'
 
 const ROLE_WORDS = {
@@ -16,12 +19,39 @@ const ROLE_WORDS = {
 const POSTED = [[0, 'Any time'], [3, 'Last 3 days'], [7, 'Last week'], [30, 'Last month']]
 const WORK = [['any', 'Any'], ['only', 'Remote'], ['exclude', 'In person']]
 
+const TIER_HEADS = [
+  [80, 'Strong fits', 'Match most of what you asked for'],
+  [60, 'Good fits', 'Worth a closer look'],
+  [-1, 'Other matches', 'Fit some of your filters'],
+]
+
+function Grouped({ results, byFit, onFocus }) {
+  if (!results.length) return <p className="quiet pad">Nothing matches all of that. Remove a filter or two.</p>
+  if (!byFit) return <ul className="jobs">{results.map((j, i) => <JobRow key={j.id} job={j} onFocus={onFocus} index={i} />)}</ul>
+  let n = 0
+  return TIER_HEADS.map(([min, title, sub], t) => {
+    const max = t ? TIER_HEADS[t - 1][0] : 101
+    const rows = results.filter((j) => (j.fit ?? 0) >= min && (j.fit ?? 0) < max)
+    if (!rows.length) return null
+    return (
+      <section key={title} className={`tier tier-${t}`} aria-label={title}>
+        <header className="tier-head"><i aria-hidden="true" /><h2>{title}</h2><span>{rows.length} shown · {sub}</span></header>
+        <ul className="jobs">{rows.map((j) => <JobRow key={j.id} job={j} onFocus={onFocus} index={n++} />)}</ul>
+      </section>
+    )
+  })
+}
+
 export default function Explore() {
-  const { profile } = useSession()
+  const { profile, home } = useSession()
+  const [params] = useSearchParams()
+  const map = useMapData()
   const locSuggest = useLocationSuggestions()
+  const [focus, setFocus] = useState(null)
+  const [mk, setMk] = useState(null)
   const [locations, setLocations] = useState(null)
   const [roles, setRoles] = useState(null)
-  const [keyword, setKeyword] = useState('')
+  const [keyword, setKeyword] = useState(params.get('q') || '')
   const [remote, setRemote] = useState('any')
   const [posted, setPosted] = useState(0)
   const [fitOnly, setFitOnly] = useState(true)
@@ -53,7 +83,10 @@ export default function Explore() {
       locations: locations?.length ? locations : undefined, remote: remote === 'any' ? undefined : remote,
       posted_within_days: posted || undefined, fit_only: fitOnly || undefined, sort, limit,
     }
-    try { setRes(await searchJobs(f, profile)) } catch (e) { setErr(e.message) } finally { setBusy(false) }
+    try {
+      const [r, m] = await Promise.all([searchJobs(f, profile), getInsights({ ...f, sort: undefined, limit: undefined }, profile).catch(() => null)])
+      setRes(r); setMk(m)
+    } catch (e) { setErr(e.message) } finally { setBusy(false) }
   }
 
   const reset = () => {
@@ -66,10 +99,28 @@ export default function Explore() {
     <main className="page page-wide">
       <header className="page-head">
         <div>
-          <h1>Explore</h1>
-          <p className="sub">Every live listing, filtered your way. Select a role to read the full description.</p>
+          <h1>Job listings</h1>
+          <p className="sub">Every live internship, filtered your way and ranked by how well it fits you. Select one to read the full description.</p>
         </div>
       </header>
+
+      <section className="ex-hero" aria-label="Summary of these results">
+        <div className="ex-map">
+          <WorldMap cities={map.cities} home={home} pins={toPins(res?.results || [])} focus={focus} compact
+            onCity={(c) => setLocations([...(locations || []).filter((l) => l !== c), c])} />
+          <span className="ex-map-key"><i className="h" />You<i className="d" />Roles shown</span>
+        </div>
+        <div className="ex-stats">
+          <p className="ex-big"><strong>{res ? <CountUp value={res.total} /> : '–'}</strong>{res?.total === 1 ? 'internship matches' : 'internships match'}</p>
+          {mk && <ModeSplit remote={mk.remote} onsite={mk.onsite} />}
+          {mk?.cities?.length > 0 && (
+            <div className="ex-cities">
+              <h3>Top cities <span>select to filter</span></h3>
+              <RankBars items={mk.cities.slice(0, 4)} onPick={(c) => setLocations([...(locations || []).filter((l) => l !== c), c])} />
+            </div>
+          )}
+        </div>
+      </section>
 
       <div className="ex">
         <aside className={`ex-filters${showFilters ? ' open' : ''}`} aria-label="Filters">
@@ -117,7 +168,7 @@ export default function Explore() {
           </div>
           <div className="ex-meta">
             <p className="ex-count" aria-live="polite">
-              {busy ? <Spinner /> : res ? <><strong>{res.total.toLocaleString('en-IN')}</strong> {res.total === 1 ? 'internship' : 'internships'}</> : null}
+              {res ? <>Showing <strong>{Math.min(limit, res.results.length)}</strong> of {res.total.toLocaleString('en-IN')}</> : null}{busy && <Spinner />}
             </p>
             <label className="ck small">
               <input type="checkbox" checked={fitOnly} onChange={(e) => setFitOnly(e.target.checked)} /><span>Strong fits only</span>
@@ -130,8 +181,8 @@ export default function Explore() {
             </label>
           </div>
           {err && <p className="form-error">{err}</p>}
-          {res && <Results data={{ results: res.results }} limit={limit} showChips={false}
-            empty="Nothing matches all of that. Remove a filter or two." />}
+          {!res && !err && <SkeletonRows n={8} />}
+          {res && <div className={busy ? 'is-busy' : ''}><Grouped results={res.results.slice(0, limit)} byFit={sort === 'fit'} onFocus={setFocus} /></div>}
           {res && res.total > res.results.length && res.results.length >= limit && (
             <button type="button" className="btn btn-ghost more-btn" onClick={() => setLimit(Math.min(50, limit + 25))} disabled={limit >= 50}>
               {limit >= 50 ? "Showing the top 50. Narrow the filters to see others." : "Show more"}

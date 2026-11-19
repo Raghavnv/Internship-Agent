@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { auth, DEMO } from '../lib/backend.js'
+import { auth } from '../lib/backend.js'
 import { useSession } from '../lib/session.jsx'
 import { UserDataProvider, useUserData } from '../lib/userdata.jsx'
 import { Icon, Logo } from '../ui.jsx'
@@ -9,7 +9,7 @@ import JobPanel from '../JobPanel.jsx'
 const NAV = [
   { to: '/app', end: true, icon: 'overview', label: 'Overview' },
   { to: '/app/copilot', icon: 'copilot', label: 'AI Copilot' },
-  { to: '/app/explore', icon: 'explore', label: 'Explore' },
+  { to: '/app/explore', icon: 'explore', label: 'Job listings' },
   { to: '/app/applications', icon: 'applications', label: 'Applications', count: 'apps' },
   { to: '/app/saved', icon: 'saved', label: 'Saved', count: 'saved' },
   { divider: 'Your profile' },
@@ -60,7 +60,6 @@ function Sidebar({ open, onClose }) {
         <button type="button" className="icon-btn" aria-label="Log out" title="Log out"
           onClick={async () => { await auth.signOut(); nav('/', { replace: true }) }}><Icon name="logout" /></button>
       </div>
-      {DEMO && <p className="side-demo" title="Connect Supabase to save accounts online">Demo mode</p>}
     </aside>
   )
 }

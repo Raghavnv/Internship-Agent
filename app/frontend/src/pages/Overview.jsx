@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { searchJobs } from '../lib/api.js'
+import { getInsights, searchJobs } from '../lib/api.js'
 import { useSession } from '../lib/session.jsx'
 import { useUserData } from '../lib/userdata.jsx'
 import { Results } from '../components.jsx'
-import { Icon, Spinner } from '../ui.jsx'
+import { CountUp, DayArea, FitSpread, RankBars, SkeletonRows } from '../charts.jsx'
+import { Icon } from '../ui.jsx'
 
 const STATUSES = ['Applied', 'Interviewing', 'Offer', 'Rejected']
 
@@ -19,6 +20,7 @@ export default function Overview() {
   const nav = useNavigate()
   const [top, setTop] = useState(null)
   const [fresh, setFresh] = useState(null)
+  const [mk, setMk] = useState(null)
   const [err, setErr] = useState('')
   const [q, setQ] = useState('')
 
@@ -26,6 +28,7 @@ export default function Overview() {
     if (!profile) return
     searchJobs({ fit_only: true, sort: 'fit', limit: 10 }, profile).then(setTop).catch((e) => setErr(e.message))
     searchJobs({ fit_only: true, posted_within_days: 7, sort: 'newest', limit: 1 }, profile).then(setFresh).catch(() => {})
+    getInsights({}, profile).then(setMk).catch(() => {})
   }, [profile])
 
   const first = (profile?.full_name || '').split(' ')[0]
@@ -44,8 +47,8 @@ export default function Overview() {
         <div>
           <h1>{greeting()}{first ? `, ${first}` : ''}</h1>
           <p className="sub">
-            {top ? <><strong>{top.total.toLocaleString('en-IN')}</strong> {top.total === 1 ? 'role fits' : 'roles fit'} your profile right now
-              {fresh?.total ? <>, and <strong>{fresh.total}</strong> of them were posted this week.</> : '.'}</> : 'Finding roles that fit you…'}
+            {top ? <><strong><CountUp value={top.total} /></strong> {top.total === 1 ? 'role fits' : 'roles fit'} your profile right now
+              {fresh?.total ? <>, and <strong><CountUp value={fresh.total} /></strong> of them were posted this week.</> : '.'}</> : 'Finding roles that fit you…'}
           </p>
         </div>
       </header>
@@ -57,14 +60,32 @@ export default function Overview() {
         {q.trim() && <button type="submit" className="btn btn-primary btn-sm">Ask</button>}
       </form>
 
+      {mk && mk.total > 0 && (
+        <section className="market" aria-labelledby="mk-h">
+          <h2 id="mk-h" className="sr">Your market</h2>
+          <div className="mk-card mk-wide">
+            <div className="mk-head"><h3>New roles that fit you</h3><span>last 30 days</span></div>
+            <DayArea data={mk.by_day} start={mk.start} />
+          </div>
+          <div className="mk-card">
+            <div className="mk-head"><h3>Fit spread</h3><span>score /100</span></div>
+            <FitSpread bins={mk.fit_bins} />
+          </div>
+          <div className="mk-card">
+            <div className="mk-head"><h3>Hiring most</h3><span>roles that fit</span></div>
+            <RankBars items={mk.companies.slice(0, 5)} onPick={(c) => nav(`/app/explore?q=${encodeURIComponent(c)}`)} />
+          </div>
+        </section>
+      )}
+
       <div className="ov-grid">
         <section className="ov-matches" aria-labelledby="tm-h">
           <div className="sec-head">
             <h2 id="tm-h">Best matches</h2>
-            <Link to="/app/explore" className="link">See all in Explore</Link>
+            <Link to="/app/explore" className="link">See all listings</Link>
           </div>
           {err && <p className="form-error">{err}</p>}
-          {!top && !err && <div className="loading"><Spinner /></div>}
+          {!top && !err && <SkeletonRows n={6} />}
           {top && <Results data={top} limit={10} showChips={false}
             empty="No strong matches yet. Try adding more locations or roles to your profile." />}
         </section>

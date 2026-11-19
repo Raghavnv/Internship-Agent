@@ -21,7 +21,7 @@ import resume as resume_ai
 from auth import current_user
 from data import store
 from geo import geocode
-from search import city_map, compact, search
+from search import city_map, compact, insights, search
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
 IST = timezone(timedelta(hours=5, minutes=30))
@@ -111,6 +111,18 @@ def post_search(body: dict, user: dict = Depends(current_user)):
     args = {k: v for k, v in body.items() if k in llm.ALLOWED - {"group_by", "top"} | {"offset"}}
     try:
         return {**search(store.get(), profile=profile, **args), "args": args}
+    except TypeError as e:
+        raise HTTPException(400, str(e))
+
+
+@app.post("/api/insights")
+def post_insights(body: dict, user: dict = Depends(current_user)):
+    """Chart data for the roles matching these filters (defaults to the user's strong fits)."""
+    profile = body.pop("profile", None)
+    args = {k: v for k, v in body.items() if k in llm.ALLOWED - {"group_by", "top", "sort", "limit"}}
+    args.setdefault("fit_only", bool(profile))
+    try:
+        return insights(store.get(), profile=profile, **args)
     except TypeError as e:
         raise HTTPException(400, str(e))
 

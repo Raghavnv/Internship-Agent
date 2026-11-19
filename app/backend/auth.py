@@ -20,7 +20,9 @@ TTL = 300
 
 def current_user(authorization: str | None = Header(default=None)) -> dict:
     if not SUPABASE_URL:
-        return {"id": "local", "email": None}
+        if os.getenv("ALLOW_LOCAL_AUTH") == "1":
+            return {"id": "local", "email": None}
+        raise HTTPException(503, "Sign-in isn't set up on the server yet (SUPABASE_URL is missing).")
     if not authorization or not authorization.lower().startswith("bearer "):
         raise HTTPException(401, "Please sign in.")
     token = authorization.split(" ", 1)[1].strip()

@@ -6,6 +6,7 @@ from pathlib import Path
 
 HERE = Path(__file__).parent
 sys.path.insert(0, str(HERE.parent))
+os.environ.setdefault("ALLOW_LOCAL_AUTH", "1")
 os.environ.setdefault("DATA_FILE", str(HERE / "sample_jobs.json"))
 os.environ["LLM_API_KEY"] = "test"
 

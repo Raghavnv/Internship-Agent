@@ -319,3 +319,42 @@ def aggregate(jobs, group_by="company", top=15, now=None, **filters):
             for l in (matched or j.get("locations") or []):
                 c[l] += 1
     return {"total": len(hits), "group_by": group_by, "counts": c.most_common(max(1, min(int(top or 15), 50)))}
+
+
+def insights(jobs, *, now=None, days=30, **filters):
+    """Shape of the matching market, for charts: new roles per day, fit spread, who's hiring and where."""
+    now = now or time.time()
+    hits = match(jobs, now=now, **filters)
+    seen, uniq = set(), []
+    for h in hits:
+        j = h[3]
+        k = (norm(j.get("company")), norm(j.get("title")), norm((j.get("locations") or [""])[0]))
+        if k not in seen:
+            seen.add(k)
+            uniq.append(h)
+    by_day = [0] * days
+    fit_bins = [0] * 5          # <60, 60s, 70s, 80s, 90+
+    companies, cities = {}, {}
+    remote = onsite = 0
+    for _, posted, fit, j, ml in uniq:
+        if posted:
+            age = int((now - posted) // 86400)
+            if 0 <= age < days:
+                by_day[days - 1 - age] += 1
+        if fit:
+            fit_bins[0 if fit < 60 else min(4, (int(fit) - 50) // 10)] += 1
+        c = (j.get("company") or "").strip()
+        if c:
+            companies[c] = companies.get(c, 0) + 1
+        if j.get("remote") or any(REMOTE_RE.search(l) for l in j.get("locations") or []):
+            remote += 1
+        else:
+            onsite += 1
+        first = (ml or j.get("locations") or [None])[0]
+        if first and not REMOTE_RE.search(first):
+            city = first.split(",")[0].strip()
+            cities[city] = cities.get(city, 0) + 1
+    top = lambda d, n: [{"name": k, "count": v} for k, v in sorted(d.items(), key=lambda kv: -kv[1])[:n]]
+    start = date.fromtimestamp(now - (days - 1) * 86400).isoformat()
+    return {"total": len(uniq), "start": start, "by_day": by_day, "fit_bins": fit_bins,
+            "companies": top(companies, 6), "cities": top(cities, 6), "remote": remote, "onsite": onsite}
