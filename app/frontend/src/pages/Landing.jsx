@@ -60,11 +60,10 @@ function Hero({ meta, cities }) {
   return (
     <section className="l-hero">
       <div className="l-hero-copy">
-        <p className="l-live"><i />{meta ? <><strong>{meta.count.toLocaleString('en-IN')}</strong> live internships, checked {ago(meta.updated)}</> : 'Live internships, checked every 15 minutes'}</p>
         <h1>Every live internship, <span>ranked for you.</span></h1>
         <p className="l-lede">
-          Internship Copilot reads five job boards around the clock, scores every listing against your skills, dates and visa
-          status, and tells you which ones are worth your evening.
+          Internship Copilot reads {meta ? meta.count.toLocaleString('en-IN') : 'thousands of'} listings from five job boards,
+          scores each one against your skills, dates and visa status, and shows you the ones worth applying to.
         </p>
         <div className="l-ctas">
           <Link to="/signup" className="btn btn-primary btn-lg">Get started free</Link>
@@ -196,7 +195,6 @@ export default function Landing() {
       </header>
 
       <Hero meta={meta} cities={cities} />
-      <Stats meta={meta} />
       <JustPosted items={meta?.recent} />
 
 

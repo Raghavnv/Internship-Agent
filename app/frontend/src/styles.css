@@ -1426,3 +1426,34 @@ h1, .display { font-family: var(--display); font-weight: 600; letter-spacing: -0
   .l-stats, .l-ticker { margin: 0 1.25rem; }
   .l-stats > div { padding: 1rem; }
 }
+
+/* ── v6.1 cleanup: one bold element (the globe), everything else flat and quiet ── */
+.btn-primary { background: var(--home); box-shadow: inset 0 1px 0 rgba(255, 240, 220, 0.45); border-color: #e0913f; }
+.btn-primary:hover:not(:disabled) { background: #ffbd74; box-shadow: inset 0 1px 0 rgba(255, 240, 220, 0.45); }
+.btn-primary:disabled { background: var(--raise); color: var(--faint); border-color: var(--line-2); box-shadow: none; }
+.btn-ghost { background: transparent; box-shadow: none; }
+.btn-ghost:hover:not(:disabled) { background: var(--raise); }
+:root { --card: var(--surface); --card-edge: none; }
+.panel, .side-card, .mk-card { background: var(--surface); box-shadow: none; }
+.side-link.on { background: var(--raise); }
+.side-link.on::before { box-shadow: none; }
+.ov-hero { background: var(--surface); box-shadow: none; border-radius: 14px; }
+.ov-stats dd { font-size: 2rem; }
+.ov-stats dd.hl { color: var(--text); }
+.cmd-tabs button.on, .cmd-ask .cmd-tabs button.on { background: var(--raise); border-color: var(--line-2); }
+.sbar-field:focus-within, .cmd-field:focus-within, .cmd-ask .cmd-field:focus-within { box-shadow: none; }
+.cmd-ask .cmd-field:focus-within { border-color: var(--dest); }
+.bd-routes, .bd-app .bd-routes { opacity: 0.22; }
+.bd-landing .bd-routes { opacity: 0.35; }
+.bd-plane { filter: none; }
+.l-ticker-cap i, .af-cap i { box-shadow: none; }
+.l-ticker { border-top: 1px solid var(--line); margin-top: 1rem; }
+.l-hero h1 { font-weight: 600; }
+.l-lede { color: var(--muted); }
+.l-demo { margin-top: 2.2rem; }
+.l-demo-q { background: var(--sunk); }
+.feat-art { background: var(--surface); box-shadow: none; }
+.auth-side { background: var(--sunk); }
+.auth-feed { background: var(--surface); }
+.srch-head h1 { font-size: 2.4rem; }
+.idea { background: transparent; }

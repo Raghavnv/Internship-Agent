@@ -29,7 +29,7 @@ export default function Backdrop({ variant = 'app' }) {
             <stop offset="1" stopColor="#7cc4ff" stopOpacity="0" />
           </radialGradient>
           <radialGradient id="bd-sun" cx="12%" cy="0%" r="50%">
-            <stop offset="0" stopColor="#ffb05c" stopOpacity="0.09" />
+            <stop offset="0" stopColor="#ffb05c" stopOpacity="0.035" />
             <stop offset="1" stopColor="#ffb05c" stopOpacity="0" />
           </radialGradient>
         </defs>
