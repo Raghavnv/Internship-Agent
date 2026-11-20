@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { findJobs } from '../lib/api.js'
 import { useSession } from '../lib/session.jsx'
+import { useUserData } from '../lib/userdata.jsx'
 import { JobRow } from '../components.jsx'
 import SearchBar from '../SearchBar.jsx'
 import { SkeletonRows } from '../charts.jsx'
@@ -11,6 +12,8 @@ const SORTS = [['relevance', 'Most relevant'], ['fit', 'Best fit for you'], ['ne
 
 export default function Search() {
   const { profile } = useSession()
+  const data = useUserData()
+  const applied = (data?.apps || []).map((a) => a.job_id).filter(Boolean)
   const nav = useNavigate()
   const [params, setParams] = useSearchParams()
   const q = params.get('q') || ''
@@ -22,6 +25,7 @@ export default function Search() {
 
   const opts = () => ({
     sort,
+    exclude_ids: applied.length ? applied : undefined,
     remote: where === 'remote' ? true : undefined,
     region: where && where !== 'remote' ? where : undefined,
   })
@@ -35,7 +39,7 @@ export default function Search() {
       .catch((e) => live && (setErr(e.message), setRes(null)))
     return () => { live = false }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [q, where, sort, profile])
+  }, [q, where, sort, profile, applied.length])
 
   const set = (k, v) => { const p = new URLSearchParams(params); v ? p.set(k, v) : p.delete(k); setParams(p, { replace: true }) }
 

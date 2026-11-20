@@ -38,6 +38,8 @@ def load_state():
 def save_state(st):
     cutoff = time.time() - 150 * 86400
     st["seen"] = {k: v for k, v in st["seen"].items() if v > cutoff}
+    st["first_seen"] = {k: v for k, v in st.get("first_seen", {}).items() if v > cutoff}
+    st["alerted"] = {k: v for k, v in st.get("alerted", {}).items() if v > cutoff}
     STATE.parent.mkdir(exist_ok=True)
     STATE.write_text(json.dumps(st, indent=0, sort_keys=True))
 
@@ -73,6 +75,24 @@ def write_matches_page(matched):
     (ROOT / "MATCHES.md").write_text("\n".join(lines) + "\n")
 
 
+def track_first_seen(jobs, matched, st):
+    """Remember when each listing first appeared, for every listing (not just the ones that match the
+    WhatsApp settings), so "new" on the website means new. The first time this runs, existing listings
+    get their posting date, or count as a week old, so they don't all look new at once."""
+    fs = st.setdefault("first_seen", {})
+    alerted = st.setdefault("alerted", {})
+    now = time.time()
+    if not st.get("first_seen_ready"):
+        for j in jobs:
+            fs.setdefault(j["id"], int(j.get("posted") or st["seen"].get(j["id"]) or now - 7 * 86400))
+        for j, _ in matched:               # roles the agent had already sent or queued for WhatsApp
+            if j["id"] in st["seen"]:
+                alerted.setdefault(j["id"], st["seen"][j["id"]])
+        st["first_seen_ready"] = True
+    for j in jobs:
+        fs.setdefault(j["id"], int(now))
+
+
 def export_jobs(jobs, evs, st, closes=None):
     """Full listing dump for the AI search app (published to the `data` branch by the workflow)."""
     keep = ("id", "source", "company", "title", "url", "locations", "terms", "remote", "posted",
@@ -88,7 +108,9 @@ def export_jobs(jobs, evs, st, closes=None):
         rec = {k: j.get(k) for k in keep if j.get(k) not in (None, [], "")}
         if reposts.get(j.get("_raw_id")):
             rec["reposts"] = reposts[j["_raw_id"]]
-        rec["first_seen"] = int(st["seen"].get(j["id"]) or time.time())
+        rec["first_seen"] = int(st["first_seen"].get(j["id"]) or time.time())
+        if st.get("alerted", {}).get(j["id"]):
+            rec["alerted"] = int(st["alerted"][j["id"]])     # sent to WhatsApp (instantly or in the digest)
         if (closes or {}).get(j["id"], 0) > time.time() - 86400:
             rec["closes"] = closes[j["id"]]
         try:
@@ -154,6 +176,7 @@ def main():
             matched.append((j, ev))
     matched.sort(key=lambda x: (-x[1]["score"], -(x[0].get("posted") or 0)))
     log.info("fetched %d listings, %d match your profile", len(jobs), len(matched))
+    track_first_seen(jobs, matched, st)
     for k, v in sorted(health.items()):
         log.info("source %-28s %s", k, v)
     write_matches_page(matched)
@@ -163,7 +186,6 @@ def main():
     except Exception as e:  # deadlines are extras; never break the run
         log.warning("deadline scan failed: %s", e)
         closes = {}
-    export_jobs(jobs, {j["id"]: ev for j, ev in matched}, st, closes)
     (ROOT / "STATUS.md").write_text(
         f"# Source status\n_Last run {datetime.now(IST):%d %b %Y, %I:%M %p} IST: "
         f"{len(jobs)} listings fetched, {len(matched)} match._\n\n| Source | Status |\n|---|---|\n"
@@ -183,6 +205,8 @@ def main():
                  f"plus a digest at {cfg['alerts']['digest_hour_ist']}:00.")
         notifier.send(intro)
         notifier.send_jobs("⭐ Top open roles", top, per)
+        for j, _ in top:
+            st["alerted"][j["id"]] = now
         if notifier.failures and not args.dry_run:
             log.error("Couldn't deliver the first-run messages (see warnings above). Not saving state, "
                       "so the next run tries again.")
@@ -196,6 +220,9 @@ def main():
             hdr = "🔥 *New internship just opened!*" if len(instant) == 1 else f"🔥 *{len(instant)} new internships just opened!*"
             before = notifier.failures
             notifier.send_jobs(hdr, instant, per)
+            if notifier.failures == before:
+                for j, _ in instant:
+                    st["alerted"][j["id"]] = now
             if notifier.failures > before:
                 # delivery failed: leave these unseen so the next run retries them
                 retry_ids = {j["id"] for j, _ in instant}
@@ -230,6 +257,8 @@ def main():
                                 ["Daily digest", f"{len(q)} new roles", "other cities / weaker fit",
                                  "Top: " + flatten(items[0][0]["title"] + " @ " + items[0][0]["company"], 200),
                                  "See MATCHES.md in your GitHub repo"])
+        for x in q:
+            st["alerted"].setdefault(x["job"]["id"], time.time())
         st["digest_queue"] = []
         st["last_digest"] = today
 
@@ -245,6 +274,7 @@ def main():
                           f"(last status: {health.get(name)}). Other sources are still running.")
             st["warned"][name] = now
 
+    export_jobs(jobs, {j["id"]: ev for j, ev in matched}, st, closes)
     if not args.dry_run:
         save_state(st)
     return 0

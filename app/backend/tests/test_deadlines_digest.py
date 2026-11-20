@@ -72,3 +72,13 @@ def test_keyword_find():
     assert [x["id"] for x in find.find(jobs, "remote", hide_stale=False)["results"]] == ["c"]
     assert find.find(jobs, "zzqx", hide_stale=False)["unknown"] == ["zzqx"]
     assert find.suggest(jobs, "mach")[0]["text"] == "Machine Learning Intern"
+
+
+def test_new_alerted_and_exclude_filters():
+    now = time.time()
+    jobs = [dict(_job(1), first_seen=now - 3600, alerted=now - 600), dict(_job(2), first_seen=now - 5 * 86400),
+            dict(_job(3), first_seen=now - 7200)]
+    r = search(jobs, new_within_hours=48, sort="found", limit=10)
+    assert [x["id"] for x in r["results"]] == ["j1", "j3"]
+    assert [x["id"] for x in search(jobs, alerted_only=True, limit=10)["results"]] == ["j1"]
+    assert "j1" not in [x["id"] for x in search(jobs, exclude_ids=["j1"], limit=10)["results"]]

@@ -22,7 +22,7 @@ so you can apply within minutes of a posting going live.
 | First run | A "you're live" message + the top ~9 roles open right now |
 | Within ~15 min of a posting | 🔥 **Instant alert** for strong matches (your cities or remote, relevant role) |
 | Every evening at 8 PM IST | 📰 **Digest** of weaker matches (other US/India cities, generic titles) |
-| Always | `MATCHES.md` in this repo: every open matching role, ranked, with links |
+| Always | `MATCHES.md` on the `data` branch: every open matching role, ranked, with links |
 
 Each alert shows the role, company, location, dates, stipend (if listed), why it fits you, a 0–100 match score and the apply link.
 On today's data that works out to about **4–6 instant alerts/day and ~10 digest roles/day**.

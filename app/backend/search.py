@@ -145,7 +145,7 @@ def ym(s):
 
 
 # ── main search ─────────────────────────────────────────────────────
-SORTS = ("relevance", "newest", "fit", "closing")
+SORTS = ("relevance", "newest", "fit", "closing", "found", "alerted")
 
 
 def search(jobs, *, sort="relevance", limit=20, offset=0, now=None, **filters):
@@ -162,6 +162,8 @@ def search(jobs, *, sort="relevance", limit=20, offset=0, now=None, **filters):
         return 8 if days <= 3 else 4 if days <= 7 else 0
 
     key = {"newest": lambda h: (-h[1], -h[0]),
+           "found": lambda h: (-(h[3].get("first_seen") or 0), -h[2], -h[0]),
+           "alerted": lambda h: (-(h[3].get("alerted") or 0), -h[2], -h[0]),
            "fit": lambda h: (-(h[2] + urgency(h[3]) if h[2] else 0), -h[0], -h[1]),
            "closing": lambda h: (h[3].get("closes") or 9e12, -h[2], -h[0])}.get(
         sort, lambda h: (-(h[0] + urgency(h[3]) / 4), -h[1]))
@@ -175,7 +177,7 @@ def search(jobs, *, sort="relevance", limit=20, offset=0, now=None, **filters):
             seen.add(k)
             uniq.append(h)
     hits = uniq
-    limit = max(1, min(int(limit or 20), 50))
+    limit = max(1, min(int(limit or 20), 100))
     page = hits[int(offset or 0): int(offset or 0) + limit]
     return {"total": len(hits), "results": [compact(j, ml, fit=fits.get(id(j))) for *_, j, ml in page]}
 
@@ -184,7 +186,8 @@ def match(jobs, *, keywords=None, any_keywords=None, exclude_keywords=None, comp
            exclude_companies=None, locations=None, remote=None, start_month=None, end_month=None, terms=None,
            include_undated=True, posted_within_days=None, categories=None, needs_sponsorship=False,
            exclude_citizenship_required=False, undergrad_only=False, fit_only=False, now=None, profile=None,
-           min_fit=55, hide_stale=False, closing_within_days=None):
+           min_fit=55, hide_stale=False, closing_within_days=None, new_within_hours=None, alerted_only=False,
+           exclude_ids=None):
     """Returns [(relevance, posted, fit, job, matched_locations)] for listings passing every filter."""
     now = now or time.time()
     kw_all = [word_re(k) for k in (keywords or []) if norm(k)]
@@ -206,7 +209,15 @@ def match(jobs, *, keywords=None, any_keywords=None, exclude_keywords=None, comp
     hits = []
     if hide_stale:
         from market import freshness
+    skip = set(exclude_ids or [])
+    fresh_after = now - float(new_within_hours) * 3600 if new_within_hours else None
     for j in jobs:
+        if skip and j.get("id") in skip:
+            continue                      # already applied: it lives on the Applications board
+        if alerted_only and not j.get("alerted"):
+            continue
+        if fresh_after and (j.get("first_seen") or 0) < fresh_after:
+            continue
         title = j.get("title", "")
         company = j.get("company", "")
         text = f"{title} {company}"
@@ -303,7 +314,7 @@ def compact(j, matched_locs=None, fit=None):
     fr = freshness(j)
     return {
         "closes": j.get("closes"), "closes_in": days_left(j.get("closes")),
-        "fresh": fr["level"], "reposts": j.get("reposts") or 0, "first_seen": j.get("first_seen"),
+        "fresh": fr["level"], "reposts": j.get("reposts") or 0, "first_seen": j.get("first_seen"), "alerted": j.get("alerted"),
         "id": j["id"], "title": j.get("title"), "company": j.get("company"), "url": j.get("url"),
         "locations": shown, "more_locations": max(0, len(locs) - len(shown)), "terms": j.get("terms") or [],
         "remote": bool(j.get("remote")), "posted": date.fromtimestamp(posted).isoformat() if posted else None,

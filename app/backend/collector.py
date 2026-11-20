@@ -44,17 +44,38 @@ def _latest_run():
                       headers=_headers(), timeout=8)
         r.raise_for_status()
         runs = r.json().get("workflow_runs") or []
-        _state["run"] = {"status": runs[0]["status"], "created": runs[0]["created_at"]} if runs else None
+        _state["run"] = {"status": runs[0]["status"], "created": runs[0]["created_at"],
+                         "started": runs[0].get("run_started_at") or runs[0]["created_at"]} if runs else None
     except (httpx.HTTPError, ValueError, KeyError) as e:
         log.info("couldn't read workflow runs: %s", e)
     return _state["run"]
 
 
-def running() -> bool:
+ACTIVE = ("queued", "in_progress", "waiting", "requested", "pending")
+
+
+def _age(run) -> float:
+    from datetime import datetime
+    try:
+        return time.time() - datetime.fromisoformat(run["started"].replace("Z", "+00:00")).timestamp()
+    except (KeyError, ValueError, AttributeError):
+        return 0
+
+
+def watching() -> bool:
+    """The long-running watcher (checks every 10 minutes for hours) is going: no need to start anything."""
     if not configured():
         return False
     run = _latest_run()
-    return bool(run and run["status"] in ("queued", "in_progress", "waiting", "requested", "pending"))
+    return bool(run and run["status"] == "in_progress" and _age(run) > 15 * 60)
+
+
+def running() -> bool:
+    """A short, fresh check is under way (one started in the last 15 minutes)."""
+    if not configured():
+        return False
+    run = _latest_run()
+    return bool(run and run["status"] in ACTIVE and _age(run) <= 15 * 60)
 
 
 def kick(reason: str = "refresh") -> dict:
@@ -67,6 +88,9 @@ def kick(reason: str = "refresh") -> dict:
     with _lock:
         now = time.time()
         gap = now - _state["dispatched"]
+        if watching():
+            # already checking every 10 minutes; a dispatch would only queue behind it for hours
+            return {"configured": True, "started": False, "running": False, "watching": True, "wait": 0}
         busy = running()
         if busy or gap < MIN_GAP:
             return {"configured": True, "started": False, "running": busy or gap < 240,

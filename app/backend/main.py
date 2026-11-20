@@ -127,7 +127,8 @@ def get_geocode(q: str):
 @app.post("/api/search")
 def post_search(body: dict, user: dict = Depends(current_user)):
     profile = body.pop("profile", None)
-    args = {k: v for k, v in body.items() if k in llm.ALLOWED - {"group_by", "top"} | {"offset"}}
+    extra = {"offset", "new_within_hours", "alerted_only", "exclude_ids"}
+    args = {k: v for k, v in body.items() if k in (llm.ALLOWED - {"group_by", "top"}) | extra}
     try:
         return {**search(store.get(), profile=profile, **args), "args": args}
     except TypeError as e:
@@ -140,7 +141,11 @@ def post_find(body: dict, user: dict = Depends(current_user)):
     q = (body.get("q") or "").strip()[:120]
     if not q:
         raise HTTPException(400, "Type a role, skill or company to search for.")
-    return find.find(store.get(), q, profile=body.get("profile"), remote=body.get("remote"),
+    jobs = store.get()
+    if body.get("exclude_ids"):
+        skip = set(body["exclude_ids"])
+        jobs = [j for j in jobs if j.get("id") not in skip]
+    return find.find(jobs, q, profile=body.get("profile"), remote=body.get("remote"),
                      region=body.get("region"), hide_stale=body.get("hide_stale", True),
                      sort=body.get("sort", "relevance"), offset=body.get("offset", 0), limit=body.get("limit", 30))
 
@@ -154,8 +159,9 @@ def get_suggest(q: str = "", user: dict = Depends(current_user)):
 def post_insights(body: dict, user: dict = Depends(current_user)):
     """Chart data for the roles matching these filters (defaults to the user's strong fits)."""
     profile = body.pop("profile", None)
-    args = {k: v for k, v in body.items() if k in llm.ALLOWED - {"group_by", "top", "sort", "limit"}}
-    args.setdefault("fit_only", bool(profile))
+    extra = {"new_within_hours", "alerted_only", "exclude_ids"}
+    args = {k: v for k, v in body.items() if k in (llm.ALLOWED - {"group_by", "top", "sort", "limit"}) | extra}
+    args.setdefault("fit_only", bool(profile) and not (args.get("new_within_hours") or args.get("alerted_only")))
     try:
         return insights(store.get(), profile=profile, **args)
     except TypeError as e:

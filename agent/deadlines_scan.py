@@ -15,7 +15,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "app" / "backend
 import deadlines  # noqa: E402
 
 log = logging.getLogger("deadlines")
-PER_RUN = 40
+PER_RUN = 20
 BUDGET_S = 75
 
 
@@ -45,7 +45,7 @@ def scan(jobs: list[dict], st: dict) -> dict:
         d = jobdetail.description(j["url"])
         return j["id"], (deadlines.to_ts(deadlines.from_blocks(d["blocks"])) if d else None), d is not None
 
-    with ThreadPoolExecutor(8) as ex:
+    with ThreadPoolExecutor(4) as ex:
         futs = [ex.submit(read, j) for j in todo]
         for f in as_completed(futs):
             if time.time() - start > BUDGET_S:

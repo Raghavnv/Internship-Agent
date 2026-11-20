@@ -4,7 +4,7 @@ import { geocode, getInsights, getOpenings, searchJobs } from '../lib/api.js'
 import Globe from '../Globe.jsx'
 import { useSession } from '../lib/session.jsx'
 import { useUserData } from '../lib/userdata.jsx'
-import { Results } from '../components.jsx'
+import { JobRow, Results } from '../components.jsx'
 import RefreshBar from '../RefreshBar.jsx'
 import { CountUp, DayArea, FitSpread, RankBars, SkeletonRows } from '../charts.jsx'
 import { Icon } from '../ui.jsx'
@@ -35,12 +35,14 @@ export default function Overview() {
 
   useEffect(() => {
     if (!profile) return
-    searchJobs({ fit_only: true, sort: 'fit', limit: 10 }, profile).then(setTop).catch((e) => setErr(e.message))
-    searchJobs({ fit_only: true, posted_within_days: 7, sort: 'newest', limit: 1 }, profile).then(setFresh).catch(() => {})
+    const ex = data.apps.map((a) => a.job_id).filter(Boolean)
+    searchJobs({ fit_only: true, sort: 'fit', limit: 10, exclude_ids: ex.length ? ex : undefined }, profile).then(setTop).catch((e) => setErr(e.message))
+    searchJobs({ new_within_hours: 48, hide_stale: true, sort: 'fit', limit: 6, exclude_ids: ex.length ? ex : undefined }, profile).then(setFresh).catch(() => {})
     getInsights({}, profile).then(setMk).catch(() => {})
     getOpenings(profile.watch_companies || []).then(setOps).catch(() => {})
     searchJobs({ fit_only: true, closing_within_days: 14, sort: 'closing', limit: 4 }, profile).then(setClosing).catch(() => {})
-  }, [profile, nonce])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profile, nonce, data.apps.length])
 
   useEffect(() => {
     if (profile?.based_in) geocode(profile.based_in).then((g) => setHome({ lat: g.lat, lng: g.lng })).catch(() => {})
@@ -70,7 +72,7 @@ export default function Overview() {
           <p className="sub">{top ? 'Here’s where your search stands today.' : 'Finding roles that fit you…'}</p>
           <dl className="ov-stats">
             <div><dt>Fit your profile</dt><dd><CountUp value={top?.total || 0} /></dd></div>
-            <div><dt>New this week</dt><dd className="hl"><CountUp value={fresh?.total || 0} /></dd></div>
+            <div><dt><Link to="/app/explore?view=new" className="stat-link">New in 2 days</Link></dt><dd className="hl"><Link to="/app/explore?view=new" className="stat-link"><CountUp value={fresh?.total || 0} /></Link></dd></div>
             <div><dt>Applied</dt><dd><CountUp value={data.apps.length} /></dd></div>
             <div><dt>Interviewing</dt><dd><CountUp value={byStatus.Interviewing || 0} /></dd></div>
           </dl>
@@ -116,6 +118,15 @@ export default function Overview() {
 
       <div className="ov-grid">
         <section className="ov-matches" aria-labelledby="tm-h">
+          {fresh?.results?.length > 0 && (
+            <div className="ov-new">
+              <div className="sec-head">
+                <h2 id="nw-h">New for you</h2>
+                <Link to="/app/explore?view=new" className="link">See all {fresh.total.toLocaleString('en-IN')} new</Link>
+              </div>
+              <ul className="jobs">{fresh.results.map((j, i) => <JobRow key={j.id} job={j} index={i} />)}</ul>
+            </div>
+          )}
           <div className="sec-head">
             <h2 id="tm-h">Best matches</h2>
             <Link to="/app/explore" className="link">See all listings</Link>

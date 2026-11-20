@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { useUserData } from '../lib/userdata.jsx'
 import { getInsights, searchJobs } from '../lib/api.js'
 import { toPins, useLocationSuggestions, useMapData } from '../lib/mapdata.js'
 import { useSession } from '../lib/session.jsx'
@@ -19,6 +20,35 @@ const ROLE_WORDS = {
 }
 const POSTED = [[0, 'Any time'], [3, 'Last 3 days'], [7, 'Last week'], [30, 'Last month']]
 const WORK = [['any', 'Any'], ['only', 'Remote'], ['exclude', 'In person']]
+
+const VIEWS = [['all', 'All listings'], ['new', 'New'], ['alerts', 'WhatsApp alerts']]
+const PAGE = 25
+const NEW_HOURS = 48
+
+// "Today", "Yesterday", "Tue 18 Nov" for grouping the New and WhatsApp views
+function dayLabel(ts) {
+  const d = new Date(ts * 1000); d.setHours(0, 0, 0, 0)
+  const t = new Date(); t.setHours(0, 0, 0, 0)
+  const diff = Math.round((t - d) / 86400000)
+  return diff === 0 ? 'Today' : diff === 1 ? 'Yesterday' : d.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' })
+}
+
+function ByDay({ results, field, onFocus, empty }) {
+  if (!results.length) return <div className="empty-state"><p>{empty}</p></div>
+  const groups = []
+  for (const j of results) {
+    const label = dayLabel(j[field] || j.first_seen || 0)
+    if (!groups.length || groups[groups.length - 1].label !== label) groups.push({ label, rows: [] })
+    groups[groups.length - 1].rows.push(j)
+  }
+  let n = 0
+  return groups.map((g) => (
+    <section key={g.label} className="day-group" aria-label={g.label}>
+      <h2 className="day-head">{g.label}<span>{g.rows.length}</span></h2>
+      <ul className="jobs">{g.rows.map((j) => <JobRow key={j.id} job={j} onFocus={onFocus} index={n++} />)}</ul>
+    </section>
+  ))
+}
 
 const TIER_HEADS = [
   [80, 'Strong fits', 'Match most of what you asked for'],
@@ -45,7 +75,14 @@ function Grouped({ results, byFit, onFocus }) {
 
 export default function Explore() {
   const { profile, home } = useSession()
-  const [params] = useSearchParams()
+  const data = useUserData()
+  const [params, setParams] = useSearchParams()
+  const view = VIEWS.some(([v]) => v === params.get('view')) ? params.get('view') : 'all'
+  const setView = (v) => { const p = new URLSearchParams(params); v === 'all' ? p.delete('view') : p.set('view', v); setParams(p, { replace: true }) }
+  const applied = (data?.apps || []).map((a) => a.job_id).filter(Boolean)
+  const appliedKey = applied.join(',')
+  const [counts, setCounts] = useState({})
+  const [more, setMore] = useState(false)
   const map = useMapData()
   const locSuggest = useLocationSuggestions()
   const [focus, setFocus] = useState(null)
@@ -61,7 +98,6 @@ export default function Explore() {
   const [res, setRes] = useState(null)
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState('')
-  const [limit, setLimit] = useState(25)
   const [showFilters, setShowFilters] = useState(false)
 
   useEffect(() => {
@@ -75,20 +111,49 @@ export default function Explore() {
     if (locations === null) return
     const t = setTimeout(run, 250)
     return () => clearTimeout(t)
-  }, [locations, roles, keyword, remote, posted, fitOnly, hideStale, sort, limit])
+  }, [locations, roles, keyword, remote, posted, fitOnly, hideStale, sort, view, appliedKey])
+
+  // tab counts: everything new in the last 2 days, and everything sent to WhatsApp
+  useEffect(() => {
+    if (!profile) return
+    const ex = applied.length ? applied : undefined
+    Promise.all([
+      searchJobs({ new_within_hours: NEW_HOURS, hide_stale: true, exclude_ids: ex, limit: 1 }, profile),
+      searchJobs({ alerted_only: true, exclude_ids: ex, limit: 1 }, profile),
+    ]).then(([n, a]) => setCounts({ new: n.total, alerts: a.total })).catch(() => {})
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profile, appliedKey, view])
+
+  function filters() {
+    const ex = applied.length ? applied : undefined
+    const kw = keyword.trim() ? [keyword.trim()] : undefined
+    const mode = remote === 'any' ? undefined : remote
+    // New and WhatsApp show everything, whatever the saved city and role filters say
+    if (view === 'new') return { new_within_hours: NEW_HOURS, keywords: kw, remote: mode, hide_stale: hideStale || undefined, exclude_ids: ex, sort: 'found' }
+    if (view === 'alerts') return { alerted_only: true, keywords: kw, remote: mode, exclude_ids: ex, sort: 'alerted' }
+    const any = (roles || []).flatMap((r) => ROLE_WORDS[r] || [])
+    return {
+      any_keywords: any.length ? any : undefined, keywords: kw,
+      locations: locations?.length ? locations : undefined, remote: mode,
+      posted_within_days: posted || undefined, fit_only: fitOnly || undefined, hide_stale: hideStale || undefined, sort, exclude_ids: ex,
+    }
+  }
 
   async function run() {
     setBusy(true); setErr('')
-    const any = (roles || []).flatMap((r) => ROLE_WORDS[r] || [])
-    const f = {
-      any_keywords: any.length ? any : undefined, keywords: keyword.trim() ? [keyword.trim()] : undefined,
-      locations: locations?.length ? locations : undefined, remote: remote === 'any' ? undefined : remote,
-      posted_within_days: posted || undefined, fit_only: fitOnly || undefined, hide_stale: hideStale || undefined, sort, limit,
-    }
+    const f = filters()
     try {
-      const [r, m] = await Promise.all([searchJobs(f, profile), getInsights({ ...f, sort: undefined, limit: undefined }, profile).catch(() => null)])
+      const [r, m] = await Promise.all([searchJobs({ ...f, limit: PAGE }, profile), getInsights({ ...f, sort: undefined }, profile).catch(() => null)])
       setRes(r); setMk(m)
     } catch (e) { setErr(e.message) } finally { setBusy(false) }
+  }
+
+  async function loadMore() {
+    setMore(true)
+    try {
+      const r = await searchJobs({ ...filters(), limit: 50, offset: res.results.length }, profile)
+      setRes((x) => ({ ...x, results: [...x.results, ...r.results] }))
+    } catch (e) { setErr(e.message) } finally { setMore(false) }
   }
 
   const reset = () => {
@@ -125,8 +190,8 @@ export default function Explore() {
         </div>
       </section>
 
-      <div className="ex">
-        <aside className={`ex-filters${showFilters ? ' open' : ''}`} aria-label="Filters">
+      <div className={`ex${view === 'all' ? '' : ' solo'}`}>
+        {view === 'all' && <aside className={`ex-filters${showFilters ? ' open' : ''}`} aria-label="Filters">
           <div className="exf">
             <label className="exf-label" htmlFor="ex-loc">Where</label>
             <ChipInput id="ex-loc" value={locations || []} onChange={setLocations} suggestions={locSuggest} placeholder="Anywhere" />
@@ -156,7 +221,7 @@ export default function Explore() {
             </div>
           </fieldset>
           <button type="button" className="link-btn" onClick={reset}>Reset to my profile</button>
-        </aside>
+        </aside>}
 
         <section className="ex-main" aria-label="Results">
           <div className="ex-bar">
@@ -169,11 +234,24 @@ export default function Explore() {
               Filters{nFilters ? ` (${nFilters})` : ''}
             </button>
           </div>
+          <div className="ex-views" role="tablist" aria-label="Which listings">
+            {VIEWS.map(([v, l]) => (
+              <button key={v} type="button" role="tab" aria-selected={view === v} className={view === v ? 'on' : ''} onClick={() => setView(v)}>
+                {l}{v !== 'all' && counts[v] != null && <em>{counts[v].toLocaleString('en-IN')}</em>}
+              </button>
+            ))}
+          </div>
+          {view !== 'all' && (
+            <p className="quiet small ex-view-note">
+              {view === 'new' ? 'Every listing that appeared in the last 2 days, newest first. Your city and role filters don’t apply here, so nothing new is hidden.'
+                : 'Every role the WhatsApp alerts sent you, newest first. Roles you’ve applied to move to Applications.'}
+            </p>
+          )}
           <div className="ex-meta">
             <p className="ex-count" aria-live="polite">
-              {res ? <>Showing <strong>{Math.min(limit, res.results.length)}</strong> of {res.total.toLocaleString('en-IN')}</> : null}{busy && <Spinner />}
+              {res ? <>Showing <strong>{res.results.length.toLocaleString('en-IN')}</strong> of {res.total.toLocaleString('en-IN')}</> : null}{busy && <Spinner />}
             </p>
-            <label className="ck small">
+            {view === 'all' && <><label className="ck small">
               <input type="checkbox" checked={fitOnly} onChange={(e) => setFitOnly(e.target.checked)} /><span>Strong fits only</span>
             </label>
             <label className="ck small" title="Listings up for months or reposted again and again">
@@ -184,17 +262,23 @@ export default function Explore() {
               <select className="select" value={sort} onChange={(e) => setSort(e.target.value)}>
                 <option value="fit">Best fit</option><option value="newest">Newest</option><option value="closing">Closing soon</option><option value="relevance">Relevance</option>
               </select>
-            </label>
+            </label></>}
           </div>
           {err && <p className="form-error">{err}</p>}
           {res && sort === 'closing' && res.results.length > 0 && !res.results[0].closes && (
             <p className="quiet small pad-s">None of these listings state an application deadline, so they’re in fit order.</p>
           )}
           {!res && !err && <SkeletonRows n={8} />}
-          {res && <div className={busy ? 'is-busy' : ''}><Grouped results={res.results.slice(0, limit)} byFit={sort === 'fit'} onFocus={setFocus} /></div>}
-          {res && res.total > res.results.length && res.results.length >= limit && (
-            <button type="button" className="btn btn-ghost more-btn" onClick={() => setLimit(Math.min(50, limit + 25))} disabled={limit >= 50}>
-              {limit >= 50 ? "Showing the top 50. Narrow the filters to see others." : "Show more"}
+          {res && (
+            <div className={busy ? 'is-busy' : ''}>
+              {view === 'all' ? <Grouped results={res.results} byFit={sort === 'fit'} onFocus={setFocus} />
+                : <ByDay results={res.results} field={view === 'alerts' ? 'alerted' : 'first_seen'} onFocus={setFocus}
+                  empty={view === 'new' ? 'Nothing new in the last 2 days yet. New listings land here within about 10 minutes of being posted.' : 'No WhatsApp alerts yet.'} />}
+            </div>
+          )}
+          {res && res.total > res.results.length && (
+            <button type="button" className="btn btn-ghost more-btn" onClick={loadMore} disabled={more}>
+              {more ? 'Loading…' : `Show more (${(res.total - res.results.length).toLocaleString('en-IN')} left)`}
             </button>
           )}
         </section>
