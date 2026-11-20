@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 import { getMap, getMeta } from '../lib/api.js'
 import { useSession } from '../lib/session.jsx'
 import HowItWorks from '../HowItWorks.jsx'
-import WorldMap from '../WorldMap.jsx'
+import Globe from '../Globe.jsx'
+import Backdrop from '../Backdrop.jsx'
 import { Logo } from '../ui.jsx'
 
 const reduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
@@ -15,6 +16,9 @@ const C = {
   aus: [30.267, -97.743], dal: [32.783, -96.807], hou: [29.763, -95.363], pla: [33.02, -96.699],
   sea: [47.606, -122.332], red: [47.674, -122.121], bel: [47.61, -122.201],
 }
+const NAMES = { sf: 'San Francisco', sj: 'San Jose', mv: 'Mountain View', pa: 'Palo Alto', sv: 'Sunnyvale', nyc: 'New York',
+  bos: 'Boston', jc: 'Jersey City', aus: 'Austin', dal: 'Dallas', hou: 'Houston', pla: 'Plano', sea: 'Seattle', red: 'Redmond', bel: 'Bellevue',
+  lon: 'London', ber: 'Berlin', blr: 'Bengaluru', sg: 'Singapore', tor: 'Toronto' }
 const SCENES = [
   { from: 'Bengaluru', home: [12.972, 77.594], q: 'ML internships in the Bay Area this summer', to: ['sf', 'sj', 'mv', 'pa', 'sv'] },
   { from: 'Toronto', home: [43.651, -79.383], q: 'Backend roles in New York, remote is fine', to: ['nyc', 'jc', 'bos'] },
@@ -33,6 +37,12 @@ function useTypewriter(text, speed = 34) {
   return text.slice(0, n)
 }
 
+function ago(ts) {
+  if (!ts) return ''
+  const m = Math.max(1, Math.round((Date.now() / 1000 - ts) / 60))
+  return m < 60 ? `${m} min ago` : m < 1440 ? `${Math.round(m / 60)} h ago` : `${Math.round(m / 1440)} d ago`
+}
+
 function Hero({ meta, cities }) {
   const [i, setI] = useState(0)
   const scene = SCENES[i]
@@ -40,30 +50,63 @@ function Hero({ meta, cities }) {
   const done = typed.length === scene.q.length
   useEffect(() => {
     if (reduced()) return
-    const id = setTimeout(() => setI((v) => (v + 1) % SCENES.length), 6200)
+    const id = setTimeout(() => setI((v) => (v + 1) % SCENES.length), 7000)
     return () => clearTimeout(id)
   }, [i])
-  const pins = useMemo(() => (done ? scene.to.map((k) => ({ lat: C[k][0], lng: C[k][1], key: `${i}-${k}` })) : []), [done, i])
-  const home = { lat: scene.home[0], lng: scene.home[1], city: scene.from }
+  const routes = useMemo(() => (done ? scene.to.map((k) => ({ lat: C[k][0], lng: C[k][1], key: `${i}-${k}`, label: NAMES[k] })) : []),
+    [done, i])
+  const home = { lat: scene.home[0], lng: scene.home[1] }
 
   return (
     <section className="l-hero">
-      <WorldMap cities={cities} home={home} pins={pins} />
       <div className="l-hero-copy">
-        <h1>Every internship.<br />One question away.</h1>
+        <p className="l-live"><i />{meta ? <><strong>{meta.count.toLocaleString('en-IN')}</strong> live internships, checked {ago(meta.updated)}</> : 'Live internships, checked every 15 minutes'}</p>
+        <h1>Every live internship, <span>ranked for you.</span></h1>
         <p className="l-lede">
-          Internship Copilot watches {meta ? meta.count.toLocaleString('en-IN') : 'thousands of'} live listings, scores every one
-          against your profile, and finds exactly what you ask for.
+          Internship Copilot reads five job boards around the clock, scores every listing against your skills, dates and visa
+          status, and tells you which ones are worth your evening.
         </p>
         <div className="l-ctas">
-          <Link to="/signup" className="btn btn-primary">Get started free</Link>
-          <a href="#how" className="btn btn-text">See how it works</a>
+          <Link to="/signup" className="btn btn-primary btn-lg">Get started free</Link>
+          <a href="#how" className="btn btn-ghost btn-lg">See how it works</a>
+        </div>
+        <div className="l-demo" aria-hidden="true">
+          <span className="l-demo-from"><i />A student in {scene.from} asks</span>
+          <span className="l-demo-q"><svg viewBox="0 0 20 20" className="ico-s" width="16" height="16"><path d="M9 15.5a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13zM13.7 13.7 17.5 17.5" /></svg>
+            {typed}<b className={done ? 'caret off' : 'caret'} /></span>
         </div>
       </div>
-      <div className="l-demo" aria-hidden="true">
-        <span className="l-demo-from"><i />A student in {scene.from} asks</span>
-        <span className="l-demo-q">{typed}<b className={done ? 'caret off' : 'caret'} /></span>
+      <div className="l-globe">
+        <Globe home={home} routes={routes} cities={cities} perRound={5} label={`Routes from ${scene.from} to matching internships`} />
       </div>
+    </section>
+  )
+}
+
+function Stats({ meta }) {
+  if (!meta) return <div className="l-stats placeholder" />
+  const items = [
+    [meta.count.toLocaleString('en-IN'), 'live internships'],
+    [(meta.companies || 0).toLocaleString('en-IN'), 'companies hiring'],
+    [(meta.cities || 0).toLocaleString('en-IN'), 'cities worldwide'],
+    ['15 min', 'between checks'],
+  ]
+  return (
+    <section className="l-stats" aria-label="Right now">
+      {items.map(([n, l]) => <div key={l}><strong>{n}</strong><span>{l}</span></div>)}
+    </section>
+  )
+}
+
+function JustPosted({ items }) {
+  if (!items?.length) return null
+  const row = items.map((r) => (
+    <li key={r.company + r.title}><b>{r.company}</b><span>{r.title}</span><em>{r.city}</em></li>
+  ))
+  return (
+    <section className="l-ticker" aria-label="Just posted">
+      <span className="l-ticker-cap"><i />Just posted</span>
+      <div className="l-ticker-track"><ul>{row}</ul><ul aria-hidden="true">{row}</ul></div>
     </section>
   )
 }
@@ -137,6 +180,7 @@ export default function Landing() {
 
   return (
     <div className="landing">
+      <Backdrop variant="landing" />
       <header className="l-nav">
         <Link to="/" className="wordmark"><Logo />Internship Copilot</Link>
         <nav aria-label="Sections">
@@ -152,6 +196,8 @@ export default function Landing() {
       </header>
 
       <Hero meta={meta} cities={cities} />
+      <Stats meta={meta} />
+      <JustPosted items={meta?.recent} />
 
 
       <div id="how"><HowItWorks /></div>

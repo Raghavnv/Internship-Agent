@@ -16,6 +16,7 @@ from pydantic import BaseModel, Field
 
 import coach
 import collector
+import find
 import deadlines
 import fit as fitlib
 import jobdetail
@@ -86,6 +87,20 @@ def get_meta():
     m["top_companies"] = Counter(j.get("company") for j in jobs).most_common(8)
     m["cities"] = len({tuple(g[:2]) for j in jobs for g in (j.get("geo") or []) if g})
     m["companies"] = len({j.get("company") for j in jobs})
+    # the newest geocoded postings, for the "just posted" animations on the landing and login pages
+    recent = sorted((j for j in jobs if j.get("geo") and j["geo"][0]), key=lambda j: -(j.get("posted") or 0))
+    seen, m["recent"] = set(), []
+    for j in recent:
+        k = j.get("company")
+        if k in seen:
+            continue
+        seen.add(k)
+        g = j["geo"][0]
+        m["recent"].append({"company": k, "title": j.get("title"), "city": g[2], "lat": g[0], "lng": g[1],
+                            "posted": j.get("posted")})
+        if len(m["recent"]) >= 14:
+            break
+    m["sources"] = len({j.get("source") for j in jobs})
     return m
 
 
@@ -117,6 +132,22 @@ def post_search(body: dict, user: dict = Depends(current_user)):
         return {**search(store.get(), profile=profile, **args), "args": args}
     except TypeError as e:
         raise HTTPException(400, str(e))
+
+
+@app.post("/api/find")
+def post_find(body: dict, user: dict = Depends(current_user)):
+    """Keyword search over every listing (ignores the profile's saved filters)."""
+    q = (body.get("q") or "").strip()[:120]
+    if not q:
+        raise HTTPException(400, "Type a role, skill or company to search for.")
+    return find.find(store.get(), q, profile=body.get("profile"), remote=body.get("remote"),
+                     region=body.get("region"), hide_stale=body.get("hide_stale", True),
+                     sort=body.get("sort", "relevance"), offset=body.get("offset", 0), limit=body.get("limit", 30))
+
+
+@app.get("/api/suggest")
+def get_suggest(q: str = "", user: dict = Depends(current_user)):
+    return {"suggestions": find.suggest(store.get(), q)}
 
 
 @app.post("/api/insights")

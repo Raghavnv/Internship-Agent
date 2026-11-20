@@ -18,6 +18,7 @@ const Portfolio = lazy(() => import('./pages/Portfolio.jsx'))
 const Profile = lazy(() => import('./pages/Profile.jsx'))
 const Autofill = lazy(() => import('./pages/Autofill.jsx'))
 const Openings = lazy(() => import('./pages/Openings.jsx'))
+const Search = lazy(() => import('./pages/Search.jsx'))
 
 const Loading = () => <div className="full-load"><Spinner /></div>
 
@@ -60,6 +61,7 @@ export default function App() {
           <Route path="profile" element={<Profile />} />
           <Route path="autofill" element={<Autofill />} />
           <Route path="openings" element={<Openings />} />
+          <Route path="search" element={<Search />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

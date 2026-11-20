@@ -55,3 +55,20 @@ def test_digest_build():
     assert not dg.empty(d) and "follow-ups due" in dg.subject(d)
     html = dg.render("Raghav Venkat", d)
     assert "Morning, Raghav" in html and "Acme" in html
+
+
+def test_keyword_find():
+    import find
+    jobs = [
+        {"id": "a", "title": "Software Development Engineer Intern", "company": "Amazon", "locations": ["Seattle, WA"]},
+        {"id": "b", "title": "Machine Learning Intern", "company": "Acme", "locations": ["Bangalore"]},
+        {"id": "c", "title": "Backend Intern", "company": "Stripe", "locations": ["Remote"], "remote": True},
+        {"id": "d", "title": "Marketing Intern", "company": "Foo", "locations": ["Bangalore"]},
+    ]
+    assert [r["id"] for r in find.find(jobs, "sde", hide_stale=False)["results"]] == ["a"]
+    r = find.find(jobs, "ml intern bangalore", hide_stale=False)
+    assert [x["id"] for x in r["results"]] == ["b"] and r["places"] == ["bangalore"]
+    assert [x["id"] for x in find.find(jobs, "stripe", hide_stale=False)["results"]] == ["c"]
+    assert [x["id"] for x in find.find(jobs, "remote", hide_stale=False)["results"]] == ["c"]
+    assert find.find(jobs, "zzqx", hide_stale=False)["unknown"] == ["zzqx"]
+    assert find.suggest(jobs, "mach")[0]["text"] == "Machine Learning Intern"

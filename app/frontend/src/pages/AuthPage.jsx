@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { auth, getProfile } from '../lib/backend.js'
 import { useSession } from '../lib/session.jsx'
 import { Logo } from '../ui.jsx'
+import { getMap, getMeta } from '../lib/api.js'
+import Globe from '../Globe.jsx'
 
 function Shell({ children }) {
   return (
@@ -71,17 +73,37 @@ export function ResetPassword() {
   )
 }
 
+// Right half: the globe, flying routes from Bengaluru to the newest real postings.
 function Side() {
+  const [meta, setMeta] = useState(null)
+  const [cities, setCities] = useState([])
+  const [k, setK] = useState(0)
+  useEffect(() => {
+    getMeta().then(setMeta).catch(() => {})
+    getMap().then((m) => setCities(m.cities)).catch(() => {})
+  }, [])
+  const recent = meta?.recent || []
+  useEffect(() => {
+    if (!recent.length) return
+    const id = setInterval(() => setK((v) => (v + 1) % recent.length), 2600)
+    return () => clearInterval(id)
+  }, [recent.length])
+  const routes = useMemo(() => recent.map((r) => ({ lat: r.lat, lng: r.lng, key: r.company, label: r.city })), [recent])
+  const now = recent[k]
   return (
     <aside className="auth-side" aria-hidden="true">
-      <svg viewBox="0 0 320 170" className="auth-art">
-        <path d="M40 130 Q160 -10 280 130" className="arc" />
-        <circle cx="40" cy="130" r="5" className="home" />
-        <circle cx="280" cy="130" r="5" className="dest" />
-        <text x="40" y="156" className="lbl" textAnchor="middle">You</text>
-        <text x="280" y="156" className="lbl" textAnchor="middle">Your next role</text>
-      </svg>
-      <p>Every live internship, scored against your profile, in one place.</p>
+      <Globe home={{ lat: 12.972, lng: 77.594 }} routes={routes} cities={cities} perRound={4} className="auth-globe" />
+      <div className="auth-side-copy">
+        <h2>Your next internship is already posted somewhere.</h2>
+        <p>{meta ? `${meta.count.toLocaleString('en-IN')} live listings, each scored against your profile.` : 'Every live listing, scored against your profile.'}</p>
+        {now && (
+          <div className="auth-feed" key={now.company}>
+            <span className="af-cap"><i />Just posted</span>
+            <strong>{now.title}</strong>
+            <span>{now.company} · {now.city}</span>
+          </div>
+        )}
+      </div>
     </aside>
   )
 }

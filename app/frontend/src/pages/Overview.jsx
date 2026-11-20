@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { getInsights, getOpenings, searchJobs } from '../lib/api.js'
+import { geocode, getInsights, getOpenings, searchJobs } from '../lib/api.js'
+import Globe from '../Globe.jsx'
 import { useSession } from '../lib/session.jsx'
 import { useUserData } from '../lib/userdata.jsx'
 import { Results } from '../components.jsx'
@@ -28,6 +29,8 @@ export default function Overview() {
   const [closing, setClosing] = useState(null)
   const [err, setErr] = useState('')
   const [q, setQ] = useState('')
+  const [mode, setMode] = useState('search')
+  const [home, setHome] = useState({ lat: 12.972, lng: 77.594 })
   const [nonce, setNonce] = useState(0)
 
   useEffect(() => {
@@ -38,6 +41,12 @@ export default function Overview() {
     getOpenings(profile.watch_companies || []).then(setOps).catch(() => {})
     searchJobs({ fit_only: true, closing_within_days: 14, sort: 'closing', limit: 4 }, profile).then(setClosing).catch(() => {})
   }, [profile, nonce])
+
+  useEffect(() => {
+    if (profile?.based_in) geocode(profile.based_in).then((g) => setHome({ lat: g.lat, lng: g.lng })).catch(() => {})
+  }, [profile?.based_in])
+  const routes = useMemo(() => (top?.results || []).filter((j) => j.pins?.length).slice(0, 8)
+    .map((j) => ({ lat: j.pins[0][0], lng: j.pins[0][1], key: j.id, label: j.company })), [top])
 
   const first = (profile?.full_name || '').split(' ')[0]
   const byStatus = Object.fromEntries(STATUSES.map((s) => [s, data.apps.filter((a) => a.status === s).length]))
@@ -52,23 +61,40 @@ export default function Overview() {
 
   return (
     <main className="page">
-      <header className="page-head">
-        <div>
-          <h1>{greeting()}{first ? `, ${first}` : ''}</h1>
-          <p className="sub">
-            {top ? <><strong><CountUp value={top.total} /></strong> {top.total === 1 ? 'role fits' : 'roles fit'} your profile right now
-              {fresh?.total ? <>, and <strong><CountUp value={fresh.total} /></strong> of them were posted this week.</> : '.'}</> : 'Finding roles that fit you…'}
-          </p>
+      <section className="ov-hero" aria-labelledby="ov-h">
+        <div className="ov-hero-copy">
+          <div className="ov-hero-top">
+            <h1 id="ov-h">{greeting()}{first ? `, ${first}` : ''}</h1>
+            <RefreshBar onReload={() => setNonce((n) => n + 1)} />
+          </div>
+          <p className="sub">{top ? 'Here’s where your search stands today.' : 'Finding roles that fit you…'}</p>
+          <dl className="ov-stats">
+            <div><dt>Fit your profile</dt><dd><CountUp value={top?.total || 0} /></dd></div>
+            <div><dt>New this week</dt><dd className="hl"><CountUp value={fresh?.total || 0} /></dd></div>
+            <div><dt>Applied</dt><dd><CountUp value={data.apps.length} /></dd></div>
+            <div><dt>Interviewing</dt><dd><CountUp value={byStatus.Interviewing || 0} /></dd></div>
+          </dl>
+          <form className={`cmd cmd-${mode}`} onSubmit={(e) => {
+            e.preventDefault(); const t = q.trim(); if (!t) return
+            nav(mode === 'search' ? `/app/search?q=${encodeURIComponent(t)}` : `/app/copilot?q=${encodeURIComponent(t)}`)
+          }}>
+            <div className="cmd-tabs" role="tablist" aria-label="Search or ask">
+              <button type="button" role="tab" aria-selected={mode === 'search'} className={mode === 'search' ? 'on' : ''} onClick={() => setMode('search')}><Icon name="search" size={14} />Search roles</button>
+              <button type="button" role="tab" aria-selected={mode === 'ask'} className={mode === 'ask' ? 'on' : ''} onClick={() => setMode('ask')}><Icon name="copilot" size={14} />Ask the Copilot</button>
+            </div>
+            <div className="cmd-field">
+              <label htmlFor="qa" className="sr">{mode === 'search' ? 'Search roles, skills or companies' : 'Ask the AI Copilot'}</label>
+              <input id="qa" value={q} onChange={(e) => setQ(e.target.value)} autoComplete="off"
+                placeholder={mode === 'search' ? 'A role, skill or company: SDE, React, Stripe, ML Bangalore' : 'Paid ML internships in Bangalore starting June'} />
+              <button type="submit" className="btn btn-primary" disabled={!q.trim()}>{mode === 'search' ? 'Search' : 'Ask'}</button>
+            </div>
+          </form>
         </div>
-        <RefreshBar onReload={() => setNonce((n) => n + 1)} />
-      </header>
-
-      <form className="quick-ask" onSubmit={(e) => { e.preventDefault(); if (q.trim()) nav(`/app/copilot?q=${encodeURIComponent(q.trim())}`) }}>
-        <Icon name="copilot" size={16} />
-        <label htmlFor="qa" className="sr">Ask the AI Copilot</label>
-        <input id="qa" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Ask the Copilot, e.g. paid ML internships in Bangalore" />
-        {q.trim() && <button type="submit" className="btn btn-primary btn-sm">Ask</button>}
-      </form>
+        <div className="ov-hero-globe">
+          <Globe home={home} routes={routes} perRound={4} spin label="Routes from your city to your best matches" />
+          <span className="ov-globe-cap"><i className="h" />You<i className="d" />Your best matches</span>
+        </div>
+      </section>
 
       {mk && mk.total > 0 && (
         <section className="market" aria-labelledby="mk-h">

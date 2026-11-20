@@ -15,6 +15,7 @@ Groq `gpt-oss-120b` (LLM with tool calling) · GitHub Actions data pipeline (`..
 | **Sign up / log in** | Email + password (Supabase Auth). |
 | **Onboarding** | 6 short steps: about you, resume (auto-extracts skills), roles, where and when, eligibility (visa, pay), links. |
 | **Overview** | Greeting, numbers, top matches, quick AI ask, application pipeline, profile strength checklist. |
+| **Search** | Plain keyword search over every live listing ("SDE", "ML Bangalore", "Stripe", "React remote"), with synonyms, type-ahead suggestions, place detection and fit ranking. Press `/` or ⌘K anywhere. |
 | **AI Copilot** | Chat. The LLM turns questions into filters and calls `search_internships` / `count_internships` over real listings. Results land on the map. |
 | **Explore** | Manual filters (cities, roles, keyword, remote, recency, sort, "strong fits only") with the map. Stated application deadlines show as "Closes in 3 days"; sort by **Closing soon**. |
 | **Applications** | Tracker: Applied, Interviewing, Offer, Rejected; notes; follow-up nudges; CSV export. Clicking Apply anywhere adds a role here. |

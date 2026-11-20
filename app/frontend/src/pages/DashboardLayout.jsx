@@ -5,9 +5,12 @@ import { useSession } from '../lib/session.jsx'
 import { UserDataProvider, useUserData } from '../lib/userdata.jsx'
 import { Icon, Logo } from '../ui.jsx'
 import JobPanel from '../JobPanel.jsx'
+import SearchBar from '../SearchBar.jsx'
+import Backdrop from '../Backdrop.jsx'
 
 const NAV = [
   { to: '/app', end: true, icon: 'overview', label: 'Overview' },
+  { to: '/app/search', icon: 'search', label: 'Search' },
   { to: '/app/copilot', icon: 'copilot', label: 'AI Copilot' },
   { to: '/app/explore', icon: 'explore', label: 'Job listings' },
   { to: '/app/openings', icon: 'calendar', label: 'Opening soon' },
@@ -73,14 +76,16 @@ export default function DashboardLayout() {
   return (
     <UserDataProvider key="ud">
       <div className="dash">
+        <Backdrop variant="app" />
         <Sidebar open={open} onClose={() => setOpen(false)} />
         {open && <button type="button" className="scrim" aria-label="Close menu" onClick={() => setOpen(false)} />}
         <div className="dash-main">
           <header className="dash-top">
-            <button type="button" className="icon-btn" aria-label="Open menu" onClick={() => setOpen(true)}><Icon name="menu" /></button>
-            <span className="wordmark"><Logo />Internship Copilot</span>
+            <button type="button" className="icon-btn dash-menu" aria-label="Open menu" onClick={() => setOpen(true)}><Icon name="menu" /></button>
+            <span className="wordmark dash-mark"><Logo />Internship Copilot</span>
+            {!loc.pathname.startsWith('/app/search') && loc.pathname !== '/app' && <SearchBar />}
           </header>
-          <Outlet />
+          <div className="route" key={loc.pathname}><Outlet /></div>
         </div>
         <JobPanel />
         <Toast />
