@@ -8,6 +8,7 @@
 "simplify:00b1c762-9ca4-4c23-afff-d070ee8279e6": 0,
 "simplify:00cd908d-fc5f-4712-97e8-b714c9ca0b11": 0,
 "simplify:0590c67b-538d-436a-97a1-2344effdb7cb": 0,
+"simplify:07314994-8ce1-406a-91bb-b8b31de49a91": 0,
 "simplify:0a6bcf68-1dac-49d0-a6da-1adca0fd22c3": 0,
 "simplify:0b13fda3-98fa-465a-b8b5-d8c8960a15e1": 0,
 "simplify:0b4ccde0-5421-4204-8674-7df0ce55af74": 0,
@@ -73,6 +74,7 @@
 "simplify:79c63349-953a-4d76-82a2-2c01a95745f7": 0,
 "simplify:7dcaed62-38da-41f4-9f67-549f034babfe": 0,
 "simplify:81cfb0db-2e35-4ab7-8ded-f4e7d0b805ea": 0,
+"simplify:89215c85-903d-4d85-8567-3d7858365b22": 0,
 "simplify:899ceff5-26e3-46f7-ab8d-a9703c3ae26d": 1796149740,
 "simplify:8b086459-985c-4225-b509-facb2dce5e94": 0,
 "simplify:8ba99fbd-63b7-40d0-a543-94677e208bdd": 0,
@@ -108,6 +110,7 @@
 "simplify:af15f3fd-75c2-49a5-b6e4-2588f738ef9c": 0,
 "simplify:b0ce7f24-559f-4b1c-bed2-b832cc9c2944": 0,
 "simplify:b192313c-9892-4f12-9f02-51fa773a14d9": 0,
+"simplify:b19d849d-2c0b-485c-8b92-497c59451a5f": 0,
 "simplify:b350f641-a0d1-4539-b545-8c26a0ad9fa7": 0,
 "simplify:b4ef0d6c-f65b-48c0-b030-61b50a0eb09b": 0,
 "simplify:b66027f1-689f-4530-b06b-17bd7dffbfb7": 1796063340,
@@ -156,7 +159,38 @@
 "simplify:f830fea0-864e-4afe-80e7-419b5b9a9d6c": 0,
 "simplify:f998d09f-9c9c-49be-93b6-49b526534bc4": 0
 },
-"digest_queue": [],
+"digest_queue": [
+{
+"ev": {
+"bucket": "remote",
+"loc": "Remote (India)",
+"reasons": [
+"matches your ai"
+],
+"score": 57,
+"tags": [
+"dates not stated - check"
+],
+"term_known": false
+},
+"job": {
+"company": "Referencified Tech Private Limited",
+"id": "internshala:3338490",
+"india_only": true,
+"locations": [
+"Remote (India)"
+],
+"posted": null,
+"remote": true,
+"source": "Internshala",
+"sponsorship": null,
+"stipend": "\u20b9 3,000 - 6,000 /month",
+"terms": [],
+"title": "AI Academic Coordinator",
+"url": "https://internshala.com/internship/detail/work-from-home-ai-academic-coordinator-internship-at-referencified-tech-private-limited1795198458"
+}
+}
+],
 "last_digest": "2026-11-20",
 "seen": {
 "gh:coinbase:8175510": 1795096978.5146687,
@@ -312,6 +346,7 @@
 "internshala:3338303": 1795183095.5619586,
 "internshala:3338304": 1795183095.5619586,
 "internshala:3338457": 1795197199.595908,
+"internshala:3338490": 1795200157.636432,
 "lever:palantir:130ee501-bd22-4d44-b651-39581ef97743": 1795096978.5146687,
 "lever:palantir:45e4617d-d658-4b30-8dc9-378ca84a027a": 1795096978.5146687,
 "lever:palantir:b3d81928-6c26-432f-8a0a-36602c2eefcb": 1795096978.5146687,
@@ -1415,10 +1450,10 @@
 },
 "source_counts": {
 "internshala": {
-"last_ok": 1795197199.595908
+"last_ok": 1795200157.636432
 },
 "simplify": {
-"last_ok": 1795197199.595908
+"last_ok": 1795200157.636432
 }
 },
 "warned": {}
