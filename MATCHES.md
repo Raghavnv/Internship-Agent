@@ -1,5 +1,5 @@
 # Open internships matching your profile
-_Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
+_Updated 20 Nov 2026, 02:37 PM IST. 1177 roles, best first._
 
 | Score | Role | Company | Location | Term | Apply |
 |---|---|---|---|---|---|
@@ -13,8 +13,6 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 92 | AI Infrastructure Engineer Intern - Recommendation & LLM | TikTok | San Jose, CA | Summer 2027 | [link](https://lifeattiktok.com/search/7672671220798818613) |
 | 88 | Software Engineer Intern - SI Reinforcement Learning | Tesla | Palo Alto, CA | Summer 2027 | [link](https://www.tesla.com/careers/search/job/289241) |
 | 88 | Data Scientist Intern | Zoox | Foster City, CA | Summer 2027 | [link](https://jobs.lever.co/zoox/85c6aec7-8da2-445d-9c4d-812365dbce97/apply) |
-| 88 | Software Engineer Intern - Software Systems | Zoox | Foster City, CA | Summer 2027 | [link](https://jobs.lever.co/zoox/8b32157b-ab44-4078-85ea-1d8d7b747a20/apply) |
-| 88 | Software Engineer Intern - Software Platforms & Product | Zoox | Foster City, CA | Summer 2027 | [link](https://jobs.lever.co/zoox/88f6cb68-1534-44af-80db-10e43c203520/apply) |
 | 88 | Machine Learning Engineer Intern | PayPal | San Jose, CA | Summer 2027 | [link](https://paypal.eightfold.ai/careers/job/274922983149) |
 | 88 | AI Research Intern | Atlassian | SF | Summer 2027 | [link](https://campus-americas.icims.com/jobs/26269/ai-research-intern-%28phd%29%2c-2027-summer-u.s./job) |
 | 88 | AI & Architecture Intern | Adobe | San Jose, CA | Summer 2027 | [link](https://adobe.wd5.myworkdayjobs.com/external_experienced/job/San-Jose/XMLNAME-2027-Intern---AI---Architecture_R172998) |
@@ -47,7 +45,6 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 88 | Backend Software Engineer Intern - Global E-Commerce | TikTok | San Jose, CA | Summer 2027 | [link](https://lifeattiktok.com/search/7668834837268138293) |
 | 88 | Machine Learning Engineer Intern - Ads Signal & Measurement | TikTok | San Jose, CA | Summer 2027 | [link](https://lifeattiktok.com/search/7669700361976809733) |
 | 88 | Machine Learning Infrastructure Engineer Intern - Ads Infrastructure | TikTok | San Jose, CA | Summer 2027 | [link](https://lifeattiktok.com/search/7668881813744191749) |
-| 88 | Data & AI Intern - Analyst | JP Morgan Chase | Palo Alto, CA | Summer 2027 | [link](https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210773869) |
 | 88 | Machine Learning Engineer Intern | TikTok | San Jose, CA | Summer 2027 | [link](https://lifeattiktok.com/search/7667338938890930437) |
 | 88 | Machine Learning Engineer Intern | TikTok | San Jose, CA | Summer 2027 | [link](https://lifeattiktok.com/search/7667350291952765237) |
 | 88 | Machine Learning Engineer Intern | TikTok | San Jose, CA | Summer 2027 | [link](https://lifeattiktok.com/search/7667346576033777925) |
@@ -58,6 +55,8 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 88 | Backend Software Engineer Intern | TikTok | San Jose, CA | Summer 2027 | [link](https://lifeattiktok.com/search/7667935739300317493) |
 | 86 | Research Scientist Intern - AI Core Machine Learning | Meta | Menlo Park, CA | ? | [link](https://www.metacareers.com/jobs/2432079507324778) |
 | 86 | Research Scientist Intern - AI Agents and Machine Learning | Meta | Menlo Park, CA | ? | [link](https://www.metacareers.com/jobs/1826604892017856) |
+| 84 | Software Engineer Intern - Software Systems | Zoox | Foster City, CA | Summer 2027 | [link](https://jobs.lever.co/zoox/8b32157b-ab44-4078-85ea-1d8d7b747a20/apply) |
+| 84 | Software Engineer Intern - Software Platforms & Product | Zoox | Foster City, CA | Summer 2027 | [link](https://jobs.lever.co/zoox/88f6cb68-1534-44af-80db-10e43c203520/apply) |
 | 84 | Software Engineer Intern | PayPal | Austin, TX | Summer 2027 | [link](https://paypal.eightfold.ai/careers/job/274922982814) |
 | 84 | Data Scientist Intern | PayPal | San Jose, CA | Summer 2027 | [link](https://paypal.eightfold.ai/careers/job/274922982821) |
 | 84 | Software Engineer Intern - AIML Platform - HP IQ | HP Inc. | SF | Summer 2027 | [link](https://hp.wd5.myworkdayjobs.com/EXTEU-AC-CareerSite/job/San-Francisco-California-United-States-of-America/Software-Engineering-Intern--AIML-Platform---HP-IQ_UNI4800) |
@@ -180,7 +179,6 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 76 | Backend Software Engineer Intern | Verkada | San Mateo, CA | Winter 2027, Summer 2027 | [link](https://job-boards.greenhouse.io/verkada/jobs/5210813007) |
 | 76 | Data Lake Infrastructure and Data Analytics Research Engineer Intern - Applied Machine Learning Ark | ByteDance | San Jose, CA | Summer 2027 | [link](https://jobs.bytedance.com/en/position/7671109787509213445/detail) |
 | 76 | Machine Learning Engineer Intern - Search Quality | TikTok | San Jose, CA | Summer 2027 | [link](https://lifeattiktok.com/search/7665475460339665157) |
-| 76 | Forward Deployed Engineer Intern | Cybernetic Labs | SF | Winter 2026, Spring 2026 | [link](https://jobs.ashbyhq.com/netic/ffd6af1a-cebb-41f5-ac1d-e695adfd067c/application?embed=true) |
 | 74 | Research Scientist Intern - GenAI Safety | Meta | SF | ? | [link](https://www.metacareers.com/jobs/993713283787464) |
 | 74 | Research Scientist Intern - ML Innovation for Products | Meta | Menlo Park, CA | ? | [link](https://www.metacareers.com/jobs/1060093353751700) |
 | 74 | Research Scientist Intern - Meta Recommendation Systems - Core ML | Meta | Menlo Park, CA | ? | [link](https://www.metacareers.com/jobs/1023154190171838) |
@@ -240,12 +238,11 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 72 | Software Engineering Intern/Co-op | SpaceX | Palo Alto, CA | Summer 2027 | [link](https://boards.greenhouse.io/spacex/jobs/8621757002) |
 | 72 | Software Engineer Intern | Heliux | SF | Summer 2027 | [link](https://jobs.ashbyhq.com/heliux/ff2b6f4b-00d0-4afe-b4f5-2dbf443409ef/application?embed=true) |
 | 72 | Software Engineer Intern - Software Engineer | Virtu Financial | Austin, TX | Summer 2027 | [link](https://job-boards.greenhouse.io/virtu/jobs/8624410002) |
-| 72 | Software Engineer Intern - Agent Platform | Cybernetic Labs | SF | Winter 2026, Spring 2026 | [link](https://jobs.ashbyhq.com/netic/b0ea7aab-8eea-4d31-96f9-278364180ae7/application?embed=true) |
-| 72 | Full-Stack Software Engineer Intern - Product | Cybernetic Labs | SF | Winter 2026, Spring 2026 | [link](https://jobs.ashbyhq.com/netic/f291394a-f3c5-4f46-9b87-77aea3d487ef/application?embed=true) |
 | 72 | Software Engineer Intern | Circleback | SF | Summer 2027 | [link](https://jobs.ashbyhq.com/circleback/2bb6be67-d1a8-42f7-bb1b-64ee36bf613f/application?embed=true) |
 | 72 | Software Engineer Intern | Pylon | SF | Summer 2027 | [link](https://jobs.ashbyhq.com/pylon-labs/fcea8b52-81f1-4b0c-b575-d7b180faec4d/application) |
 | 72 | Software Engineer Intern | CTGT | SF | Summer 2027 | [link](https://jobs.ashbyhq.com/ctgt/f657c2f5-125e-42b6-a68a-646bbea3d155/application) |
 | 72 | Software Developer Intern | Quantiq | Austin, TX | Summer 2027 | [link](https://job-boards.greenhouse.io/quantiq/jobs/4287936009) |
+| 70 | AI & Data Intern - Applied AI/Machine Learning | Lucid Motors | Newark, CA | Summer 2027 | [link](https://lucidmotors.com/careers/search/5290919007?gh_jid=5290919007) |
 | 70 | Product Data Science Intern | Docusign | SF | ? | [link](https://careers.docusign.com/jobs/31092?icims=1&lang=en-us) |
 | 70 | Software Engineer Intern | Emerson Electric | Austin, TX | ? | [link](https://hdjq.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/26013632) |
 | 70 | AI Inference & Training Framework Engineer Intern | NeuroSpark | Santa Clara, CA | ? | [link](https://ats.rippling.com/neurospark/jobs/349c061d-1b7b-4876-acf0-57f53c7263ea) |
@@ -286,6 +283,8 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 68 | Software Engineering Intern | Wikimedia Foundation | Remote in USA | Winter 2027, Spring 2027 | [link](https://job-boards.greenhouse.io/wikimedia/jobs/8268853) |
 | 68 | Software Engineer Intern - Summer 2027 | CACI | Remote in USA | Summer 2027 | [link](https://caci.wd1.myworkdayjobs.com/external/job/437-DENVER-CO/Cleared-Software-Engineer-Intern---Summer-2027_331999) |
 | 67 | Software Engineer Intern | The Voleon Group | Berkeley, CA | Summer 2027, Fall 2027 | [link](https://jobs.ashbyhq.com/voleon/57f1b666-2f4b-4bad-aac0-fa42a1c8fdf6/application?embed=true) |
+| 66 | AI Software Engineer Intern | Honeywell Aerospace | United States | Summer 2027 | [link](https://icfcjb.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/Aerospace/job/119880) |
+| 66 | AI Software Engineer Intern | Honeywell Aerospace | United States | Summer 2027 | [link](https://icfcjb.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/Aerospace/job/119899) |
 | 66 | AI Intern | Vertiv | Westerville, OH | Summer 2027 | [link](https://egup.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX/job/20286620) |
 | 66 | AI Intern | Vertiv | Westerville, OH | Summer 2027 | [link](https://egup.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX/job/20286621) |
 | 66 | Machine Learning Engineer Intern | Anduril | Santa Ana, CA | Summer 2027 | [link](https://boards.greenhouse.io/andurilindustries/jobs/5274037007) |
@@ -339,9 +338,9 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 66 | Software Engineer Intern - Data Architecture - E-commerce | TikTok | Seattle, WA | Summer 2027 | [link](https://lifeattiktok.com/search/7668582146236631349) |
 | 66 | Software Engineer Intern | TikTok | Seattle, WA | Summer 2027 | [link](https://lifeattiktok.com/search/7668582086899763461) |
 | 65 | Forward Deployed Software Engineer Intern - Commercial | Palantir | Chicago, IL | Winter 2027, Spring 2027 | [link](https://jobs.lever.co/palantir/d5486403-c050-4920-b2e0-91b69b61ebb2/apply) |
+| 65 | Software Development – Full Stack & Mobile | Astrorize | Bangalore | ? | [link](https://internshala.com/internship/detail/software-development--full-stack-mobile-internship-in-bangalore-at-astrorize1794667301) |
 | 65 | AI Product Management | Scaler | Bangalore | ? | [link](https://internshala.com/internship/detail/ai-product-management-internship-in-bangalore-at-scaler1794917299) |
 | 65 | Full Stack Development | Rugas Technologies Private Limited | Bangalore | ? | [link](https://internshala.com/internship/detail/full-stack-development-internship-in-bangalore-at-rugas-technologies-private-limited1793067169) |
-| 65 | Software Development – Full Stack & Mobile | Astrorize | Bangalore | ? | [link](https://internshala.com/internship/detail/software-development--full-stack-mobile-internship-in-bangalore-at-astrorize1794667301) |
 | 65 | Software Development | Grovia Business Consulting India Private Limited | Bangalore | ? | [link](https://internshala.com/internship/detail/software-development-internship-in-bangalore-at-grovia-business-consulting-india-private-limited1794547499) |
 | 65 | Junior Full Stack Developer | BXP Support And Solutions Private Limited | Bangalore | ? | [link](https://internshala.com/internship/detail/junior-full-stack-developer-internship-in-bangalore-at-bxp-support-and-solutions-private-limited1794513966) |
 | 65 | Software Engineer (SDE) + Instructor | Bosscoder Academy | Bangalore | ? | [link](https://internshala.com/internship/detail/software-engineer-sde-instructor-internship-in-bangalore-at-bosscoder-academy1794227248) |
@@ -350,8 +349,9 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 65 | AI & Full-Stack Development | The Signature Design Studio | Bangalore (Hybrid) | ? | [link](https://internshala.com/internship/detail/ai-full-stack-development-internship-in-bangalore-at-the-signature-design-studio1793099094) |
 | 65 | Full Stack Development | Agile Vortex Private Limited | Bangalore (Hybrid) | ? | [link](https://internshala.com/internship/detail/full-stack-development-internship-in-bangalore-at-agile-vortex-private-limited1792729874) |
 | 65 | Artificial Intelligence (AI) | Blismos Solutions Private Limited | Bangalore | ? | [link](https://internshala.com/internship/detail/artificial-intelligence-ai-internship-in-bangalore-at-blismos-solutions-private-limited1794290997) |
-| 65 | AI/ML Engineer – LLMs & Intelligent Automation | Risingminds Software Solutions | Bangalore | ? | [link](https://internshala.com/internship/detail/ai-ml-engineer--llms-intelligent-automation-internship-in-bangalore-at-risingminds-software-solutions1792722335) |
 | 65 | Full Stack Development | PowerPod | Bangalore (Hybrid) | ? | [link](https://internshala.com/internship/detail/full-stack-development-internship-in-bangalore-at-powerpod1792571882) |
+| 65 | AI/ML Engineer – LLMs & Intelligent Automation | Risingminds Software Solutions | Bangalore | ? | [link](https://internshala.com/internship/detail/ai-ml-engineer--llms-intelligent-automation-internship-in-bangalore-at-risingminds-software-solutions1792722335) |
+| 65 | Artificial Intelligence (AI) | Sales Centri | Bangalore (Hybrid) | ? | [link](https://internshala.com/internship/detail/artificial-intelligence-ai-internship-in-bangalore-at-sales-centri1793616118) |
 | 64 | Future Product Innovation Research Intern - Human-AI Computational Design | Toyota Research Institute | Los Altos, CA | ? | [link](https://jobs.lever.co/tri/ad346610-e4a6-4cd2-a357-11d731b136a2/apply) |
 | 64 | Research Scientist Intern - LLM Memory and Skills | Meta | Seattle, WA | ? | [link](https://www.metacareers.com/jobs/1676116714093186) |
 | 64 | Research Scientist Intern - Computational Photography & Computer Vision | Meta | Redmond, WA | ? | [link](https://www.metacareers.com/jobs/1670489511324528) |
@@ -364,6 +364,12 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 63 | Research Scientist Intern - Foundation Model Optimization | Meta | Menlo Park, CA | ? | [link](https://www.metacareers.com/jobs/997597222780035) |
 | 63 | Research Scientist Intern - Synthetic Data for Computer Use Agents | Meta | Menlo Park, CA | ? | [link](https://www.metacareers.com/jobs/1667187061776108) |
 | 63 | Research Scientist Intern - Robotics Foundation Models - Agentic RL | Meta | Menlo Park, CA | ? | [link](https://www.metacareers.com/jobs/1414987577372371) |
+| 62 | Software Development Engineer Intern | iA | Binghamton, NY | Summer 2027 | [link](https://workforcenow.adp.com/job?cid=93fdfc70-37a2-4cde-ba86-0da4925db4c8&jobId=9200936414429_1) |
+| 62 | Software Engineer Intern | Honeywell Aerospace | United States | Summer 2027 | [link](https://icfcjb.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/Aerospace/job/119718) |
+| 62 | Software Engineer Intern | Honeywell Aerospace | United States | Summer 2027 | [link](https://icfcjb.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/Aerospace/job/119821) |
+| 62 | Information Systems Data Science Intern - IT | Honeywell Aerospace | United States | Summer 2027 | [link](https://icfcjb.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/Aerospace/job/120471) |
+| 62 | Information Systems Data Science Intern | Honeywell Aerospace | United States | Summer 2027 | [link](https://icfcjb.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/Aerospace/job/120238) |
+| 62 | Software Development Intern | Melaleuca | Idaho Falls, ID | Summer 2027 | [link](https://recruiting2.ultipro.com/MEL1001MEL/JobBoard/d5ffce96-7247-41c4-831b-454b3454c233/OpportunityDetail?opportunityId=da1623df-5176-4008-9b62-c1c59dda63bf) |
 | 62 | Software Engineer Intern | Ralliant | Beaverton, OR | Summer 2027 | [link](https://ibwujb.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/11153) |
 | 62 | Software Development Engineer Intern | Amperity | Seattle, WA | Summer 2027 | [link](https://amperity.com/careers?gh_jid=8393990#openpositions) |
 | 62 | IT Software Developer Intern | Constellation Energy | San Diego, CA | Summer 2027 | [link](https://jobs.constellationenergy.com/jobs/143150?icims=1&lang=en-us) |
@@ -405,7 +411,8 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 61 | Software Engineer Intern - AWS Database | Amazon | United States | Summer 2027, Winter 2027 | [link](https://amazon.jobs/en/jobs/10565667/software-development-engineer-intern-aws-database-2027-us) |
 | 61 | Software Development Engineer Intern - Summer | Amazon | Seattle, WA | Summer 2027, Winter 2027 | [link](https://amazon.jobs/en/jobs/10552937/software-development-engineer-internship-summer-2027-usa) |
 | 61 | Privacy and Civil Liberties Software Engineer Intern | Palantir | NYC | Winter 2027, Spring 2027 | [link](https://jobs.lever.co/palantir/09846827-b931-4a9f-bd64-c3bb8860187b/apply) |
-| 61 | AI Web Development | InAmigos Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-ai-web-development-internship-at-inamigos-foundation1795086884) |
+| 61 | Full Stack Development | Wonderkids.club | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-full-stack-development-internship-at-wonderkidsclub1795151999) |
+| 61 | Software Development | TEN | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-software-development-internship-at-ten1795151268) |
 | 61 | Full Stack Development | Meru Technosoft Private Limited | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-full-stack-development-internship-at-meru-technosoft-private-limited1795089383) |
 | 61 | Software Development | NayePankh Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-part-time-software-development-internship-at-nayepankh-foundation1795087159) |
 | 61 | Software Development | Hope Behind Tails Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-software-development-internship-at-hope-behind-tails-foundation1795083420) |
@@ -416,18 +423,18 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 61 | Full Stack Development | Codeprogen Innovations | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-full-stack-development-internship-at-codeprogen-innovations1795059961) |
 | 61 | Software Development | Pledge India Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-part-time-software-development-internship-at-pledge-india-foundation1795007091) |
 | 61 | Backend Development | NayePankh Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-backend-development-internship-at-nayepankh-foundation1795003729) |
-| 61 | Backend Development | Codeatrix | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-backend-development-internship-at-codeatrix1794991414) |
-| 61 | Machine Learning | EvoNexis | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-machine-learning-internship-at-evonexis1794977744) |
-| 61 | Machine Learning | Qubixo | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-machine-learning-internship-at-qubixo1795065114) |
-| 61 | Machine Learning | Innoknowvex | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-machine-learning-internship-at-innoknowvex1793098232) |
-| 61 | Machine Learning | Women First India Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-machine-learning-internship-at-women-first-india-foundation1794912976) |
-| 61 | Machine Learning | NayePankh Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-machine-learning-internship-at-nayepankh-foundation1794914849) |
 | 61 | Machine Learning | NDFM Business World Pvt. Ltd. | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-machine-learning-internship-at-ndfm-business-world-pvt-ltd1794493035) |
-| 61 | Machine Learning | Kidsneuron | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-machine-learning-internship-at-kidsneuron1794462457) |
 | 61 | Machine Learning | Emoolar Technology Private Limited | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-machine-learning-internship-at-emoolar-technology-private-limited1794204145) |
-| 61 | Machine Learning | Pledge India Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-machine-learning-internship-at-pledge-india-foundation1794569917) |
+| 61 | Machine Learning | Qubixo | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-machine-learning-internship-at-qubixo1795065114) |
 | 61 | Machine Learning | Hope Behind Tails Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-machine-learning-internship-at-hope-behind-tails-foundation1795083395) |
+| 61 | Machine Learning | EvoNexis | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-machine-learning-internship-at-evonexis1795153567) |
+| 61 | Machine Learning | NayePankh Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-machine-learning-internship-at-nayepankh-foundation1794914849) |
+| 61 | Machine Learning | Women First India Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-machine-learning-internship-at-women-first-india-foundation1794912976) |
+| 61 | Machine Learning | Kidsneuron | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-machine-learning-internship-at-kidsneuron1794462457) |
+| 61 | Machine Learning | Pledge India Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-machine-learning-internship-at-pledge-india-foundation1794569917) |
+| 61 | Machine Learning | Innoknowvex | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-machine-learning-internship-at-innoknowvex1793098232) |
 | 61 | Artificial Intelligence (AI) | Basti Ki Pathshala Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-artificial-intelligence-ai-internship-at-basti-ki-pathshala-foundation1795000609) |
+| 61 | Artificial Intelligence (AI) | Pregrad | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-artificial-intelligence-ai-internship-at-pregrad1795161926) |
 | 61 | AI Research | InAmigos Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-ai-research-internship-at-inamigos-foundation1795091762) |
 | 61 | Leveraging AI And Machine Learning Frameworks To Detect And Mitigate Greenwashing In Corporate ESG Reporting | International Institute Of SDGs & Public Policy Research | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-leveraging-ai-and-machine-learning-frameworks-to-detect-and-mitigate-greenwashing-in-corporate-esg-reporting-internship-at-international-institute-of-sdgs-public-policy-research1795078468) |
 | 61 | Artificial Intelligence (AI) | Reducate.ai | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-artificial-intelligence-ai-internship-at-reducateai1795100130) |
@@ -444,8 +451,6 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 61 | Data Science | Hope Behind Tails Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-data-science-internship-at-hope-behind-tails-foundation1794914045) |
 | 61 | Artificial Intelligence (AI) | Women First India Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-artificial-intelligence-ai-internship-at-women-first-india-foundation1794913039) |
 | 61 | Artificial Intelligence (AI) - Beginner Only | Schoolwhool | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-part-time-artificial-intelligence-ai-beginner-only-internship-at-schoolwhool1794911842) |
-| 61 | Artificial Intelligence (AI) | InAmigos Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-artificial-intelligence-ai-internship-at-inamigos-foundation1794901728) |
-| 61 | AI & Machine Learning | InAmigos Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-ai-machine-learning-internship-at-inamigos-foundation1794901715) |
 | 61 | Data Science | INFINEXA LEARNING SOLUTIONS PRIVATE LIMITED | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-part-time-data-science-internship-at-infinexa-learning-solutions-private-limited1794851374) |
 | 61 | Data Science | Emoolar Technology Private Limited | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-data-science-internship-at-emoolar-technology-private-limited1794847272) |
 | 61 | Artificial Intelligence (AI) | Queens Of Change Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-artificial-intelligence-ai-internship-at-queens-of-change-foundation1794828359) |
@@ -458,29 +463,31 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 61 | AI Agent Development | NDFM Business World Pvt. Ltd. | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-ai-agent-development-internship-at-ndfm-business-world-pvt-ltd1794546708) |
 | 61 | Artificial Intelligence (AI) | NDFM Business World Pvt. Ltd. | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-artificial-intelligence-ai-internship-at-ndfm-business-world-pvt-ltd1794546674) |
 | 61 | Data Science | NDFM Business World Pvt. Ltd. | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-data-science-internship-at-ndfm-business-world-pvt-ltd1794493060) |
+| 61 | Artificial Intelligence (AI) | Unessa Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-artificial-intelligence-ai-internship-at-unessa-foundation1794471217) |
 | 61 | Software Development | Troywings Technologies | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-software-development-internship-at-troywings-technologies1794391778) |
-| 61 | Software Development | NDFM Business World Pvt. Ltd. | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-software-development-internship-at-ndfm-business-world-pvt-ltd1794492911) |
 | 61 | Software Development | The ProEducator | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-software-development-internship-at-the-proeducator1791997496) |
-| 61 | Software Development | Nexicat | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-software-development-internship-at-nexicat1794363699) |
+| 61 | Software Development | NDFM Business World Pvt. Ltd. | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-software-development-internship-at-ndfm-business-world-pvt-ltd1794492911) |
 | 61 | Software Development | Women First India Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-software-development-internship-at-women-first-india-foundation1794828570) |
 | 61 | Full Stack Development | Codeatrix | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-full-stack-development-internship-at-codeatrix1794985258) |
 | 61 | Software Development Engineering (Web) | Betatest Solutions Private Limited | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-software-development-engineering-web-internship-at-betatest-solutions-private-limited1794570014) |
 | 61 | Full Stack Development | Floneo | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-full-stack-development-internship-at-floneo1794559889) |
 | 61 | Software Development | She Can Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-part-time-software-development-internship-at-she-can-foundation1794481549) |
+| 61 | Software Development | Nexicat | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-software-development-internship-at-nexicat1794363699) |
 | 61 | Software Development Engineering (Web) | Jugaad Clothing | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-software-development-engineering-web-internship-at-jugaad-clothing1794276054) |
 | 61 | Software Development Engineering (Web) | Emoolar Technology Private Limited | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-part-time-software-development-engineering-web-internship-at-emoolar-technology-private-limited1794206720) |
 | 61 | AI Product Developer - Python & React (Remote) | AIVOA | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-ai-product-developer-python-react-remote-internship-at-aivoa1792558013) |
+| 61 | Backend Development | Codeatrix | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-backend-development-internship-at-codeatrix1794991414) |
 | 61 | Backend Development | NDFM Business World Pvt. Ltd. | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-backend-development-internship-at-ndfm-business-world-pvt-ltd1794492645) |
 | 61 | Subject Matter Expert (SME) - AI/ML | House Of Couton Private Limited | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-subject-matter-expert-sme-ai-ml-internship-at-house-of-couton-private-limited1794249563) |
 | 61 | Software Engineer | Callzo | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-software-engineer-internship-at-callzo1794201712) |
 | 61 | Backend Development | Axe Consultancy And Security Services LLC | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-backend-development-internship-at-axe-consultancy-and-security-services-llc1793342252) |
 | 61 | Data Science | Cornixe | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-data-science-internship-at-cornixe1793353906) |
 | 61 | Artificial Intelligence (AI) | GoAified | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-artificial-intelligence-ai-internship-at-goaified1795060569) |
-| 61 | AI Data Associate | Redgenie Technologies Private Limited | Bangalore | ? | [link](https://internshala.com/internship/detail/ai-data-associate-internship-in-bangalore-at-redgenie-technologies-private-limited1794550565) |
 | 61 | Software Development Engineering (Web) | Ga.ma.na | Bangalore (Hybrid) | ? | [link](https://internshala.com/internship/detail/part-time-software-development-engineering-web-internship-in-bangalore-at-gamana1794375334) |
-| 61 | AI Operations & Data | Flipspaces | Bangalore | ? | [link](https://internshala.com/internship/detail/ai-operations-data-internship-in-bangalore-at-flipspaces1793680249) |
 | 61 | Full Stack Developer | Brandsea | Bangalore (Hybrid) | ? | [link](https://internshala.com/internship/detail/full-stack-developer-internship-in-bangalore-at-brandsea1792751110) |
 | 61 | Software Development | Ganesh Enterprises | Bangalore | ? | [link](https://internshala.com/internship/detail/software-development-internship-in-bangalore-at-ganesh-enterprises1793445883) |
+| 61 | AI Data Associate | Redgenie Technologies Private Limited | Bangalore | ? | [link](https://internshala.com/internship/detail/ai-data-associate-internship-in-bangalore-at-redgenie-technologies-private-limited1794550565) |
+| 61 | AI Operations & Data | Flipspaces | Bangalore | ? | [link](https://internshala.com/internship/detail/ai-operations-data-internship-in-bangalore-at-flipspaces1793680249) |
 | 60 | Computer Vision Engineer Intern - AI/ML | Scout Space | Reston, VA | ? | [link](https://job-boards.greenhouse.io/scoutspace/jobs/5489231008) |
 | 60 | Software Engineer Intern - Connectivity Platform and Product | Palantir | NYC | ? | [link](https://jobs.lever.co/palantir/130ee501-bd22-4d44-b651-39581ef97743/apply) |
 | 60 | Software Engineer Intern - Connectivity Platform - Product | Palantir | Denver, CO | ? | [link](https://jobs.lever.co/palantir/eb496d6a-a960-43d3-a09b-e3843052f54e/apply) |
@@ -542,7 +549,6 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 58 | AI Consulting Associate Program Brokerage Intern | DriveWealth | Chicago, IL | Summer 2027 | [link](https://boards.greenhouse.io/drivewealth/jobs/8039368003) |
 | 58 | AI Consulting Associate Program – AI Engineer Intern | DriveWealth | Chicago, IL | Summer 2027 | [link](https://boards.greenhouse.io/drivewealth/jobs/8039350003) |
 | 58 | AI Initiatives Fellow | The New York Times | NYC | Summer 2027 | [link](https://job-boards.greenhouse.io/thenewyorktimes/jobs/4740369005) |
-| 58 | AI Consulting Associate Program Brokerage Intern | DriveWealth | Chicago, IL | Summer 2027 | [link](https://jobs.ashbyhq.com/drivewealth/b11409e6-a86d-4504-b4da-36636f888c16/application?embed=true) |
 | 58 | AI & Internal Tools Software Engineer Intern | Inversion Space | Playa Vista, LA | Summer 2027 | [link](https://job-boards.greenhouse.io/inversionspace/jobs/4745076005) |
 | 58 | Forward Deployed Software Engineer Intern | Healthpeak Properties | NYC | Summer 2027 | [link](https://healthpeak.applytojob.com/apply/ss4v1Qi95q/Forward-Deployed-Software-Engineer-Internship) |
 | 58 | Forward Deployed Software Engineer Intern | Healthpeak Properties | Irvine, CA | Summer 2027 | [link](https://healthpeak.applytojob.com/apply/RTf9TfJE4h/Forward-Deployed-Software-Engineer-Internship) |
@@ -564,7 +570,6 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 58 | AI Software Engineer Intern | Rockwell Automation | Mayfield Heights, OH | Summer 2027 | [link](https://rockwellautomation.wd1.myworkdayjobs.com/External-Rockwell-Automation-Early-Careers/job/Mayfield-Heights-Ohio-United-States/Intern--AI-Software-Engineering--June-August-2027-_R26-6980) |
 | 58 | AI Software Engineering Co-op - 6 months - 8 months | Rockwell Automation | Mayfield Heights, OH | Winter 2027, Summer 2027 | [link](https://rockwellautomation.wd1.myworkdayjobs.com/External_Rockwell_Automation/job/Mayfield-Heights-Ohio-United-States/Co-op--AI-Software-Engineering--6-8-months-_R26-6982-1) |
 | 58 | AI Software Engineer Intern | Rockwell Automation | Mayfield Heights, OH | Summer 2027 | [link](https://rockwellautomation.wd1.myworkdayjobs.com/External_Rockwell_Automation/job/Mayfield-Heights-Ohio-United-States/Intern--AI-Software-Engineering--June-August-2027-_R26-6980-1) |
-| 58 | Generative AI Software Development Intern | General Dynamics Information Technology | Bossier City, LA | Summer 2027 | [link](https://gdit.wd5.myworkdayjobs.com/gdit_earlytalent/job/USA-LA-Bossier-City/GDIT-Summer-Internship-Program---Summer-2027-Generative-AI-Software-Development-Internship_RQ228933-1) |
 | 58 | R&D Intern - AI Research Engineer | Procter & Gamble | Mason, OH | Summer 2027, Summer 2026 | [link](https://pg.wd5.myworkdayjobs.com/1000/job/MASON-BUS-AND-INNOVATION-CTR/R-D-PhD-Summer-Intern---AI-Research-Engineer_R000159371) |
 | 58 | AI Intern | Farmers Mutual Hail | West Des Moines, IA | Summer 2027 | [link](https://job-boards.greenhouse.io/farmersmutualhailinsurancecompany/jobs/4404387009) |
 | 58 | Software Developer Intern - Java | W.R. Berkley | Urbandale, IA | Summer 2027 | [link](https://careers-berkley.icims.com/jobs/14437/job?mobile=true&needsRedirect=false) |
@@ -611,15 +616,17 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 57 | Application Developer Intern | DTCC | Dallas, TX | Summer 2027 | [link](https://ebxr.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/214459) |
 | 57 | Data Engineer Intern - Data | LPL Financial Holdings | Austin, TX | Summer 2027 | [link](https://lplfinancial.wd1.myworkdayjobs.com/university/job/Fort-MillCharlotte/Summer-Intern-2027---Data_R-052914) |
 | 57 | Chip Simulation Software Intern | Etched | San Jose, CA | Fall 2026, Spring 2027 | [link](https://jobs.ashbyhq.com/Etched/27e5bd6b-9357-45f0-9e79-cfa2bf4eeba8/application?embed=true) |
-| 57 | AI Prompt Engineering | InAmigos Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-ai-prompt-engineering-internship-at-inamigos-foundation1795089166) |
 | 57 | Full Stack Development | NayePankh Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-part-time-full-stack-development-internship-at-nayepankh-foundation1795087178) |
+| 57 | AI Prompt Engineering | InAmigos Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-ai-prompt-engineering-internship-at-inamigos-foundation1795089166) |
+| 57 | AI Web Development | InAmigos Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-ai-web-development-internship-at-inamigos-foundation1795086884) |
 | 57 | Full Stack Development | Hope Behind Tails Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-full-stack-development-internship-at-hope-behind-tails-foundation1795083448) |
 | 57 | Full Stack Development | Women First India Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-full-stack-development-internship-at-women-first-india-foundation1795083049) |
 | 57 | Backend Development | Queens Of Change Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-backend-development-internship-at-queens-of-change-foundation1795082349) |
 | 57 | Full Stack Development | Queens Of Change Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-full-stack-development-internship-at-queens-of-change-foundation1795082230) |
 | 57 | Full Stack Development | Pledge India Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-part-time-full-stack-development-internship-at-pledge-india-foundation1795007166) |
+| 57 | AI Voice Training & Transcription - Hindi | Renan Partners | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-ai-voice-training-transcription-hindi-internship-at-renan-partners1795157378) |
 | 57 | Project Executive - AI Data Services | ConsultBae | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-project-executive-ai-data-services-internship-at-consultbae1795016807) |
-| 56 | Backend - Intern ( SEA & Europe) | Paytm | Noida, Uttar Pradesh | ? | [link](https://jobs.lever.co/paytm/0a6e7022-caaf-4bc3-b6e9-d5dd90c44cf8) |
+| 56 | Software and AI Engineer Intern | Pathlabs | Missoula, MT | ? | [link](https://pathlabs.applytojob.com/apply/qW73dwA0iS/Software-And-AI-Engineering-Intern) |
 | 56 | Software Engineer, Internship - Connectivity Platform and Product | Palantir | New York, NY | ? | [link](https://jobs.lever.co/palantir/130ee501-bd22-4d44-b651-39581ef97743) |
 | 56 | Software Engineer, Internship - Data Connectors | Palantir | New York, NY | ? | [link](https://jobs.lever.co/palantir/45e4617d-d658-4b30-8dc9-378ca84a027a) |
 | 56 | Applied Scientist Intern | Microsoft | Redmond, WA | ? | [link](https://apply.careers.microsoft.com/careers/job/1970393557050150) |
@@ -721,8 +728,6 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 54 | Software Engineer Intern | Radiance Technologies | Dayton, OH | Spring 2027, Summer 2027 | [link](https://radiancetech.wd12.myworkdayjobs.com/Radiance_External/job/Dayton-Office/Software-Engineer-Intern-Spring-Summer-2027_HR102443) |
 | 54 | Software Engineer Intern | Illinois Tool Works | Eden Prairie, MN | Summer 2027 | [link](https://careers.itw.com/global/en/job/JR10261) |
 | 54 | Software Development Engineer Intern | Qumulo | Seattle, WA | Winter 2027, Spring 2027 | [link](https://jobs.ashbyhq.com/qumulo/43855947-3a85-4d1c-8b8e-e0c0ddcaf183/application?embed=true) |
-| 54 | Software Development Engineer Intern | GM financial | Arlington, TX | Summer 2027 | [link](https://fa-exvu-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/260943) |
-| 54 | Software Development Intern | General Dynamics Information Technology | Bossier City, LA | Summer 2027 | [link](https://gdit.wd5.myworkdayjobs.com/gdit_earlytalent/job/USA-LA-Bossier-City/GDIT-Summer-Internship-Program---Summer-2027-Software-Development-Internship_RQ228931-2) |
 | 54 | Software Engineer Intern | Udig | Nashville, TN | Summer 2027 | [link](https://udig.com/careers/job-listing/?gh_jid=7999436003) |
 | 54 | Data Science Intern | Epic Games | Cary, NC | Summer 2027 | [link](https://epicgames.com/careers/jobs/6202675004?gh_jid=6202675004) |
 | 54 | Software Development Intern - Summer 2027 | Tyler Technologies | Yarmouth, ME | Summer 2027 | [link](https://jobs.jobvite.com/tylertech/job/oxAPAfwg?nl=1&nl=1&fr=false) |
@@ -793,8 +798,6 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 54 | Data Scientist Intern - University | Booz Allen | Annapolis Junction, MD | Summer 2027 | [link](https://bah.wd1.myworkdayjobs.com/bah_jobs/job/Annapolis-Junction-MD/University---2027-Summer-Games-Data-Scientist-Intern---Annapolis-Junction--MD_R0248408) |
 | 54 | Data Scientist Intern - 2027 Summer Games | Booz Allen | Honolulu, HI | Summer 2027 | [link](https://bah.wd1.myworkdayjobs.com/bah_jobs/job/Honolulu-HI/University---2027-Summer-Games--Data-Scientist-Intern---Honolulu--HI_R0248406) |
 | 54 | Software Developer Intern - University | Booz Allen | Annapolis Junction, MD | Summer 2027 | [link](https://bah.wd1.myworkdayjobs.com/bah_jobs/job/Annapolis-Junction-MD/University---2027-Summer-Games-Software-Developer-Intern---Annapolis-Junction--MD_R0248403) |
-| 54 | Data Science Co-op - Summer 2027 | Johnson & Johnson | Cincinnati, OH | Summer 2027 | [link](https://jj.wd5.myworkdayjobs.com/JJ/job/Cincinnati-Ohio-United-States-of-America/Data-Science-Co-Op--Summer-2027_R-096746) |
-| 54 | Software Engineer Co-op | Johnson & Johnson | Cincinnati, OH | Summer 2027 | [link](https://jj.wd5.myworkdayjobs.com/JJ/job/Cincinnati-Ohio-United-States-of-America/Software-Engineering-Co-Op-Summer-2027_R-096743) |
 | 54 | Software Developer Intern | Newrez | Coppell, TX | Summer 2027 | [link](https://newrez.wd1.myworkdayjobs.com/NRZ/job/TX-Coppell/XMLNAME-2027-Summer-Internship---Software-Developer_R10390) |
 | 54 | Software Engineer Intern | AeroVironment | Germantown, MD | Summer 2027 | [link](https://avav.wd1.myworkdayjobs.com/en-US/avav/job/Simi-Valley-CA/Summer-2027-Software-Engineering-Intern_8611) |
 | 54 | Software Engineer Intern - IT | Vermeer | Pella, IA | Summer 2027 | [link](https://vermeer.wd5.myworkdayjobs.com/externalcareersite/job/Pella-Iowa-USA---Corporate-Office/IT-Software-Engineer-Internship-Summer-2027_REQ-22178) |
@@ -804,7 +807,6 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 54 | Calibration Process Data Science Intern - 8 months/40 hours per week | Robert Bosch Venture Capital | Farmington Hills, MI | Winter 2027, Summer 2027 | [link](https://jobs.smartrecruiters.com/BoschGroup/744000146524429) |
 | 54 | Software Engineering Intern - Software Engineering | Stryker | Fort Lauderdale, FL | Summer 2027 | [link](https://stryker.wd1.myworkdayjobs.com/StrykerCareers/job/Fort-Lauderdale-Florida/Summer-2027-Internship---Software-Engineering---Florida_R572629-1) |
 | 54 | Software Engineering Intern - Multiple Teams | Stryker | Fort Wayne, IN | Summer 2027 | [link](https://stryker.wd1.myworkdayjobs.com/StrykerCareers/job/Fort-Wayne-Indiana/Summer-2027-Internship---Software-Engineering---Indiana_R572631) |
-| 54 | Software Engineering Intern - Software Engineering | Stryker | Portage, MI | Summer 2027 | [link](https://stryker.wd1.myworkdayjobs.com/StrykerCareers/job/Portage-Michigan/Summer-2027-Internship---Software-Engineering---Michigan_R572632-1) |
 | 54 | Software Engineer Intern - Summer 2027 | DraftKings | Boston, MA | Summer 2027 | [link](https://draftkings.wd1.myworkdayjobs.com/Campus_Career_Portal/job/Boston-MA/Software-Engineer-Intern--Summer-2027-_JR14928) |
 | 54 | Data Scientist Intern - Summer Games | Booz Allen | Rome, NY | Summer 2027 | [link](https://bah.wd1.myworkdayjobs.com/bah_jobs/job/Rome-NY/University--2027-Summer-Games-Data-Scientist-Intern_R0248143) |
 | 54 | Data Scientist Intern - Summer Games | Booz Allen | Colorado Springs, CO | Summer 2027 | [link](https://bah.wd1.myworkdayjobs.com/bah_jobs/job/Colorado-Springs-CO/University--2027-Summer-Games-Data-Scientist-Intern_R0248132) |
@@ -851,6 +853,9 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 54 | Software Engineer Intern | Aquatic Capital Management | Chicago, IL | Summer 2027 | [link](https://job-boards.greenhouse.io/aquaticcapitalmanagement/jobs/8489233002) |
 | 54 | Software Engineer | Ellipsis Labs | NYC | Summer 2027 | [link](https://jobs.ashbyhq.com/ellipsislabs/02136b22-35b1-4b3d-8bef-567c3380a849/application) |
 | 53 | Gameplay Engineer Intern | Crystal Dynamics | Remote in USA | Spring 2027 | [link](https://job-boards.greenhouse.io/crystaldynamics/jobs/4746848005) |
+| 52 | Software Engineer Intern | REXA | Middleborough, MA | ? | [link](https://rexa.bamboohr.com/careers/134/) |
+| 52 | Data Engineering/Data Science Intern | Park National Bank | Newark, OH | ? | [link](https://recruiting.ultipro.com/par1025pnatb/JobBoard/78198a68-8e94-4f76-b970-3a27214b2ee3/OpportunityDetail?opportunityId=06b7fd8f-690d-4645-a0ff-a1900cef7bb1) |
+| 52 | Software Developer Intern | Marias Technology | Covington, OH | ? | [link](https://mariastechnology.bamboohr.com/careers/27/) |
 | 52 | Manufacturing Software Engineer Intern | Veolia | Boulder, CO | ? | [link](https://jobs.smartrecruiters.com/VeoliaEnvironnementSA/744000162593839) |
 | 52 | Software Engineering Assistant Intern | Space Dynamics Laboratory | Logan, UT | ? | [link](https://spacedynamicslaboratory.applytojob.com/apply/qi2jNoCwKX/Student-Software-Engineering-Assistant) |
 | 52 | Software Engineer Intern | Mytra | Brisbane, CA | ? | [link](https://ats.rippling.com/mytra/jobs/5e479468-c622-4d2b-8789-89fbc14f3292) |
@@ -866,7 +871,6 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 52 | AI Engineer Co-op Intern | ASML | San Diego, CA | ? | [link](https://asml.wd3.myworkdayjobs.com/asmlext1/job/San-Diego-CA-USA/Internship-Co-Op--AI-Engineer_J-00355629) |
 | 52 | AI Engineer Co-op Intern | ASML | San Diego, CA | ? | [link](https://asml.wd3.myworkdayjobs.com/asmlext1/job/San-Diego-CA-USA/Internship--Co-Op--AI-Engineer_J-00355628) |
 | 52 | AI Product Operator Intern | Niural | NYC | ? | [link](https://jobs.ashbyhq.com/niural/0daacf58-a15d-4c6f-bfa0-0fc069e4956e/application?embed=true) |
-| 52 | Product Intelligence Engineering Intern - AI/ML | ASM International | Phoenix, AZ | ? | [link](https://www.asm.com/open-vacancies/?gh_jid=5029228101) |
 | 52 | Python Backend Developer Intern - Energy Flexibility Platform | Siemens | Princeton, NJ | ? | [link](https://siemens.avature.net/en_US/externaljobs/JobDetail/526984) |
 | 51 | Engineer Intern | San Francisco Data | SF | ? | [link](https://jobs.ashbyhq.com/sfdata/20f37c79-b892-46d9-98d9-3588ab45542c/application?embed=true) |
 | 51 | Research Intern - Robotics Data - Real-to-Sim | WorldEngine AI | SF | ? | [link](https://jobs.ashbyhq.com/worldengine/ba22a6ae-9b75-4078-83c4-d908a29ccdd9/application?embed=true) |
@@ -887,8 +891,6 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 48 | Software Engineer Intern | Valeo | Troy, MI | ? | [link](https://valeo.wd3.myworkdayjobs.com/en-US/valeo_jobs/job/Troy-MI/Software-Engineer-Intern--Year-Round-_REQ2026081794) |
 | 48 | Data Scientist Intern | Martin Marietta | Raleigh, NC | ? | [link](https://martinmarietta.wd5.myworkdayjobs.com/Martin_Marietta_Careers/job/Raleigh-NC/Intern--Data-Scientist_JR024144-1) |
 | 48 | IT OT Software Engineer Intern | Cintas | Mason, OH | ? | [link](https://careers.cintas.com/job/Mason-IT-Intern-OT-Software-Engineer-OH-45040/1450367200/?ats=successfactors) |
-| 48 | Product Software Engineer Intern | Wolters Kluwer | Waltham, MA | ? | [link](https://wk.wd3.myworkdayjobs.com/en-US/External/job/USA---Waltham-MA/Product-Software-Engineer_R0061394) |
-| 48 | Junior Software Engineer / Data Scientist Intern | Leidos | Tucson, AZ | ? | [link](https://leidos.wd5.myworkdayjobs.com/External/job/Tucson-AZ/Junior-Software-Engineer---Data-Scientist-Intern_R-00196510) |
 | 48 | Software Engineer Intern | Atalanta | Washington, DC | ? | [link](https://jobs.ashbyhq.com/atalanta/52011b21-df9a-4304-81a9-005a79f55335/application?embed=true) |
 | 48 | Software Developer Intern - Software Development | Shive-Hattery | Iowa City, IA | ? | [link](https://recruiting.paylocity.com/Recruiting/Jobs/Details/4619793) |
 | 48 | Software Engineer Intern - Rci | Zotec Partners | Carmel, IN | ? | [link](https://zotecpartners.applytojob.com/apply/kZD502wRCY/Software-Engineer-Intern-RCI) |
@@ -898,7 +900,7 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 48 | Systems and Software Development Intern | General Dynamics Mission Systems | San Antonio, TX | ? | [link](https://careers-gdms.icims.com/jobs/76099/job?mobile=true&needsRedirect=false) |
 | 48 | Software Engineer Intern | General Dynamics Mission Systems | Pittsburgh, PA | ? | [link](https://careers-gdms.icims.com/jobs/75637/job?mobile=true&needsRedirect=false) |
 | 48 | Software Engineer Intern | Trimble | Portland, OR | ? | [link](https://trimble.wd1.myworkdayjobs.com/en-US/TrimbleCareers/job/US---OR-Lake-Oswego/Software-Engineer-Intern_R58171) |
-| 48 | Software Engineer Intern | Light & Wonder | Reno, NV | ? | [link](https://lnw.wd5.myworkdayjobs.com/lightwonderexternalcareers/job/Reno-NV/Intern-Software-Engineering_R322885) |
+| 48 | Product Intelligence Engineering Intern - AI/ML | ASM International | Phoenix, AZ | ? | [link](https://www.asm.com/open-vacancies/?gh_jid=5029228101) |
 | 48 | AI Automation Intern | Trimble | Dayton, OH | ? | [link](https://trimble.wd1.myworkdayjobs.com/en-US/TrimbleCareers/job/US---OH-Dayton/AI-Automation-Intern_R58148) |
 | 48 | AI Engineer Intern | V2X | Indianapolis, IN | ? | [link](https://careers.gov2x.com/jobs/63948?icims=1&lang=en-us) |
 | 48 | AI and Software Innovation Intern | Framatome | Lynchburg, VA | ? | [link](https://careers-framatome.icims.com/jobs/3385/job?mobile=true&needsRedirect=false) |
@@ -923,7 +925,8 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 48 | AI/ML for Cybersecurity Intern | National Laboratory of the Rockies | Golden, CO | ? | [link](https://nrel.wd5.myworkdayjobs.com/NLR/job/Golden-CO/Graduate--10-12-weeks--Intern---AI-ML-for-Cybersecurity_R14563) |
 | 48 | AI & HPC Performance Engineering Intern | Hewlett Packard Enterprise | Spring, TX | ? | [link](https://hpe.wd5.myworkdayjobs.com/jobsathpe/job/Spring-Texas-United-States-of-America/AI---HPC-Performance-Engineering-Intern_1213397) |
 | 48 | HPC AI Networking Intern - Network Transport | Hewlett Packard Enterprise | Chippewa Falls, WI | ? | [link](https://hpe.wd5.myworkdayjobs.com/jobsathpe/job/Fort-Collins-Colorado/HPC---AI-Networking-Intern---Network-Transport_1213416) |
-| 48 | AI/ML Intern - Radiation Oncology | Mayo Clinic | Rochester, MN | ? | [link](https://fa-euwp-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/385703) |
+| 47 | API & Automation Intern | Formlabs | Somerville, MA | Summer 2027 | [link](https://careers.formlabs.com/job/8400855/apply/?gh_jid=8400855) |
+| 47 | Data Engineering Intern | Piper Sandler | Minneapolis, MN | Summer 2027 | [link](https://pipersandler.wd501.myworkdayjobs.com/Piper_Sandler_Careers/job/Minneapolis-MN---HQ/XMLNAME-2027-Summer-Internship-Program---Data-Engineering_R-100805) |
 | 47 | Business Systems Engineer Intern | Anduril | Costa Mesa, CA | Summer 2027 | [link](https://boards.greenhouse.io/andurilindustries/jobs/5300647007) |
 | 47 | Research Intern - Adversarial Intelligence | Horizon3.ai | Chicago, IL | Summer 2027 | [link](https://jobs.ashbyhq.com/horizon3ai/818f854b-f212-4817-8227-3b9e654d39a2/application?embed=true) |
 | 47 | Creative Engineering Intern | Bask Health | Remote in USA | ? | [link](https://apply.workable.com/bask-health-1/j/24DD93E3BA/apply) |
@@ -941,17 +944,17 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 47 | Applied Research Intern | NextToken | SF | ? | [link](https://jobs.ashbyhq.com/nexttoken/f202a966-912e-40b8-b55a-8cca851eef5e/application?embed=true) |
 | 47 | Software Intern | Multiply Labs | SF | ? | [link](https://jobs.lever.co/multiplylabs/8203fbb3-4d42-4f6a-ae64-f05c3dcf0e9b/apply) |
 | 47 | Rotational Technology Intern | Insperity | Kingwood, Houston, TX | ? | [link](https://insperity.wd12.myworkdayjobs.com/NSP/job/Kingwood-TX/Rotational-Technology-Intern_JR103457) |
-| 47 | Engineer Intern | Sycamore | Palo Alto, CA | ? | [link](https://jobs.ashbyhq.com/sycamore/20c06fdf-9aa4-44b0-9cd1-4e21707a16f3/application?embed=true) |
 | 47 | Product Operations Engineer Intern | Happyrobot | SF | ? | [link](https://jobs.ashbyhq.com/happyrobot.ai/875c5335-97a5-4408-a9ae-9fdefdd3b768/application?embed=true) |
 | 47 | Applications Development Engineer Intern | KLA | Milpitas, CA | ? | [link](https://kla.wd1.myworkdayjobs.com/search/job/Milpitas-CA/Applications-Development-Engineering-Intern---BBP_2641507-1) |
 | 47 | Applications Development Engineer Intern | KLA | Milpitas, CA | ? | [link](https://kla.wd1.myworkdayjobs.com/UR/job/Milpitas-CA/Applications-Development-Engineering-Intern---BBP_2641507) |
 | 46 | Data Engineer Intern | Amazon | Seattle, WA | Winter 2027, Summer 2027 | [link](https://amazon.jobs/en/jobs/10553907/data-engineer-internship-2027-us) |
 | 46 | Data Analytics / AI Intern - Summer 2027 | ITT | Irvine, CA | Summer 2027 | [link](https://careersenus-itt-inc.icims.com/jobs/17657/job?mobile=true&needsRedirect=false) |
 | 46 | Python Development | Basti Ki Pathshala Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-part-time-python-development-internship-at-basti-ki-pathshala-foundation1795087130) |
+| 46 | Python Development | EvoNexis | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-python-development-internship-at-evonexis1795153519) |
+| 46 | Python Development | BiteTech Technologies | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-part-time-python-development-internship-at-bitetech-technologies1795146372) |
 | 46 | Python Development | Qubixo | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-python-development-internship-at-qubixo1795065236) |
 | 46 | Python Development | NayePankh Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-python-development-internship-at-nayepankh-foundation1794999391) |
 | 46 | Artificial Intelligence Associate | Vedron.ai | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-part-time-artificial-intelligence-associate-internship-at-vedronai1794996163) |
-| 46 | Python Development | EvoNexis | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-python-development-internship-at-evonexis1794977803) |
 | 46 | Python Development | Hope Behind Tails Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-python-development-internship-at-hope-behind-tails-foundation1794828722) |
 | 46 | Python Development | NDFM Business World Pvt. Ltd. | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-python-development-internship-at-ndfm-business-world-pvt-ltd1794546197) |
 | 46 | Python Development | Queens Of Change Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-part-time-python-development-internship-at-queens-of-change-foundation1794918153) |
@@ -962,6 +965,8 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 45 | Research Scientist Intern - Intelligent Camera Systems | Meta | Redmond, WA | ? | [link](https://www.metacareers.com/jobs/971210335715482) |
 | 45 | Analytics Engineer Intern | ID.me | Mountain View, CA | Summer 2027 | [link](https://job-boards.greenhouse.io/idmeuniversityrecruiting/jobs/8041991003) |
 | 45 | AI Data Analytics | InAmigos Foundation | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-ai-data-analytics-internship-at-inamigos-foundation1795086849) |
+| 44 | AI and Business Analytics Intern | Southern Mississippi Trading | Waynesboro, MS | ? | [link](https://southernmississippitradingllc.applytojob.com/apply/jIkpJ1ZhDo/AI-Business-Analytics-Intern) |
+| 44 | Software Engineer Intern | Light & Wonder | Reno, NV | ? | [link](https://lnw.wd5.myworkdayjobs.com/lightwonderexternalcareers/job/Reno-NV/Intern-Software-Engineering_R322885) |
 | 44 | Maritime Software Development Intern - Maritime Software Development - Ocean Systems and Engineering | Johns Hopkins Applied Physics Laboratory | Laurel, MD | ? | [link](https://careers.jhuapl.edu/jobs/60820?icims=1&lang=en-us) |
 | 44 | Software Engineer Intern | Hearst | Carmel, IN | ? | [link](https://job-boards.greenhouse.io/hearst/jobs/4466334009) |
 | 44 | Software Developer Intern | IDeaS | Bloomington, MN | ? | [link](https://ideas-sas.icims.com/jobs/42665/job?mobile=true&needsRedirect=false) |
@@ -1013,6 +1018,7 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 43 | Research Intern | Category Labs | NYC | Summer 2027 | [link](https://jobs.ashbyhq.com/category-labs/248a6400-c18e-4627-9c8c-1b1054869075/application?embed=true) |
 | 43 | Creative Technology Intern | Deeplocal | Pittsburgh, PA | Summer 2027 | [link](https://job-boards.greenhouse.io/deeplocal/jobs/8360330) |
 | 43 | Engineering Intern | Genius AI | NYC | Summer 2027 | [link](https://jobs.ashbyhq.com/geniusai/06198681-5c9d-40fa-aa68-ac92b65227c4/application?embed=true) |
+| 42 | Infotainment Software Intern | Lucid Motors | Newark, CA | Summer 2027, Fall 2027 | [link](https://lucidmotors.com/careers/search/5290921007?gh_jid=5290921007) |
 | 42 | Data Analytics & Data Science Intern | Simbe Robotics | Burlingame, CA | Spring 2027, Summer 2027 | [link](https://jobs.lever.co/SimbeRobotics/96ee45fb-f094-4751-a43d-3e376f32667f/apply) |
 | 42 | Data Science and Business Analytics Intern | The Federal Reserve System | Chicago, IL | Summer 2027 | [link](https://rb.wd5.myworkdayjobs.com/en-US/FRS/job/Chicago-IL/Summer-2027-Intern-Data-Science-and-Business-Analytics_R-0000033609) |
 | 42 | Automated Test Software Engineering Intern | Shure | Niles, IL | Summer 2027 | [link](https://careersus-shure.icims.com/jobs/4964/job?mobile=true&needsRedirect=false) |
@@ -1023,7 +1029,6 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 42 | Unity Game Developer | KIDLOLAND KIDS & TODDLER GAMES PRIVATE LIMITED | Remote (India) | ? | [link](https://internshala.com/internship/detail/work-from-home-unity-game-developer-internship-at-kidloland-kids-toddler-games-private-limited1794920055) |
 | 42 | DevOps | Ziptrrip | Bangalore | ? | [link](https://internshala.com/internship/detail/devops-internship-in-bangalore-at-ziptrrip1794974522) |
 | 42 | Software Testing | JSM Technologies Private Limited | Bangalore | ? | [link](https://internshala.com/internship/detail/software-testing-internship-in-bangalore-at-jsm-technologies-private-limited1793514317) |
-| 41 | Developer Intern - Python Development | ECM Tek | Nashville, TN | ? | [link](https://ecmtek.bamboohr.com/careers/51/) |
 | 41 | Research Scientist Intern - Humanoid Control & Dexterous Manipulation | Meta | Redmond, WA | ? | [link](https://www.metacareers.com/jobs/1832390484751700) |
 | 41 | Research Scientist Intern - Spatial Reasoning & Localization | Meta | Boston, MA | ? | [link](https://www.metacareers.com/jobs/1218542847568705) |
 | 41 | Research Scientist Intern - Robotic Control Policy | Meta | Redmond, WA | ? | [link](https://www.metacareers.com/jobs/1872420890835857) |
@@ -1035,7 +1040,6 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 41 | Research Scientist Intern - Robotics | Meta | Burlingame, CA | ? | [link](https://www.metacareers.com/jobs/1471718241508516) |
 | 41 | Research Scientist Intern - Multi-Agent Systems and Memory | Meta | Seattle, WA | ? | [link](https://www.metacareers.com/jobs/2615214025585454) |
 | 41 | Research Scientist Intern - Feed Recommendations | Meta | Bellevue, WA | ? | [link](https://www.metacareers.com/jobs/29044546168568671) |
-| 41 | Research Scientist Intern - Robot Foundation Models | Meta | Redmond, WA | ? | [link](https://www.metacareers.com/jobs/27730225806654441) |
 | 41 | Research Scientist Intern - Multimodal Behavioral Modeling - Hearing Science | Meta | Redmond, WA | ? | [link](https://www.metacareers.com/jobs/1141752241867684) |
 | 41 | Research Scientist Intern - Robotics | Meta | Redmond, WA | ? | [link](https://www.metacareers.com/jobs/2586686598441521) |
 | 41 | Research Scientist Intern - Spatial Audio Capture and Reproduction | Meta | Redmond, WA | ? | [link](https://www.metacareers.com/jobs/1674394627579563) |
@@ -1138,6 +1142,7 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 37 | Vehicle Access System Engineering Intern - Advanced EV | Ford Motor Company | Allen Park, MI | ? | [link](https://efds.fa.em5.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/74636) |
 | 37 | Web Developer Intern | GEI Consultants | Rancho Cordova, CA | ? | [link](https://jobs.jobvite.com/gei-consultants/job/ogR5zfwv?nl=1&nl=1&fr=false) |
 | 37 | Agentic Engineering Intern | Starwood Capital Group | NYC | ? | [link](https://jobs.jobvite.com/starwoodcapitalgroup/job/okzWAfw9?nl=1&nl=1&fr=false) |
+| 37 | Developer Intern - Python Development | ECM Tek | Nashville, TN | ? | [link](https://ecmtek.bamboohr.com/careers/51/) |
 | 37 | Engineer 1 New Grad - Software | Shield AI | Arlington County, Arlington, VA | ? | [link](https://jobs.ashbyhq.com/f7d8749a-72d6-407c-bf98-292ea630c73a/7e0ae8a3-4872-431c-a04a-2f2b8988b527/application?embed=true) |
 | 37 | Engineer 1 New Grad - Software | Shield AI | Arlington County, Arlington, VA | ? | [link](https://jobs.ashbyhq.com/shield/7e0ae8a3-4872-431c-a04a-2f2b8988b527/application?embed=true) |
 | 36 | Business Analytics AI Co-op | Susquehanna International Group | Bala Cynwyd, PA | ? | [link](https://careers-sig.icims.com/jobs/11675/job?mobile=true&needsRedirect=false) |
@@ -1152,7 +1157,6 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 29 | Applications Engineer Intern | KLA | Ann Arbor, MI | ? | [link](https://kla.wd1.myworkdayjobs.com/Search/job/Ann-Arbor-MI/Applications-Engineering-Intern_2642296-1) |
 | 29 | Applications Engineer Intern | KLA Corporation | Ann Arbor, MI | ? | [link](https://kla.wd1.myworkdayjobs.com/UR/job/Ann-Arbor-MI/Applications-Engineering-Intern_2642296) |
 | 29 | Research Intern | Two Six Technologies | Arlington County, Arlington, VA | ? | [link](https://job-boards.greenhouse.io/twosixtechnologies/jobs/6236149004) |
-| 29 | Engineer Intern - Multiple Teams | General Dynamics Mission Systems | United States | ? | [link](https://careers-gdms.icims.com/jobs/76785/job?mobile=true&needsRedirect=false) |
 | 29 | Mobile App Developer Intern | Sophinea | Manassas, VA | ? | [link](https://apply.workable.com/sophinea/j/B392177653/apply) |
 | 29 | Application Integration Developer Intern | Danaher | Brea, CA | ? | [link](https://danaher.wd1.myworkdayjobs.com/DanaherJobs/job/Brea-California-United-States/Intern---Application-Integration-Developer_R1316677) |
 | 29 | Software Systems Engineering Intern | Allegion | Golden, CO | ? | [link](https://allegion.wd5.myworkdayjobs.com/careers/job/Golden-CO/Summer-Intern---Software-Systems-Engineering_JR37395-1) |
@@ -1164,7 +1168,6 @@ _Updated 20 Nov 2026, 06:58 AM IST. 1174 roles, best first._
 | 29 | Connected Vehicle Engineer Intern - V2X - Communications Modeling and Traffic Simulation | National Laboratory of the Rockies | Golden, CO | ? | [link](https://nrel.wd5.myworkdayjobs.com/NLR/job/Golden-CO/Graduate-Intern---Connected-Vehicle--V2X--Communications-Modeling-and-Traffic-Simulation_R14564) |
 | 29 | Student Web Developer & Content Specialist Intern | Arizona State University | Tempe, AZ | ? | [link](https://asuep.wd5.myworkdayjobs.com/ASUEP/job/Tempe-AZ/Student-Web-Developer---Content-Specialist_R1546) |
 | 29 | Automation Team Student Engineer Intern | Auburn University | Auburn, AL | ? | [link](https://jobs.auburn.edu/jobs/10594?icims=1&lang=en-us) |
-| 29 | Data Engineer Intern | Judi Health | NYC | ? | [link](https://job-boards.greenhouse.io/judihealth/jobs/5418671008) |
 | 27 | Geothermal Production Analytics Engineer Intern | Constellation Energy | Middletown, CA | Summer 2027 | [link](https://jobs.constellationenergy.com/jobs/140400?icims=1&lang=en-us) |
 | 27 | Business Intelligence Developer Intern | Auto-Owners Insurance | Lansing, MI | Summer 2027 | [link](https://aoins.wd5.myworkdayjobs.com/AutoOwners/job/Lansing-MI/Business-Intelligence-Developer-Internship---Summer-2027_R_14772) |
 | 27 | Software Analytics Co-op | KION Group | Grand Rapids, MI | Summer 2027 | [link](https://kiongroup.wd3.myworkdayjobs.com/kiongroup/job/Grand-Rapids-MI-United-States/Software-Analytics-Co-op_JR-0096723-1) |

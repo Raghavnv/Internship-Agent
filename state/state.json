@@ -1,11 +1,15 @@
 {
 "deadlines": {
+"ashby:sarvam:0a5bf81d-3370-47e6-88f4-14aa5102ba72": 0,
 "gh:cloudflare:8383449": 0,
 "gh:cloudflare:8394342": 0,
+"gh:robinhood:8357464": 0,
 "simplify:00b1c762-9ca4-4c23-afff-d070ee8279e6": 0,
 "simplify:00cd908d-fc5f-4712-97e8-b714c9ca0b11": 0,
 "simplify:0590c67b-538d-436a-97a1-2344effdb7cb": 0,
 "simplify:0a6bcf68-1dac-49d0-a6da-1adca0fd22c3": 0,
+"simplify:0b13fda3-98fa-465a-b8b5-d8c8960a15e1": 0,
+"simplify:0b4ccde0-5421-4204-8674-7df0ce55af74": 0,
 "simplify:133dfd58-e65d-4b80-951a-bd1a9a54546e": 0,
 "simplify:1344faa8-1ac5-42aa-9e6f-7777257aca98": 0,
 "simplify:13c833d6-f1c2-40e7-aa7c-c3c48b43f398": 0,
@@ -14,28 +18,42 @@
 "simplify:1aad775b-e368-402d-afc4-1c375d8015fe": 0,
 "simplify:239630c8-42e9-421c-a908-9be5bd749777": 0,
 "simplify:257fb63b-2043-4128-8ca6-1ccc68542d8c": 0,
+"simplify:271bf34b-9787-4363-aae3-dcbb2964bfc1": 0,
 "simplify:29e95151-04f0-4334-beca-c4476d2d7b5f": 0,
 "simplify:2d118061-4df0-42b0-bb7c-a4062ea46dd1": 0,
 "simplify:2f406251-cd61-4118-99af-c862671e6b0b": 0,
+"simplify:30bd4dfd-b823-4a01-841f-76c3c17f0de1": 0,
 "simplify:382e68bd-7f9a-433c-a906-cf3b15984178": 0,
 "simplify:3966d53c-f47c-411d-add7-e02180c0f986": 0,
 "simplify:3a39e8ab-e09d-4a73-899a-1b7ef8a9bbaf": 0,
+"simplify:3ea65aaa-0297-4b8f-9378-51e35478fb95": 0,
 "simplify:40ef9e3b-1493-4170-b639-2beafbc6c791": 0,
+"simplify:427bec11-8943-4ada-a572-dc6406bec262": 0,
+"simplify:4a878341-b59a-4f01-ae88-94e135bfd7af": 0,
 "simplify:4b186364-72dd-445a-aa47-b26731004b25": 0,
+"simplify:50119efd-3a89-4665-8364-8b7776f19351": 0,
 "simplify:520e9dc3-4b51-497a-a614-d9034a3244a2": 0,
+"simplify:531a491d-17f0-414b-bc44-c2fa4f3f8f09": 0,
 "simplify:54de568b-e42f-497c-b9c2-77927e5e338f": 0,
+"simplify:576b979b-5662-44cb-a8ba-a25adc3fbdf1": 0,
+"simplify:5d8b5a71-c3cc-4f5f-b6ca-c6784175532c": 0,
 "simplify:606c64dc-f35a-44e7-a1d2-74e2b99d8fd8": 0,
 "simplify:6748ee09-8ba9-42eb-a423-934641666a7c": 1797618540,
 "simplify:6b1eaa5d-98a1-4f76-bc2d-7e99beb87572": 0,
+"simplify:6f68ae24-002f-4c1a-9481-237226b8224a": 0,
+"simplify:71ef84ba-69f2-4413-9b83-712ab2b91299": 0,
 "simplify:724d8d28-ef8b-46f7-ba87-c388f6f3c296": 0,
 "simplify:7463809a-409b-4ae8-925c-bc370d1626ed": 0,
 "simplify:751bdabd-e853-41ef-9842-6f7d92883fd9": 0,
 "simplify:75359d3c-071a-4952-b187-7bdc22a0f482": 0,
+"simplify:76493083-8144-4671-8730-436be1cbd186": 0,
 "simplify:7766a454-005e-4e27-8359-8572fd17712f": 0,
 "simplify:77908349-6d07-4a91-b136-136a9a8ec5ba": 0,
 "simplify:793b7566-ea82-4894-b777-45367504c6c4": 0,
 "simplify:79c63349-953a-4d76-82a2-2c01a95745f7": 0,
+"simplify:7dcaed62-38da-41f4-9f67-549f034babfe": 0,
 "simplify:899ceff5-26e3-46f7-ab8d-a9703c3ae26d": 1796149740,
+"simplify:8ba99fbd-63b7-40d0-a543-94677e208bdd": 0,
 "simplify:8ce53ad1-615a-4bd5-83f3-e14b8358c09c": 0,
 "simplify:8e3d3b72-2402-4196-badd-1a8e2e39f38a": 0,
 "simplify:8eb1a21e-c57a-44e4-a936-098c9e7c642a": 0,
@@ -55,23 +73,36 @@
 "simplify:aadac344-466b-49c1-9edf-8e0bbb15a85d": 0,
 "simplify:abe940a9-ab2d-4ad8-a09c-c78904056271": 0,
 "simplify:ae65d281-ff4a-4a87-abaf-19df4cf4a628": 0,
+"simplify:ae87e9d7-6095-4858-ad45-3e454d66d799": 0,
 "simplify:b0ce7f24-559f-4b1c-bed2-b832cc9c2944": 0,
 "simplify:b192313c-9892-4f12-9f02-51fa773a14d9": 0,
 "simplify:b350f641-a0d1-4539-b545-8c26a0ad9fa7": 0,
 "simplify:b4ef0d6c-f65b-48c0-b030-61b50a0eb09b": 0,
+"simplify:b66027f1-689f-4530-b06b-17bd7dffbfb7": 1796063340,
+"simplify:b80c73b2-8965-4d66-bb3b-ade96bd3a1f3": 0,
 "simplify:ba23165e-e66d-4e52-90f4-9e640cdb5325": 0,
 "simplify:bee8e5de-03d0-4cf7-9457-e9ec51642c89": 0,
 "simplify:c069db03-8351-4057-bd8c-ad4c630ac0e6": 0,
+"simplify:c1b6a336-1f07-4e77-9682-cdb74fad5b71": 0,
+"simplify:c267ac77-cf36-46c9-8ade-0c7e564d152e": 0,
 "simplify:c9a8405e-a813-4db7-a08e-18e55bae5e72": 0,
+"simplify:cb73caee-cfcf-48a6-a1a2-363dbcaf57d5": 0,
+"simplify:cf9000e5-12f7-4f27-8411-ea80f63beb57": 0,
+"simplify:d351a269-c79d-416c-8fab-f91ef363ddee": 0,
 "simplify:d5a4e4de-19f7-4b33-af36-7e2512eefca5": 0,
 "simplify:d9d64ad1-bfcf-465d-90e1-bad73dcb61da": 0,
+"simplify:da18a6f1-1675-4ee9-addf-e819685c6b7e": 0,
 "simplify:da95f3d5-7184-4537-9adc-647349c0c2a4": 0,
 "simplify:e0a4ae5b-f142-4d19-802f-89beac33b2da": 0,
 "simplify:e36780ca-625f-4558-8501-fa2649791b6c": 0,
 "simplify:e9d0a2c4-44d9-4b28-bc49-eee5040711c2": 0,
+"simplify:eb20cf0f-e882-4371-8d02-39c616e9fd04": 0,
+"simplify:eb2140d4-c14b-41d4-b79a-7ead14815c8f": 0,
 "simplify:eb73aa5b-7e0b-476a-9743-38e423cae3f3": 0,
 "simplify:f1e8f352-3cfb-4c29-aed1-c4c57d3bdb5d": 0,
+"simplify:f515d91f-94a1-48f5-b594-661d2e768029": 1796063340,
 "simplify:f5c0fd6f-a358-4c5b-8523-ec698800634b": 0,
+"simplify:f7c4221f-6c64-4799-8157-8a32799d7e85": 0,
 "simplify:f830fea0-864e-4afe-80e7-419b5b9a9d6c": 0
 },
 "digest_queue": [
@@ -471,6 +502,751 @@
 "title": "Vehicle Access System Engineering Intern - Advanced EV",
 "url": "https://efds.fa.em5.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/74636"
 }
+},
+{
+"ev": {
+"bucket": "other_us",
+"loc": "Newark, CA",
+"reasons": [
+"matches your machine learning, ai"
+],
+"score": 70,
+"tags": [],
+"term_known": true
+},
+"job": {
+"_raw_id": "23c15372-9632-404c-a541-af54e55a15f8",
+"category": "AI/ML/Data",
+"company": "Lucid Motors",
+"degrees": [
+"Bachelor's",
+"Master's"
+],
+"id": "simplify:23c15372-9632-404c-a541-af54e55a15f8",
+"locations": [
+"Newark, CA"
+],
+"posted": 1795130683,
+"remote": false,
+"source": "Simplify",
+"sponsorship": "Other",
+"stipend": null,
+"terms": [
+"Summer 2027"
+],
+"title": "AI & Data Intern - Applied AI/Machine Learning",
+"url": "https://lucidmotors.com/careers/search/5290919007?gh_jid=5290919007"
+}
+},
+{
+"ev": {
+"bucket": "other_us",
+"loc": "United States",
+"reasons": [
+"matches your ai"
+],
+"score": 66,
+"tags": [],
+"term_known": true
+},
+"job": {
+"_raw_id": "fe78548c-a1e1-4fcb-a85c-b5c7a51f9274",
+"category": "AI/ML/Data",
+"company": "Honeywell Aerospace",
+"degrees": [
+"Bachelor's",
+"Master's",
+"MBA",
+"PharmD",
+"PhD"
+],
+"id": "simplify:fe78548c-a1e1-4fcb-a85c-b5c7a51f9274",
+"locations": [
+"United States"
+],
+"posted": 1795159701,
+"remote": false,
+"source": "Simplify",
+"sponsorship": "Other",
+"stipend": null,
+"terms": [
+"Summer 2027"
+],
+"title": "AI Software Engineer Intern",
+"url": "https://icfcjb.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/Aerospace/job/119880"
+}
+},
+{
+"ev": {
+"bucket": "other_us",
+"loc": "United States",
+"reasons": [
+"matches your ai"
+],
+"score": 66,
+"tags": [],
+"term_known": true
+},
+"job": {
+"_raw_id": "9c54d364-ad5f-46e0-ba72-7f990d2553c2",
+"category": "AI/ML/Data",
+"company": "Honeywell Aerospace",
+"degrees": [
+"Bachelor's",
+"Master's"
+],
+"id": "simplify:9c54d364-ad5f-46e0-ba72-7f990d2553c2",
+"locations": [
+"United States"
+],
+"posted": 1795159701,
+"remote": false,
+"source": "Simplify",
+"sponsorship": "Other",
+"stipend": null,
+"terms": [
+"Summer 2027"
+],
+"title": "AI Software Engineer Intern",
+"url": "https://icfcjb.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/Aerospace/job/119899"
+}
+},
+{
+"ev": {
+"bucket": "other_us",
+"loc": "Binghamton, NY",
+"reasons": [],
+"score": 62,
+"tags": [],
+"term_known": true
+},
+"job": {
+"_raw_id": "100a3877-0948-435a-a35c-03be89ef5d7f",
+"category": "Software",
+"company": "iA",
+"degrees": [
+"Bachelor's"
+],
+"id": "simplify:100a3877-0948-435a-a35c-03be89ef5d7f",
+"locations": [
+"Binghamton, NY"
+],
+"posted": 1795160325,
+"remote": false,
+"source": "Simplify",
+"sponsorship": "Other",
+"stipend": null,
+"terms": [
+"Summer 2027"
+],
+"title": "Software Development Engineer Intern",
+"url": "https://workforcenow.adp.com/job?cid=93fdfc70-37a2-4cde-ba86-0da4925db4c8&jobId=9200936414429_1"
+}
+},
+{
+"ev": {
+"bucket": "other_us",
+"loc": "United States",
+"reasons": [],
+"score": 62,
+"tags": [],
+"term_known": true
+},
+"job": {
+"_raw_id": "bd33ada7-01d7-4b42-afd3-dbfd56e9010e",
+"category": "Software",
+"company": "Honeywell Aerospace",
+"degrees": [
+"Bachelor's"
+],
+"id": "simplify:bd33ada7-01d7-4b42-afd3-dbfd56e9010e",
+"locations": [
+"United States"
+],
+"posted": 1795159699,
+"remote": false,
+"source": "Simplify",
+"sponsorship": "Other",
+"stipend": null,
+"terms": [
+"Summer 2027"
+],
+"title": "Software Engineer Intern",
+"url": "https://icfcjb.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/Aerospace/job/119718"
+}
+},
+{
+"ev": {
+"bucket": "other_us",
+"loc": "United States",
+"reasons": [],
+"score": 62,
+"tags": [],
+"term_known": true
+},
+"job": {
+"_raw_id": "99b77642-45fa-477e-ad57-b2d678bf2086",
+"category": "Software",
+"company": "Honeywell Aerospace",
+"degrees": [
+"Bachelor's",
+"Master's",
+"PhD"
+],
+"id": "simplify:99b77642-45fa-477e-ad57-b2d678bf2086",
+"locations": [
+"United States"
+],
+"posted": 1795159699,
+"remote": false,
+"source": "Simplify",
+"sponsorship": "Other",
+"stipend": null,
+"terms": [
+"Summer 2027"
+],
+"title": "Software Engineer Intern",
+"url": "https://icfcjb.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/Aerospace/job/119821"
+}
+},
+{
+"ev": {
+"bucket": "other_us",
+"loc": "United States",
+"reasons": [],
+"score": 62,
+"tags": [],
+"term_known": true
+},
+"job": {
+"_raw_id": "6c63d83e-2427-4ab6-93a3-4e4f765cb782",
+"category": "AI/ML/Data",
+"company": "Honeywell Aerospace",
+"degrees": [
+"Bachelor's",
+"Master's",
+"PhD"
+],
+"id": "simplify:6c63d83e-2427-4ab6-93a3-4e4f765cb782",
+"locations": [
+"United States"
+],
+"posted": 1795159699,
+"remote": false,
+"source": "Simplify",
+"sponsorship": "Other",
+"stipend": null,
+"terms": [
+"Summer 2027"
+],
+"title": "Information Systems Data Science Intern - IT",
+"url": "https://icfcjb.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/Aerospace/job/120471"
+}
+},
+{
+"ev": {
+"bucket": "other_us",
+"loc": "United States",
+"reasons": [],
+"score": 62,
+"tags": [],
+"term_known": true
+},
+"job": {
+"_raw_id": "9ca75007-6dfd-46bb-a091-0b6ec78828a7",
+"category": "AI/ML/Data",
+"company": "Honeywell Aerospace",
+"degrees": [
+"Bachelor's"
+],
+"id": "simplify:9ca75007-6dfd-46bb-a091-0b6ec78828a7",
+"locations": [
+"United States"
+],
+"posted": 1795159698,
+"remote": false,
+"source": "Simplify",
+"sponsorship": "Other",
+"stipend": null,
+"terms": [
+"Summer 2027"
+],
+"title": "Information Systems Data Science Intern",
+"url": "https://icfcjb.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/Aerospace/job/120238"
+}
+},
+{
+"ev": {
+"bucket": "other_us",
+"loc": "Idaho Falls, ID",
+"reasons": [],
+"score": 62,
+"tags": [],
+"term_known": true
+},
+"job": {
+"_raw_id": "d263736b-e32b-4826-90b6-26e21a6d1a7d",
+"category": "Software",
+"company": "Melaleuca",
+"degrees": [
+"Bachelor's"
+],
+"id": "simplify:d263736b-e32b-4826-90b6-26e21a6d1a7d",
+"locations": [
+"Idaho Falls, ID"
+],
+"posted": 1795159028,
+"remote": false,
+"source": "Simplify",
+"sponsorship": "Other",
+"stipend": null,
+"terms": [
+"Summer 2027"
+],
+"title": "Software Development Intern",
+"url": "https://recruiting2.ultipro.com/MEL1001MEL/JobBoard/d5ffce96-7247-41c4-831b-454b3454c233/OpportunityDetail?opportunityId=da1623df-5176-4008-9b62-c1c59dda63bf"
+}
+},
+{
+"ev": {
+"bucket": "remote",
+"loc": "Remote (India)",
+"reasons": [
+"matches your javascript, mysql, full stack"
+],
+"score": 61,
+"tags": [
+"dates not stated - check"
+],
+"term_known": false
+},
+"job": {
+"company": "Wonderkids.club",
+"id": "internshala:3337830",
+"india_only": true,
+"locations": [
+"Remote (India)"
+],
+"posted": null,
+"remote": true,
+"source": "Internshala",
+"sponsorship": null,
+"stipend": "\u20b9 6,000 /month",
+"terms": [],
+"title": "Full Stack Development",
+"url": "https://internshala.com/internship/detail/work-from-home-full-stack-development-internship-at-wonderkidsclub1795151999"
+}
+},
+{
+"ev": {
+"bucket": "remote",
+"loc": "Remote (India)",
+"reasons": [
+"matches your python, java, react"
+],
+"score": 61,
+"tags": [
+"dates not stated - check"
+],
+"term_known": false
+},
+"job": {
+"company": "TEN",
+"id": "internshala:3337825",
+"india_only": true,
+"locations": [
+"Remote (India)"
+],
+"posted": null,
+"remote": true,
+"source": "Internshala",
+"sponsorship": null,
+"stipend": "\u20b9 2,000 /month",
+"terms": [],
+"title": "Software Development",
+"url": "https://internshala.com/internship/detail/work-from-home-software-development-internship-at-ten1795151268"
+}
+},
+{
+"ev": {
+"bucket": "remote",
+"loc": "Remote (India)",
+"reasons": [
+"matches your machine learning, ai"
+],
+"score": 61,
+"tags": [
+"dates not stated - check"
+],
+"term_known": false
+},
+"job": {
+"company": "Unessa Foundation",
+"id": "internshala:3332804",
+"india_only": true,
+"locations": [
+"Remote (India)"
+],
+"posted": null,
+"remote": true,
+"source": "Internshala",
+"sponsorship": null,
+"stipend": "\u20b9 2,000 - 5,000 /month",
+"terms": [],
+"title": "Artificial Intelligence (AI)",
+"url": "https://internshala.com/internship/detail/work-from-home-artificial-intelligence-ai-internship-at-unessa-foundation1794471217"
+}
+},
+{
+"ev": {
+"bucket": "remote",
+"loc": "Remote (India)",
+"reasons": [
+"matches your ai"
+],
+"score": 57,
+"tags": [
+"dates not stated - check"
+],
+"term_known": false
+},
+"job": {
+"company": "Renan Partners",
+"id": "internshala:3337815",
+"india_only": true,
+"locations": [
+"Remote (India)"
+],
+"posted": null,
+"remote": true,
+"source": "Internshala",
+"sponsorship": null,
+"stipend": "\u20b9 5,000 /month",
+"terms": [],
+"title": "AI Voice Training & Transcription - Hindi",
+"url": "https://internshala.com/internship/detail/work-from-home-ai-voice-training-transcription-hindi-internship-at-renan-partners1795157378"
+}
+},
+{
+"ev": {
+"bucket": "other_us",
+"loc": "Missoula, MT",
+"reasons": [
+"matches your ai"
+],
+"score": 56,
+"tags": [
+"dates not stated - check"
+],
+"term_known": false
+},
+"job": {
+"_raw_id": "b0cd14b7-c677-4221-b6fb-e7a8d7035eff",
+"category": "Software",
+"company": "Pathlabs",
+"degrees": [],
+"id": "simplify:b0cd14b7-c677-4221-b6fb-e7a8d7035eff",
+"locations": [
+"Missoula, MT"
+],
+"posted": 1795141335,
+"remote": false,
+"source": "Simplify",
+"sponsorship": "Other",
+"stipend": null,
+"terms": [],
+"title": "Software and AI Engineer Intern",
+"url": "https://pathlabs.applytojob.com/apply/qW73dwA0iS/Software-And-AI-Engineering-Intern"
+}
+},
+{
+"ev": {
+"bucket": "other_us",
+"loc": "Middleborough, MA",
+"reasons": [],
+"score": 52,
+"tags": [
+"dates not stated - check"
+],
+"term_known": false
+},
+"job": {
+"_raw_id": "a4da6180-6f78-4f2c-ac8b-f1d23a467b3b",
+"category": "Software",
+"company": "REXA",
+"degrees": [
+"Bachelor's"
+],
+"id": "simplify:a4da6180-6f78-4f2c-ac8b-f1d23a467b3b",
+"locations": [
+"Middleborough, MA"
+],
+"posted": 1795161554,
+"remote": false,
+"source": "Simplify",
+"sponsorship": "Other",
+"stipend": null,
+"terms": [],
+"title": "Software Engineer Intern",
+"url": "https://rexa.bamboohr.com/careers/134/"
+}
+},
+{
+"ev": {
+"bucket": "other_us",
+"loc": "Newark, OH",
+"reasons": [],
+"score": 52,
+"tags": [
+"dates not stated - check"
+],
+"term_known": false
+},
+"job": {
+"_raw_id": "86b2ddaa-e714-4fae-b3b3-de800fe55b2f",
+"category": "AI/ML/Data",
+"company": "Park National Bank",
+"degrees": [
+"Associate's"
+],
+"id": "simplify:86b2ddaa-e714-4fae-b3b3-de800fe55b2f",
+"locations": [
+"Newark, OH"
+],
+"posted": 1795160715,
+"remote": false,
+"source": "Simplify",
+"sponsorship": "Other",
+"stipend": null,
+"terms": [],
+"title": "Data Engineering/Data Science Intern",
+"url": "https://recruiting.ultipro.com/par1025pnatb/JobBoard/78198a68-8e94-4f76-b970-3a27214b2ee3/OpportunityDetail?opportunityId=06b7fd8f-690d-4645-a0ff-a1900cef7bb1"
+}
+},
+{
+"ev": {
+"bucket": "other_us",
+"loc": "Covington, OH",
+"reasons": [],
+"score": 52,
+"tags": [
+"dates not stated - check"
+],
+"term_known": false
+},
+"job": {
+"_raw_id": "7a1cd48c-673b-4540-99e2-41bf53c586d4",
+"category": "Software",
+"company": "Marias Technology",
+"degrees": [
+"Bachelor's",
+"Associate's"
+],
+"id": "simplify:7a1cd48c-673b-4540-99e2-41bf53c586d4",
+"locations": [
+"Covington, OH"
+],
+"posted": 1795159863,
+"remote": false,
+"source": "Simplify",
+"sponsorship": "Other",
+"stipend": null,
+"terms": [],
+"title": "Software Developer Intern",
+"url": "https://mariastechnology.bamboohr.com/careers/27/"
+}
+},
+{
+"ev": {
+"bucket": "other_us",
+"loc": "Somerville, MA",
+"reasons": [],
+"score": 47,
+"tags": [],
+"term_known": true
+},
+"job": {
+"_raw_id": "6088d4cc-1e5f-4495-8f41-33af9ea62bde",
+"category": "Software",
+"company": "Formlabs",
+"degrees": [],
+"id": "simplify:6088d4cc-1e5f-4495-8f41-33af9ea62bde",
+"locations": [
+"Somerville, MA"
+],
+"posted": 1795134860,
+"remote": false,
+"source": "Simplify",
+"sponsorship": "Other",
+"stipend": null,
+"terms": [
+"Summer 2027"
+],
+"title": "API & Automation Intern",
+"url": "https://careers.formlabs.com/job/8400855/apply/?gh_jid=8400855"
+}
+},
+{
+"ev": {
+"bucket": "other_us",
+"loc": "Minneapolis, MN",
+"reasons": [],
+"score": 47,
+"tags": [],
+"term_known": true
+},
+"job": {
+"_raw_id": "8ba99fbd-63b7-40d0-a543-94677e208bdd",
+"category": "AI/ML/Data",
+"company": "Piper Sandler",
+"degrees": [
+"Bachelor's"
+],
+"id": "simplify:8ba99fbd-63b7-40d0-a543-94677e208bdd",
+"locations": [
+"Minneapolis, MN"
+],
+"posted": 1795046400,
+"remote": false,
+"source": "Simplify",
+"sponsorship": "Other",
+"stipend": null,
+"terms": [
+"Summer 2027"
+],
+"title": "Data Engineering Intern",
+"url": "https://pipersandler.wd501.myworkdayjobs.com/Piper_Sandler_Careers/job/Minneapolis-MN---HQ/XMLNAME-2027-Summer-Internship-Program---Data-Engineering_R-100805"
+}
+},
+{
+"ev": {
+"bucket": "remote",
+"loc": "Remote (India)",
+"reasons": [
+"matches your python, rest, machine learning"
+],
+"score": 46,
+"tags": [
+"dates not stated - check"
+],
+"term_known": false
+},
+"job": {
+"company": "EvoNexis",
+"id": "internshala:3337849",
+"india_only": true,
+"locations": [
+"Remote (India)"
+],
+"posted": null,
+"remote": true,
+"source": "Internshala",
+"sponsorship": null,
+"stipend": "\u20b9 12,000 - 24,000 /month",
+"terms": [],
+"title": "Python Development",
+"url": "https://internshala.com/internship/detail/work-from-home-python-development-internship-at-evonexis1795153519"
+}
+},
+{
+"ev": {
+"bucket": "remote",
+"loc": "Remote (India)",
+"reasons": [
+"matches your python, javascript, backend"
+],
+"score": 46,
+"tags": [
+"dates not stated - check"
+],
+"term_known": false
+},
+"job": {
+"company": "BiteTech Technologies",
+"id": "internshala:3327861",
+"india_only": true,
+"locations": [
+"Remote (India)"
+],
+"posted": null,
+"remote": true,
+"source": "Internshala",
+"sponsorship": null,
+"stipend": "\u20b9 1,050 - 1,101 /month",
+"terms": [],
+"title": "Python Development",
+"url": "https://internshala.com/internship/detail/work-from-home-part-time-python-development-internship-at-bitetech-technologies1795146372"
+}
+},
+{
+"ev": {
+"bucket": "other_us",
+"loc": "Waynesboro, MS",
+"reasons": [
+"matches your ai"
+],
+"score": 44,
+"tags": [
+"dates not stated - check"
+],
+"term_known": false
+},
+"job": {
+"_raw_id": "2f0708e4-8365-497f-9fd5-cd1b2e6babcc",
+"category": "AI/ML/Data",
+"company": "Southern Mississippi Trading",
+"degrees": [
+"Bachelor's"
+],
+"id": "simplify:2f0708e4-8365-497f-9fd5-cd1b2e6babcc",
+"locations": [
+"Waynesboro, MS"
+],
+"posted": 1795142351,
+"remote": false,
+"source": "Simplify",
+"sponsorship": "Other",
+"stipend": null,
+"terms": [],
+"title": "AI and Business Analytics Intern",
+"url": "https://southernmississippitradingllc.applytojob.com/apply/jIkpJ1ZhDo/AI-Business-Analytics-Intern"
+}
+},
+{
+"ev": {
+"bucket": "other_us",
+"loc": "Newark, CA",
+"reasons": [],
+"score": 42,
+"tags": [
+"co-op may run past September"
+],
+"term_known": true
+},
+"job": {
+"_raw_id": "8cf12030-dee3-49e9-baaa-ea5dfb834537",
+"category": "Software",
+"company": "Lucid Motors",
+"degrees": [
+"Bachelor's",
+"Master's"
+],
+"id": "simplify:8cf12030-dee3-49e9-baaa-ea5dfb834537",
+"locations": [
+"Newark, CA"
+],
+"posted": 1795138046,
+"remote": false,
+"source": "Simplify",
+"sponsorship": "Other",
+"stipend": null,
+"terms": [
+"Summer 2027",
+"Fall 2027"
+],
+"title": "Infotainment Software Intern",
+"url": "https://lucidmotors.com/careers/search/5290921007?gh_jid=5290921007"
+}
 }
 ],
 "last_digest": null,
@@ -491,6 +1267,7 @@
 "internshala:3326451": 1795096978.5146687,
 "internshala:3327029": 1795096978.5146687,
 "internshala:3327273": 1795096978.5146687,
+"internshala:3327861": 1795165651.874306,
 "internshala:3328033": 1795096978.5146687,
 "internshala:3329588": 1795096978.5146687,
 "internshala:3329688": 1795096978.5146687,
@@ -511,6 +1288,7 @@
 "internshala:3331947": 1795096978.5146687,
 "internshala:3332213": 1795096978.5146687,
 "internshala:3332556": 1795096978.5146687,
+"internshala:3332804": 1795165651.874306,
 "internshala:3332924": 1795096978.5146687,
 "internshala:3332988": 1795096978.5146687,
 "internshala:3333173": 1795096978.5146687,
@@ -585,6 +1363,7 @@
 "internshala:3337395": 1795096978.5146687,
 "internshala:3337403": 1795096978.5146687,
 "internshala:3337407": 1795096978.5146687,
+"internshala:3337416": 1795165651.874306,
 "internshala:3337426": 1795096978.5146687,
 "internshala:3337430": 1795096978.5146687,
 "internshala:3337435": 1795096978.5146687,
@@ -598,6 +1377,11 @@
 "internshala:3337546": 1795096978.5146687,
 "internshala:3337564": 1795096978.5146687,
 "internshala:3337666": 1795117049.4749043,
+"internshala:3337815": 1795165651.874306,
+"internshala:3337825": 1795165651.874306,
+"internshala:3337830": 1795165651.874306,
+"internshala:3337849": 1795165651.874306,
+"internshala:3337851": 1795165651.874306,
 "lever:palantir:130ee501-bd22-4d44-b651-39581ef97743": 1795096978.5146687,
 "lever:palantir:45e4617d-d658-4b30-8dc9-378ca84a027a": 1795096978.5146687,
 "lever:palantir:b3d81928-6c26-432f-8a0a-36602c2eefcb": 1795096978.5146687,
@@ -665,6 +1449,7 @@
 "simplify:0f772ef3-bf68-469c-8f4e-85239e83014d": 1795096978.5146687,
 "simplify:0fafd493-8e5a-4e86-87ae-617311283122": 1795096978.5146687,
 "simplify:0fb5cd0a-2141-450b-b5c0-d7a1d71036dd": 1795096978.5146687,
+"simplify:100a3877-0948-435a-a35c-03be89ef5d7f": 1795165651.874306,
 "simplify:10418cfa-4ae1-4f7a-8a52-bb2d1772ad29": 1795096978.5146687,
 "simplify:107f6694-f8a2-45ff-bb58-e77552dc317c": 1795096978.5146687,
 "simplify:1099db4b-84db-44c0-abbd-4f3675aaf6e0": 1795096978.5146687,
@@ -735,6 +1520,7 @@
 "simplify:23656e12-b4f7-407c-aa31-bfc1c7f3a9f9": 1795096978.5146687,
 "simplify:23a3d989-578b-45f2-9c26-fa183ae2e6d1": 1795096978.5146687,
 "simplify:23a5a6a6-47fc-41cf-8936-946b702be2cd": 1795096978.5146687,
+"simplify:23c15372-9632-404c-a541-af54e55a15f8": 1795165651.874306,
 "simplify:23e36426-bb74-4b8d-9baa-51a102571c69": 1795096978.5146687,
 "simplify:23f42855-d656-4288-b470-cbc2fb8f3bbd": 1795096978.5146687,
 "simplify:24381402-1346-48ef-9e6d-909cd81ca7d5": 1795096978.5146687,
@@ -767,6 +1553,7 @@
 "simplify:2e35f7c5-6439-4055-8645-1f6e1035fcd6": 1795096978.5146687,
 "simplify:2e8bb17d-0726-4482-af62-5f868bede92c": 1795096978.5146687,
 "simplify:2ed5af7a-589d-4925-a790-0008c9fafa02": 1795096978.5146687,
+"simplify:2f0708e4-8365-497f-9fd5-cd1b2e6babcc": 1795165651.874306,
 "simplify:2f39b3db-1163-4648-abef-3fd3387c0ea2": 1795096978.5146687,
 "simplify:2f4c5900-989e-4b19-afdd-c5d973e9b552": 1795096978.5146687,
 "simplify:2f66f3c8-4ff6-4ae9-a40e-ab8552e65340": 1795096978.5146687,
@@ -975,6 +1762,7 @@
 "simplify:5fe56478-a22c-43a2-aed6-425c37548138": 1795096978.5146687,
 "simplify:60174f6d-1cb4-49c4-93db-3cf3d5dc9382": 1795096978.5146687,
 "simplify:60881082-3930-422a-9543-38028c8e9208": 1795096978.5146687,
+"simplify:6088d4cc-1e5f-4495-8f41-33af9ea62bde": 1795165651.874306,
 "simplify:6090cee5-4298-4248-b6a0-246ffc8c6b0c": 1795096978.5146687,
 "simplify:60ab7a67-de85-40c1-889d-104e6d6019cd": 1795096978.5146687,
 "simplify:60be7de4-e01f-4279-9e3b-cbba3d97c638": 1795096978.5146687,
@@ -1025,6 +1813,7 @@
 "simplify:6be1a997-592a-4fed-98f8-f00887837e03": 1795096978.5146687,
 "simplify:6c0be2d1-eac9-429a-b900-df719577d679": 1795096978.5146687,
 "simplify:6c623df8-7d81-4f90-be6f-b3fdde876280": 1795096978.5146687,
+"simplify:6c63d83e-2427-4ab6-93a3-4e4f765cb782": 1795165651.874306,
 "simplify:6cba10bd-bcb9-4b0c-834b-31c33c3e5125": 1795096978.5146687,
 "simplify:6d3f5916-cf7c-49e6-a3dc-a48791bec4fd": 1795096978.5146687,
 "simplify:6d5015af-faac-4bea-9f05-f7226b20c046": 1795096978.5146687,
@@ -1085,6 +1874,7 @@
 "simplify:78f881bd-6ece-4393-aaf1-e81fd8596d88": 1795096978.5146687,
 "simplify:793b7566-ea82-4894-b777-45367504c6c4": 1795096978.5146687,
 "simplify:7a19de96-0ecf-4c4f-abe0-dfc8d77f507b": 1795096978.5146687,
+"simplify:7a1cd48c-673b-4540-99e2-41bf53c586d4": 1795165651.874306,
 "simplify:7a3479e6-fa2c-40d9-b917-c42922bfeaf1": 1795096978.5146687,
 "simplify:7a4c54a2-858e-4678-90f3-93bba7644c52": 1795096978.5146687,
 "simplify:7a58365b-0d72-4b0c-8094-fa29ec18b560": 1795096978.5146687,
@@ -1155,6 +1945,7 @@
 "simplify:863b9318-7dc6-4e18-822b-2b7d47e49c64": 1795096978.5146687,
 "simplify:866c4ff4-bf23-4584-8728-27a04027ccb1": 1795096978.5146687,
 "simplify:86741bed-09a2-4ca8-b7f9-be2c6f5019d1": 1795096978.5146687,
+"simplify:86b2ddaa-e714-4fae-b3b3-de800fe55b2f": 1795165651.874306,
 "simplify:86e907c2-6aef-4071-ae6c-20a9c6b7306c": 1795096978.5146687,
 "simplify:870cc93e-557c-4662-95bf-2cf7b7e1fbb3": 1795096978.5146687,
 "simplify:871b6c2e-2fc6-4cd0-a15a-f6678513e85c": 1795096978.5146687,
@@ -1177,6 +1968,7 @@
 "simplify:8b95003b-f01d-4d6b-a4d2-1e4c6d890df5": 1795096978.5146687,
 "simplify:8b95518e-7880-4858-a78a-07273d000e53": 1795096978.5146687,
 "simplify:8b98f33d-21b5-4ae4-af04-3b7378193f39": 1795096978.5146687,
+"simplify:8ba99fbd-63b7-40d0-a543-94677e208bdd": 1795165651.874306,
 "simplify:8bab5dd2-9265-4515-b6ba-b4ca2af51a80": 1795096978.5146687,
 "simplify:8becf5e4-874b-49a7-bc91-15d24c4e5d6f": 1795096978.5146687,
 "simplify:8c2d4fa4-d2b6-4ca2-bf92-4bbd38e700d1": 1795096978.5146687,
@@ -1185,6 +1977,7 @@
 "simplify:8c8a1f21-e711-48d0-8cec-601018138920": 1795096978.5146687,
 "simplify:8cd5b581-53c6-4c6a-88c2-b61b04039976": 1795096978.5146687,
 "simplify:8ce107ef-76f8-4eb0-8088-c8fbdc876812": 1795096978.5146687,
+"simplify:8cf12030-dee3-49e9-baaa-ea5dfb834537": 1795165651.874306,
 "simplify:8d8ac70c-4524-4e6c-abd0-378889133e68": 1795096978.5146687,
 "simplify:8e36309e-1871-4c3f-81fb-4637169e02c5": 1795096978.5146687,
 "simplify:8e77f653-a96d-4c5f-abc0-06ffb62f8a73": 1795096978.5146687,
@@ -1232,6 +2025,7 @@
 "simplify:98a4f1e7-ff51-4d1a-9395-cf93c25f6f14": 1795096978.5146687,
 "simplify:98ba4abf-1726-45e5-a03c-c711dfb81c84": 1795096978.5146687,
 "simplify:99625c56-8f56-42c3-a5d9-6eb33cfa33fa": 1795096978.5146687,
+"simplify:99b77642-45fa-477e-ad57-b2d678bf2086": 1795165651.874306,
 "simplify:99d9f40c-43fa-4ed7-9813-99c784ef3e43": 1795096978.5146687,
 "simplify:9a6bfc62-3b30-4eb9-ae60-710c5f62d722": 1795096978.5146687,
 "simplify:9ab28903-ae46-4bfe-9491-da387c3a1628": 1795096978.5146687,
@@ -1240,7 +2034,9 @@
 "simplify:9b0a00f8-306d-4f85-be43-6b438422bb5c": 1795096978.5146687,
 "simplify:9b6715cc-7d85-49b5-8e81-d4623e296d95": 1795096978.5146687,
 "simplify:9c3549d6-12b9-488c-9b34-de7b9deb3d97": 1795096978.5146687,
+"simplify:9c54d364-ad5f-46e0-ba72-7f990d2553c2": 1795165651.874306,
 "simplify:9ca48e9a-a09b-4300-802e-47d9b4466d99": 1795096978.5146687,
+"simplify:9ca75007-6dfd-46bb-a091-0b6ec78828a7": 1795165651.874306,
 "simplify:9cb9b3d0-14d5-47cb-bd55-ce2ce7c5213e": 1795096978.5146687,
 "simplify:9cbd92a5-bad6-41d7-b1ee-fb170ceb8a49": 1795096978.5146687,
 "simplify:9cd21651-921e-42a7-a95f-01b1f4bea964": 1795096978.5146687,
@@ -1265,6 +2061,7 @@
 "simplify:a1f44bba-d5c1-4c7c-ac07-e78ab47ee7a5": 1795096978.5146687,
 "simplify:a2fe1cc0-aff1-49f6-bc73-fc65ecaa526f": 1795096978.5146687,
 "simplify:a31cdf39-a527-48df-95d0-b048ca50228e": 1795096978.5146687,
+"simplify:a4da6180-6f78-4f2c-ac8b-f1d23a467b3b": 1795165651.874306,
 "simplify:a52db0c1-d350-4198-a39f-785d617afe4e": 1795096978.5146687,
 "simplify:a56c3be4-35d8-45ca-a8f7-c98206f9e105": 1795096978.5146687,
 "simplify:a57d347e-4ce0-4590-bf80-9368dd106660": 1795096978.5146687,
@@ -1317,6 +2114,7 @@
 "simplify:b058e4f4-66d1-4259-8983-1c888392410d": 1795096978.5146687,
 "simplify:b07a5da6-2c9f-4bf1-bf90-18ffff8232ae": 1795096978.5146687,
 "simplify:b0b20473-ab96-400f-adc1-7e807c7e6e46": 1795096978.5146687,
+"simplify:b0cd14b7-c677-4221-b6fb-e7a8d7035eff": 1795165651.874306,
 "simplify:b11dddb4-7bc4-4864-8ee8-ab5d5bb12c9a": 1795096978.5146687,
 "simplify:b1897deb-37b0-4282-a948-8d6248118a62": 1795096978.5146687,
 "simplify:b18ff132-aa14-44b4-be12-11abaa64b110": 1795096978.5146687,
@@ -1372,6 +2170,7 @@
 "simplify:bbe59360-d6e5-4189-9126-da097b9c93c6": 1795096978.5146687,
 "simplify:bc6412bd-7dbe-456e-8c67-d2002acadeaa": 1795096978.5146687,
 "simplify:bcdcec45-2483-4ebd-8b02-b763219eecec": 1795096978.5146687,
+"simplify:bd33ada7-01d7-4b42-afd3-dbfd56e9010e": 1795165651.874306,
 "simplify:bdd3a0f8-3d9c-4fba-9550-fba440691018": 1795096978.5146687,
 "simplify:bdf30f76-458b-4527-9924-6423f7c5ebd4": 1795096978.5146687,
 "simplify:be4332c5-d83a-4a08-8665-0ca7425c43ad": 1795096978.5146687,
@@ -1474,6 +2273,7 @@
 "simplify:d1904255-ff24-4a54-948f-1b66a6a7a370": 1795096978.5146687,
 "simplify:d1a00b5b-0da8-4b04-9e89-3f259a701ce6": 1795096978.5146687,
 "simplify:d1eb886b-0de3-4b44-a75f-e5b3c10bdb23": 1795096978.5146687,
+"simplify:d263736b-e32b-4826-90b6-26e21a6d1a7d": 1795165651.874306,
 "simplify:d264e688-c953-468e-a492-487e9683cb63": 1795096978.5146687,
 "simplify:d27ce4c9-b5bf-4de0-a7f5-2e540532f643": 1795096978.5146687,
 "simplify:d2f0c44e-b2d5-4ab2-ad1e-7991506e8027": 1795096978.5146687,
@@ -1666,6 +2466,7 @@
 "simplify:fd1af9f8-2356-4f0f-b005-ab9f523e4e24": 1795096978.5146687,
 "simplify:fdd7e7ec-c300-4a26-931c-56c3adc48425": 1795096978.5146687,
 "simplify:fe2aa5c1-8e60-4174-9040-300739ee7ebc": 1795096978.5146687,
+"simplify:fe78548c-a1e1-4fcb-a85c-b5c7a51f9274": 1795165651.874306,
 "simplify:fe8fd0a0-0ded-47c1-8bba-8ac16fdd2926": 1795096978.5146687,
 "simplify:fef80be2-32b2-45c7-8fd7-acdeba3b2295": 1795096978.5146687,
 "simplify:fefe3900-bf9a-4fe1-8ede-259288aed3e1": 1795096978.5146687,
@@ -1679,10 +2480,10 @@
 },
 "source_counts": {
 "internshala": {
-"last_ok": 1795138094.490462
+"last_ok": 1795165651.874306
 },
 "simplify": {
-"last_ok": 1795138094.490462
+"last_ok": 1795165651.874306
 }
 },
 "warned": {}
