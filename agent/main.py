@@ -38,7 +38,8 @@ def load_state():
 def save_state(st):
     cutoff = time.time() - 150 * 86400
     st["seen"] = {k: v for k, v in st["seen"].items() if v > cutoff}
-    st["first_seen"] = {k: v for k, v in st.get("first_seen", {}).items() if v > cutoff}
+    live = st.pop("_live", set())         # listings still up keep their date however old it is
+    st["first_seen"] = {k: v for k, v in st.get("first_seen", {}).items() if k in live or v > cutoff}
     st["alerted"] = {k: v for k, v in st.get("alerted", {}).items() if v > cutoff}
     STATE.parent.mkdir(exist_ok=True)
     STATE.write_text(json.dumps(st, indent=0, sort_keys=True))
@@ -98,8 +99,15 @@ def track_first_seen(jobs, matched, st):
             for k in [k for k, v in alerted.items() if int(v) == ts]:
                 del alerted[k]
         st["alerted_fix1"] = True
+    if not st.get("first_seen_fix1"):
+        # an earlier version dropped old dates on save, so long-listed roles were re-stamped as new once
+        for j in jobs:
+            if j.get("posted") and fs.get(j["id"], 0) - j["posted"] > 30 * 86400:
+                fs[j["id"]] = int(j["posted"])
+        st["first_seen_fix1"] = True
     for j in jobs:
         fs.setdefault(j["id"], int(now))
+    st["_live"] = {j["id"] for j in jobs}
 
 
 def export_jobs(jobs, evs, st, closes=None):
