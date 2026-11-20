@@ -175,7 +175,7 @@ export default function Landing() {
     getMeta().then(setMeta).catch(() => {})
     getMap().then((m) => setCities(m.cities)).catch(() => {})
   }, [])
-  const appLink = user ? (profile?.onboarded ? '/app' : '/onboarding') : null
+  const appLink = user ? '/app' : null   // /app sends brand-new accounts to setup by itself
 
   return (
     <div className="landing">

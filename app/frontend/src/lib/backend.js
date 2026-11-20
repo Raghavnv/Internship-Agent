@@ -63,9 +63,11 @@ export async function saveProfile(userId, fields) {
   const clean = Object.fromEntries(Object.entries(fields).filter(([k]) => PROFILE_COLS.includes(k))
     .map(([k, v]) => [k, v === '' ? null : v]))
   let { data, error } = await sb.from('profiles').upsert({ id: userId, ...clean }).select().single()
-  // a column from a newer schema version that hasn't been added yet: save everything else
-  const missing = error && /Could not find the '(\w+)' column/.exec(error.message || '')
-  if (missing && missing[1] in clean) {
+  // columns from newer schema versions that haven't been added yet: drop them one by one and save
+  // everything else, so setup never fails (and never has to be repeated) because of an optional field
+  for (let i = 0; i < 8 && error; i++) {
+    const missing = /Could not find the '(\w+)' column/.exec(error.message || '')
+    if (!missing || !(missing[1] in clean)) break
     delete clean[missing[1]]
     ;({ data, error } = await sb.from('profiles').upsert({ id: userId, ...clean }).select().single())
   }

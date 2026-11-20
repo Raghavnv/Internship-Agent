@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { auth, getProfile } from '../lib/backend.js'
-import { useSession } from '../lib/session.jsx'
+import { useSession, isOnboarded } from '../lib/session.jsx'
 import { Logo } from '../ui.jsx'
 import { getMap, getMeta } from '../lib/api.js'
 import Globe from '../Globe.jsx'
@@ -117,7 +117,7 @@ function Signed({ user, profile }) {
       <h1>You’re already signed in</h1>
       <p className="sub">Signed in as <strong>{name}</strong>{profile?.full_name && user.email ? ` (${user.email})` : ''}.</p>
       <div className="auth-stack">
-        <button type="button" className="btn btn-primary btn-block" onClick={() => nav(profile?.onboarded ? '/app' : '/onboarding')}>
+        <button type="button" className="btn btn-primary btn-block" onClick={() => nav('/app')}>
           Continue to your dashboard
         </button>
         <button type="button" className="btn btn-ghost btn-block" disabled={busy}
@@ -142,7 +142,7 @@ export default function AuthPage({ mode }) {
 
   async function afterLogin(session) {
     const p = await getProfile(session.user.id)
-    nav(p?.onboarded ? '/app' : '/onboarding', { replace: true })
+    nav(isOnboarded(p) ? '/app' : '/onboarding', { replace: true })
   }
 
   async function submit(e) {
