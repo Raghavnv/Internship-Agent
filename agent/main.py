@@ -89,6 +89,15 @@ def track_first_seen(jobs, matched, st):
             if j["id"] in st["seen"]:
                 alerted.setdefault(j["id"], st["seen"][j["id"]])
         st["first_seen_ready"] = True
+    if not st.get("alerted_fix1"):
+        # the very first run marked every match as seen but only sent the top few: don't count that batch
+        from collections import Counter
+        batch = Counter(int(v) for v in st["seen"].values()).most_common(1)
+        if batch and batch[0][1] > 200:
+            ts = batch[0][0]
+            for k in [k for k, v in alerted.items() if int(v) == ts]:
+                del alerted[k]
+        st["alerted_fix1"] = True
     for j in jobs:
         fs.setdefault(j["id"], int(now))
 
