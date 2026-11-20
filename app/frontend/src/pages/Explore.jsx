@@ -93,12 +93,16 @@ export default function Explore() {
   const [err, setErr] = useState('')
   const [showFilters, setShowFilters] = useState(false)
 
+  // Start with nothing filtered out: every listing shows, ranked by how well it fits the profile
+  // (cities and roles already count toward fit). The profile's cities and roles are one click away.
   useEffect(() => {
-    if (profile && locations === null) {
-      setLocations((profile.locations || []).filter((l) => !/^remote$/i.test(l)))
-      setRoles(profile.roles || [])
-    }
+    if (profile && locations === null) { setLocations([]); setRoles([]) }
   }, [profile])
+  // arriving from a link like ?q=Honeywell: show that company's roles, whatever the other filters were
+  useEffect(() => {
+    const q = params.get('q')
+    if (q != null) { setKeyword(q); setLocations([]); setRoles([]); setRemote('any'); setPosted(0); setFitOnly(false) }
+  }, [params.get('q')])
 
   useEffect(() => {
     if (locations === null) return
@@ -140,9 +144,11 @@ export default function Explore() {
     } catch (e) { setErr(e.message) } finally { setMore(false) }
   }
 
-  const reset = () => {
+  const useProfile = () => {
     setLocations((profile?.locations || []).filter((l) => !/^remote$/i.test(l))); setRoles(profile?.roles || [])
-    setKeyword(''); setRemote('any'); setPosted(0); setFitOnly(false)
+  }
+  const reset = () => {
+    setLocations([]); setRoles([]); setKeyword(''); setRemote('any'); setPosted(0); setFitOnly(false)
   }
   const nFilters = (locations?.length ? 1 : 0) + (roles?.length ? 1 : 0) + (remote !== 'any') + (posted ? 1 : 0)
 
@@ -151,7 +157,7 @@ export default function Explore() {
       <header className="page-head">
         <div>
           <h1>Job listings</h1>
-          <p className="sub">Every live internship, filtered your way and ranked by how well it fits you. Select one to read the full description.</p>
+          <p className="sub">Every live internship, ranked by how well it fits you. Narrow it down with the filters, or select one to read the full description.</p>
         </div>
         <RefreshBar onReload={run} />
       </header>
@@ -204,7 +210,8 @@ export default function Explore() {
               ))}
             </div>
           </fieldset>
-          <button type="button" className="link-btn" onClick={reset}>Reset to my profile</button>
+          <button type="button" className="link-btn" onClick={useProfile}>Use my profile’s cities and roles</button>
+          {nFilters > 0 && <button type="button" className="link-btn" onClick={reset}>Clear filters</button>}
         </aside>
 
         <section className="ex-main" aria-label="Results">
@@ -225,7 +232,7 @@ export default function Explore() {
               </button>
             ))}
           </div>
-          {view === 'new' && <p className="quiet small ex-view-note">Listings that appeared in the last 2 days and match your filters, newest first. They’re in All listings too.</p>}
+          {view === 'new' && <p className="quiet small ex-view-note">Every listing that appeared in the last 2 days{nFilters || keyword || fitOnly ? ' and matches your filters' : ''}, newest first. They’re in All listings too.</p>}
           <div className="ex-meta">
             <p className="ex-count" aria-live="polite">
               {res ? <>Showing <strong>{res.results.length.toLocaleString('en-IN')}</strong> of {res.total.toLocaleString('en-IN')}</> : null}{busy && <Spinner />}

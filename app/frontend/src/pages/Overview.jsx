@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { geocode, getInsights, getOpenings, searchJobs } from '../lib/api.js'
 import Globe from '../Globe.jsx'
-import { profileFilters } from '../lib/filters.js'
 import { useSession } from '../lib/session.jsx'
 import { useUserData } from '../lib/userdata.jsx'
 import { JobRow, Results } from '../components.jsx'
@@ -38,7 +37,7 @@ export default function Overview() {
     if (!profile) return
     const ex = data.apps.map((a) => a.job_id).filter(Boolean)
     searchJobs({ fit_only: true, sort: 'fit', limit: 10, exclude_ids: ex.length ? ex : undefined }, profile).then(setTop).catch((e) => setErr(e.message))
-    searchJobs({ ...profileFilters(profile), new_within_hours: 48, hide_stale: true, sort: 'fit', limit: 6, exclude_ids: ex.length ? ex : undefined }, profile).then(setFresh).catch(() => {})
+    searchJobs({ new_within_hours: 48, hide_stale: true, sort: 'fit', limit: 6, exclude_ids: ex.length ? ex : undefined }, profile).then(setFresh).catch(() => {})
     getInsights({}, profile).then(setMk).catch(() => {})
     getOpenings(profile.watch_companies || []).then(setOps).catch(() => {})
     searchJobs({ fit_only: true, closing_within_days: 14, sort: 'closing', limit: 4 }, profile).then(setClosing).catch(() => {})
