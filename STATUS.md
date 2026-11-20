@@ -1,5 +1,5 @@
 # Source status
-_Last run 21 Nov 2026, 12:12 AM IST: 5244 listings fetched, 1164 match._
+_Last run 21 Nov 2026, 12:14 AM IST: 5244 listings fetched, 1164 match._
 
 | Source | Status |
 |---|---|
