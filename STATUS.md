@@ -1,5 +1,5 @@
 # Source status
-_Last run 20 Nov 2026, 02:37 PM IST: 5278 listings fetched, 1177 match._
+_Last run 20 Nov 2026, 07:28 PM IST: 5266 listings fetched, 1176 match._
 
 | Source | Status |
 |---|---|
@@ -41,7 +41,7 @@ _Last run 20 Nov 2026, 02:37 PM IST: 5278 listings fetched, 1177 match._
 | greenhouse:stripe | ok |
 | greenhouse:twilio | ok |
 | greenhouse:zeta | HTTP 404 (board name probably wrong) |
-| internshala | ok (211 listings) |
+| internshala | ok (210 listings) |
 | lever:cred | ok |
 | lever:jar-app | HTTP 404 (board name probably wrong) |
 | lever:meesho | ok |
@@ -51,4 +51,4 @@ _Last run 20 Nov 2026, 02:37 PM IST: 5278 listings fetched, 1177 match._
 | lever:spotify | ok |
 | lever:upstox | HTTP 404 (board name probably wrong) |
 | lever:zepto | HTTP 404 (board name probably wrong) |
-| simplify | ok (5090 listings) |
+| simplify | ok (5079 listings) |
