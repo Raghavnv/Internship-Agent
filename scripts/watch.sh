@@ -19,9 +19,12 @@ publish() {
   rm -rf /tmp/pub && mkdir -p /tmp/pub
   cp data/jobs.json state/state.json /tmp/pub/
   cp data/openings.json MATCHES.md STATUS.md /tmp/pub/ 2>/dev/null || true
+  # this branch is data, not a website: tell Vercel not to build it (otherwise every push
+  # fires a failing preview deployment and a failure email)
+  echo '{"git":{"deploymentEnabled":false}}' > /tmp/pub/vercel.json
   ( cd /tmp/pub && git init -q -b data && git add . \
     && git -c user.name="internship-bot" -c user.email="internship-bot@users.noreply.github.com" \
-         commit -qm "listings $(date -u +%FT%TZ)" \
+         commit -qm "listings $(date -u +%FT%TZ) [skip ci] [vercel skip]" \
     && git push -qf "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git" data ) \
     && echo "published $(date -u +%H:%M) UTC"
 }
