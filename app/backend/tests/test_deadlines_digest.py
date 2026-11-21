@@ -103,3 +103,14 @@ def test_new_and_whatsapp_roles_are_never_merged_or_hidden():
     assert search(_dupes(5, alerted=True), limit=100)["total"] == 5       # sent to WhatsApp
     old = _dupes(3, "Hooli", alerted=True, age_days=200)
     assert search(old, hide_stale=True, limit=100)["total"] == 3          # ghost-looking, but you were told about it
+
+
+def test_unstated_or_slightly_off_dates_do_not_hurt_fit():
+    from fit import prepare, score
+    p = prepare({"roles": ["Backend"], "locations": ["Bengaluru"], "onsite_from": "2027-06", "onsite_to": "2027-09",
+                 "remote_ok": True, "onsite_ok": True})
+    base = {"id": "x", "title": "Software Engineer Intern", "company": "Co", "locations": ["Bengaluru, India"]}
+    fit = lambda terms: score({**base, "terms": terms}, p)[0]
+    assert fit([]) == fit(["Summer 2027"])                 # dates not stated costs nothing
+    assert fit(["Fall 2027"]) >= fit(["Summer 2027"]) - 5   # a season off is a small nudge
+    assert fit(["Summer 2026"]) < fit(["Summer 2027"])      # a year away still counts for something

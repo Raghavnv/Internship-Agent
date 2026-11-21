@@ -143,8 +143,8 @@ class Matcher:
             reasons.insert(0, "well-known company")
         score += {"preferred": 22, "remote": 18, "other_us": 4, "other_india": 4}[bucket]
         terms = set(job.get("terms") or [])
+        score += 10                       # unstated dates count the same as stated ones: they don't lower the match
         if term_known:
-            score += 10
             if bucket != "remote" and terms & {"Fall 2027", "Winter 2028"}:
                 tags.append("co-op may run past September")
                 score -= 5

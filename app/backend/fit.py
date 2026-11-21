@@ -51,6 +51,11 @@ def _window(profile, kind):
     return (a or b, b or a) if (a or b) else None
 
 
+def _gap_months(spans, win):
+    """Months between the closest listed term and the user's free window (0 = overlap)."""
+    return min(max(0, win[0] - b, a - win[1]) for a, b in spans)
+
+
 def prepare(profile):
     """Pre-compiles what scoring needs once per request."""
     p = dict(profile or {})
@@ -115,11 +120,12 @@ def score(job, p, now=None):
     # dates vs availability
     spans = [x for x in (term_months(t) for t in job.get("terms") or []) if x]
     win = p["_win_remote"] if is_remote else p["_win_onsite"]
-    if spans and win:
-        if any(a <= win[1] and b >= win[0] for a, b in spans):
-            s += 12
-        else:
-            s -= 18
+    # Missing dates cost nothing, and being a few months off is a small nudge, not a verdict.
+    if not spans:
+        s += 12                                   # same as a match: unstated dates aren't a mark against it
+    elif win:
+        gap = _gap_months(spans, win)
+        s += 12 if gap == 0 else 8 if gap <= 3 else 2 if gap <= 6 else -4
 
     # degree and work authorisation
     deg = set(job.get("degrees") or [])
@@ -225,10 +231,13 @@ def explain(job, p):
     spans = [x for x in (term_months(t) for t in job.get("terms") or []) if x]
     win = p["_win_remote"] if is_remote else p["_win_onsite"]
     if not spans:
-        out.append({"ok": None, "text": "Dates aren’t stated, so check them before applying"})
+        out.append({"ok": None, "text": "Dates aren’t stated. This doesn’t lower the match; check them before applying"})
     elif win:
-        if any(a <= win[1] and b >= win[0] for a, b in spans):
+        gap = _gap_months(spans, win)
+        if gap == 0:
             out.append({"ok": True, "text": f"Overlaps when you’re free ({_fmt_ym(win[0])} to {_fmt_ym(win[1])})"})
+        elif gap <= 3:
+            out.append({"ok": None, "text": f"Dates are within {gap} month{'s' if gap > 1 else ''} of when you’re free; a small difference"})
         else:
             out.append({"ok": False, "text": f"Runs outside when you’re free ({_fmt_ym(win[0])} to {_fmt_ym(win[1])})"})
 
