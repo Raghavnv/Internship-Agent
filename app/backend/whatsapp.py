@@ -216,7 +216,8 @@ def process(payload: dict, jobs, meta, openings=None, send=send_text) -> int:
     owners, n = _env()["owners"], 0
     for mid, sender, kind, text in extract(payload):
         if sender not in owners:
-            log.info("ignored message from a number that isn't the owner")
+            log.info("ignored message from a number that isn't the owner (from ...%s; META_WA_TO ends ...%s)",
+                     sender[-4:], ",".join(sorted(o[-4:] for o in owners)))
             continue
         if not _fresh(mid):
             continue
