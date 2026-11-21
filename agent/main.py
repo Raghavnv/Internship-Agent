@@ -41,6 +41,7 @@ def save_state(st):
     live = st.pop("_live", set())         # listings still up keep their date however old it is
     st["first_seen"] = {k: v for k, v in st.get("first_seen", {}).items() if k in live or v > cutoff}
     st["alerted"] = {k: v for k, v in st.get("alerted", {}).items() if v > cutoff}
+    st["alert_log"] = {k: v for k, v in st.get("alert_log", {}).items() if k in st["alerted"]}
     STATE.parent.mkdir(exist_ok=True)
     STATE.write_text(json.dumps(st, indent=0, sort_keys=True))
 
@@ -141,6 +142,15 @@ def export_jobs(jobs, evs, st, closes=None):
         if ev:
             rec["fit"] = {"score": ev["score"], "bucket": ev["bucket"], "tags": ev["tags"]}
         out.append(rec)
+    # every role that went to WhatsApp stays on the website, even after the source stops listing it
+    saved = st.setdefault("alert_log", {})
+    live = {r["id"] for r in out}
+    for r in out:
+        if r.get("alerted"):
+            saved[r["id"]] = {k: v for k, v in r.items() if k not in ("fit", "reposts", "closes")}
+    for jid, ts in (st.get("alerted") or {}).items():
+        if jid not in live and jid in saved:
+            out.append({**saved[jid], "alerted": int(ts), "gone": True})
     out.sort(key=lambda r: -(r.get("posted") or r["first_seen"]))
     d = ROOT / "data"
     d.mkdir(exist_ok=True)

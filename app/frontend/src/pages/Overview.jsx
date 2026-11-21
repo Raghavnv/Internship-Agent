@@ -111,7 +111,7 @@ export default function Overview() {
           </div>
           <div className="mk-card">
             <div className="mk-head"><h3>Hiring most</h3><span>roles that fit</span></div>
-            <RankBars items={mk.companies.slice(0, 5)} onPick={(c) => nav(`/app/explore?q=${encodeURIComponent(c)}`)} />
+            <RankBars items={mk.companies.slice(0, 5)} onPick={(c) => nav(`/app/explore?company=${encodeURIComponent(c)}`)} />
           </div>
         </section>
       )}
@@ -170,7 +170,7 @@ export default function Overview() {
               <div className="sec-head"><h2 id="os-h">Opening soon</h2><Link to="/app/openings" className="link">All</Link></div>
               <ul className="mini-list">
                 {ops.watching.filter((o) => o.status === 'open' && o.open_roles > 0).slice(0, 2).map((o) => (
-                  <li key={'w' + o.company}><button type="button" onClick={() => nav(`/app/explore?q=${encodeURIComponent(o.company)}`)}>
+                  <li key={'w' + o.company}><button type="button" onClick={() => nav(`/app/explore?company=${encodeURIComponent(o.company)}`)}>
                     <strong>{o.company} is open</strong><span className="ok-t">{o.open_roles} role{o.open_roles === 1 ? '' : 's'} · you’re watching it</span></button></li>
                 ))}
                 {ops.soon.filter((o) => o.days_until >= 0).slice(0, 3).map((o) => (

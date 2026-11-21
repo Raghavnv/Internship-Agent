@@ -127,7 +127,7 @@ def get_geocode(q: str):
 @app.post("/api/search")
 def post_search(body: dict, user: dict = Depends(current_user)):
     profile = body.pop("profile", None)
-    extra = {"offset", "new_within_hours", "alerted_only", "exclude_ids"}
+    extra = {"offset", "new_within_hours", "alerted_only", "exclude_ids", "company_is", "dedupe"}
     args = {k: v for k, v in body.items() if k in (llm.ALLOWED - {"group_by", "top"}) | extra}
     try:
         return {**search(store.get(), profile=profile, **args), "args": args}

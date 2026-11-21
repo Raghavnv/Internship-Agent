@@ -76,7 +76,10 @@ def calendar(openings: dict, jobs: list, today: date | None = None, watch=(), ho
     if not openings:
         return {"cycle": None, "soon": [], "opened": [], "watching": []}
     open_roles: dict = {}
+    now_ts = time.time()
     for j in jobs:
+        if j.get("closes") and j["closes"] < now_ts:
+            continue                                  # deadline passed: not listed as open
         k = company_key(j.get("company"))
         open_roles[k] = open_roles.get(k, 0) + 1
     soon, opened = [], []

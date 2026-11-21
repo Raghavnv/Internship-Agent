@@ -180,6 +180,8 @@ def fetch_internshala():
             continue
         soup = BeautifulSoup(html, "html.parser")
         cards = soup.select("div.individual_internship[internshipid]") or soup.select("div.individual_internship")
+        if not cards:
+            log.warning("internshala %s: no listings found (page was %d bytes)", page, len(html))
         for c in cards:
             iid = c.get("internshipid") or c.get("data-internship_id") or ""
             a = c.select_one("a.job-title-href") or c.select_one("h3 a") or c.select_one("a[href*='/internship/detail/']")

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useUserData } from '../lib/userdata.jsx'
 import { downloadIcs, googleCalendarUrl } from '../lib/calendar.js'
@@ -30,20 +30,19 @@ function followUp(a) {
   return { due, days, suggested: !a.follow_up_on }
 }
 
-function Card({ a, onMove, onEdit, onOpen, onRemove, dragging, setDragging }) {
+function Card({ a, onMove, onEdit, onOpen, onRemove }) {
   const [open, setOpen] = useState(false)
   const [note, setNote] = useState(a.notes || '')
   const f = followUp(a)
   const iv = a.interview_at && new Date(a.interview_at) > Date.now() - 2 * 3600000 ? a.interview_at : null
   return (
-    <li className={`card${dragging === a.id ? ' dragging' : ''}`} draggable
-      onDragStart={(e) => { e.dataTransfer.setData('text/plain', a.id); e.dataTransfer.effectAllowed = 'move'; setDragging(a.id) }}
-      onDragEnd={() => setDragging(null)}>
+    <li className="card">
       <div className="card-top">
         <span className="avatar co-av" style={coHue(a.company)} aria-hidden="true">{(a.company || '?').charAt(0)}</span>
         <div className="card-main">
           <button type="button" className="card-title" onClick={() => onOpen(a)}>{a.title}</button>
           <p className="card-sub">{a.company}{a.location && <> · {cityName(a.location)}</>}</p>
+          <p className="card-when">Applied {ago(a.applied_at)}</p>
         </div>
       </div>
       {(iv || (f && f.days <= 2)) && (
@@ -53,18 +52,19 @@ function Card({ a, onMove, onEdit, onOpen, onRemove, dragging, setDragging }) {
         </div>
       )}
       <div className="card-foot">
-        <span>Applied {ago(a.applied_at)}</span>
+        <label className="move">
+          <span className="sr">Move {a.title} to another stage</span>
+          <select className="select" value="" onChange={(e) => e.target.value && onMove(a, e.target.value)}>
+            <option value="">Move to…</option>
+            {STATUSES.filter((s) => s !== a.status).map((s) => <option key={s} value={s}>{s}</option>)}
+          </select>
+        </label>
         <button type="button" className="icon-btn sm" aria-expanded={open} aria-label={`Edit ${a.title}`} onClick={() => setOpen(!open)}>
           <Icon name={open ? 'x' : 'more'} size={15} />
         </button>
       </div>
       {open && (
         <div className="card-edit">
-          <label>Stage
-            <select className="select" value={a.status} onChange={(e) => onMove(a, e.target.value)}>
-              {STATUSES.map((s) => <option key={s}>{s}</option>)}
-            </select>
-          </label>
           <label>Interview
             <input type="datetime-local" value={toLocalInput(a.interview_at)}
               onChange={(e) => onEdit(a.id, { interview_at: e.target.value ? new Date(e.target.value).toISOString() : null })} />
@@ -94,29 +94,19 @@ function Card({ a, onMove, onEdit, onOpen, onRemove, dragging, setDragging }) {
 }
 
 function Board({ apps, onMove, ...rest }) {
-  const [dragging, setDragging] = useState(null)
-  const [over, setOver] = useState(null)
-  // the dragged card re-mounts in its new column, so its own dragend may never fire
-  useEffect(() => {
-    const end = () => { setDragging(null); setOver(null) }
-    document.addEventListener('dragend', end); document.addEventListener('drop', end)
-    return () => { document.removeEventListener('dragend', end); document.removeEventListener('drop', end) }
-  }, [])
   return (
     <div className="board" role="list" aria-label="Application stages">
       {STATUSES.map((s) => {
         const col = apps.filter((a) => a.status === s)
         return (
-          <section key={s} role="listitem" className={`col col-${statusKey(s)}${over === s ? ' over' : ''}`} aria-label={`${s}, ${col.length}`}
-            onDragOver={(e) => { e.preventDefault(); setOver(s) }} onDragLeave={() => setOver((o) => (o === s ? null : o))}
-            onDrop={(e) => { e.preventDefault(); setOver(null); const a = apps.find((x) => x.id === e.dataTransfer.getData('text/plain')); if (a && a.status !== s) onMove(a, s) }}>
+          <section key={s} role="listitem" className={`col col-${statusKey(s)}`} aria-label={`${s}, ${col.length}`}>
             <header className="col-head">
               <i aria-hidden="true" /><h2>{s}</h2><span className="col-n">{col.length}</span>
             </header>
             <p className="col-hint">{HINTS[s]}</p>
             <ul className="col-cards">
-              {col.map((a) => <Card key={a.id} a={a} onMove={onMove} dragging={dragging} setDragging={setDragging} {...rest} />)}
-              {!col.length && <li className="col-empty">Drop a card here</li>}
+              {col.map((a) => <Card key={a.id} a={a} onMove={onMove} {...rest} />)}
+              {!col.length && <li className="col-empty">Nothing here yet</li>}
             </ul>
           </section>
         )
@@ -180,7 +170,7 @@ export default function Applications() {
       <header className="page-head">
         <div>
           <h1>Applications</h1>
-          <p className="sub">{apps.length ? <><strong>{active}</strong> in progress. Drag a card to a new stage as you hear back.</> : 'Track every application from submitted to offer.'}</p>
+          <p className="sub">{apps.length ? <><strong>{active}</strong> in progress. Use Move to on a card when you hear back.</> : 'Track every application from submitted to offer.'}</p>
         </div>
         {apps.length > 0 && (
           <div className="row-gap">

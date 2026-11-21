@@ -82,3 +82,24 @@ def test_new_alerted_and_exclude_filters():
     assert [x["id"] for x in r["results"]] == ["j1", "j3"]
     assert [x["id"] for x in search(jobs, alerted_only=True, limit=10)["results"]] == ["j1"]
     assert "j1" not in [x["id"] for x in search(jobs, exclude_ids=["j1"], limit=10)["results"]]
+
+
+def _dupes(n, company="Docusign", alerted=False, age_days=10):
+    t = int(time.time())
+    return [{"id": f"{company}{i}", "title": "Software Engineer Intern", "company": company, "locations": ["Seattle, WA"],
+             "posted": t - age_days * 86400, "first_seen": t - age_days * 86400,
+             **({"alerted": t} if alerted else {})} for i in range(n)]
+
+
+def test_company_view_lists_every_role_without_merging():
+    jobs = _dupes(8) + _dupes(1, "Dropbox")
+    assert search(jobs, limit=100)["total"] == 2                          # old reposts merge in All listings
+    r = search(jobs, company_is=["Docusign"], limit=100)
+    assert r["total"] == 8 and all(x["company"] == "Docusign" for x in r["results"])   # exact company, nothing merged
+
+
+def test_new_and_whatsapp_roles_are_never_merged_or_hidden():
+    assert search(_dupes(5, age_days=1), limit=100)["total"] == 5         # first seen in the last 3 days
+    assert search(_dupes(5, alerted=True), limit=100)["total"] == 5       # sent to WhatsApp
+    old = _dupes(3, "Hooli", alerted=True, age_days=200)
+    assert search(old, hide_stale=True, limit=100)["total"] == 3          # ghost-looking, but you were told about it

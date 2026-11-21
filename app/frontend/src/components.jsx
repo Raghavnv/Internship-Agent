@@ -76,6 +76,7 @@ export function JobRow({ job, onFocus, index = 0 }) {
             {city || 'Location not listed'}{more > 0 && <span className="more-loc"> +{more}</span>}
           </span>
           <span className="job-meta">
+            {job.gone && <span className="closes soon" title="The source no longer lists this role. It may have closed.">No longer listed</span>}
             {closes && <span className={`closes ${closesLevel(left)}`} title={`Applications close ${closesDate(job.closes)}`}>{closes}</span>}
             {remote && <span className="pill">Remote</span>}
             <span>{shortTerms(job.terms)}</span>

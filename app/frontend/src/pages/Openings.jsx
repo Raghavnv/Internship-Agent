@@ -83,7 +83,7 @@ export default function Openings() {
           {look.error ? <p className="form-error">{look.error}</p> : look.status === 'unknown'
             ? <p className="quiet">No past openings on record for “{look.company}”. Try the exact company name.</p>
             : <><OpeningLine o={look} /><div className="row-gap"><WatchButton company={look.company} small />
-              {look.open_roles > 0 && <Link className="btn btn-ghost btn-sm" to={`/app/explore?q=${encodeURIComponent(look.company)}`}>See {look.open_roles} open role{look.open_roles === 1 ? '' : 's'}</Link>}</div></>}
+              {look.open_roles > 0 && <Link className="btn btn-ghost btn-sm" to={`/app/explore?company=${encodeURIComponent(look.company)}`}>See {look.open_roles} open role{look.open_roles === 1 ? '' : 's'}</Link>}</div></>}
         </div>
       )}
 
@@ -105,7 +105,7 @@ export default function Openings() {
                         <div className="op-main">
                           <p className="op-co">{o.company}</p>
                           {o.expected_on && o.status !== 'open' && <p className="op-past">Usually around {fmt(o.expected_on)}</p>}
-                          {o.status === 'open' && o.open_roles > 0 && <p className="op-past"><Link to={`/app/explore?q=${encodeURIComponent(o.company)}`}>{o.open_roles} open role{o.open_roles === 1 ? '' : 's'}</Link></p>}
+                          {o.status === 'open' && o.open_roles > 0 && <p className="op-past"><Link to={`/app/explore?company=${encodeURIComponent(o.company)}`}>{o.open_roles} open role{o.open_roles === 1 ? '' : 's'}</Link></p>}
                         </div>
                         <span className={`op-when ${w.cls}`}>{w.text}</span>
                         <button type="button" className="icon-btn" aria-label={`Stop watching ${o.company}`} onClick={() => watch.toggle(o.company)}><Icon name="x" size={15} /></button>
@@ -134,7 +134,7 @@ export default function Openings() {
             <ul className="op-opened">
               {data.opened.slice(0, 18).map((o) => (
                 <li key={o.company}>
-                  <Link to={`/app/explore?q=${encodeURIComponent(o.company)}`}>
+                  <Link to={`/app/explore?company=${encodeURIComponent(o.company)}`}>
                     <span className="avatar co-av" style={coHue(o.company)} aria-hidden="true">{o.company.charAt(0)}</span>
                     <span className="oo-main"><strong>{o.company}</strong><span>{fmt(o.opened_on)} · {o.open_roles} role{o.open_roles === 1 ? '' : 's'}</span></span>
                     {o.vs_usual_days != null && Math.abs(o.vs_usual_days) >= 7 && <span className={`oo-vs ${o.vs_usual_days > 0 ? 'late' : 'early'}`}>{Math.abs(o.vs_usual_days)}d {o.vs_usual_days > 0 ? 'late' : 'early'}</span>}

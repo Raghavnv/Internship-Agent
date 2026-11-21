@@ -83,6 +83,7 @@ export default function Explore() {
   const [locations, setLocations] = useState(null)
   const [roles, setRoles] = useState(null)
   const [keyword, setKeyword] = useState(params.get('q') || '')
+  const [company, setCompany] = useState(params.get('company') || '')   // exactly one company, from Just opened
   const [remote, setRemote] = useState('any')
   const [posted, setPosted] = useState(0)
   const [fitOnly, setFitOnly] = useState(false)
@@ -100,15 +101,17 @@ export default function Explore() {
   }, [profile])
   // arriving from a link like ?q=Honeywell: show that company's roles, whatever the other filters were
   useEffect(() => {
-    const q = params.get('q')
-    if (q != null) { setKeyword(q); setLocations([]); setRoles([]); setRemote('any'); setPosted(0); setFitOnly(false) }
-  }, [params.get('q')])
+    const q = params.get('q'), co = params.get('company')
+    if (q != null || co != null) {
+      setKeyword(q || ''); setCompany(co || ''); setLocations([]); setRoles([]); setRemote('any'); setPosted(0); setFitOnly(false)
+    }
+  }, [params.get('q'), params.get('company')])
 
   useEffect(() => {
     if (locations === null) return
     const t = setTimeout(run, 250)
     return () => clearTimeout(t)
-  }, [locations, roles, keyword, remote, posted, fitOnly, hideStale, sort, view, appliedKey])
+  }, [locations, roles, keyword, company, remote, posted, fitOnly, hideStale, sort, view, appliedKey])
 
   function filters(v = view) {
     const any = (roles || []).flatMap((r) => ROLE_WORDS[r] || [])
@@ -117,6 +120,7 @@ export default function Explore() {
       locations: locations?.length ? locations : undefined, remote: remote === 'any' ? undefined : remote,
       fit_only: fitOnly || undefined, hide_stale: hideStale || undefined,
       exclude_ids: applied.length ? applied : undefined,
+      company_is: company ? [company] : undefined,     // every role of that company, none merged or hidden
     }
     // New: the same filters, limited to what appeared in the last 2 days, newest first
     if (v === 'new') return { ...f, new_within_hours: NEW_HOURS, sort: 'found' }
@@ -147,10 +151,14 @@ export default function Explore() {
   const useProfile = () => {
     setLocations((profile?.locations || []).filter((l) => !/^remote$/i.test(l))); setRoles(profile?.roles || [])
   }
-  const reset = () => {
-    setLocations([]); setRoles([]); setKeyword(''); setRemote('any'); setPosted(0); setFitOnly(false)
+  const clearCompany = () => {
+    setCompany('')
+    if (params.get('company') != null) { const p = new URLSearchParams(params); p.delete('company'); setParams(p, { replace: true }) }
   }
-  const nFilters = (locations?.length ? 1 : 0) + (roles?.length ? 1 : 0) + (remote !== 'any') + (posted ? 1 : 0)
+  const reset = () => {
+    clearCompany(); setLocations([]); setRoles([]); setKeyword(''); setRemote('any'); setPosted(0); setFitOnly(false)
+  }
+  const nFilters = (company ? 1 : 0) + (locations?.length ? 1 : 0) + (roles?.length ? 1 : 0) + (remote !== 'any') + (posted ? 1 : 0)
 
   return (
     <main className="page page-wide">
@@ -225,6 +233,12 @@ export default function Explore() {
               Filters{nFilters ? ` (${nFilters})` : ''}
             </button>
           </div>
+          {company && (
+            <p className="ex-company">
+              Showing every role at <strong>{company}</strong>
+              <button type="button" className="link-btn" onClick={clearCompany}>Show all companies</button>
+            </p>
+          )}
           <div className="ex-views" role="tablist" aria-label="Which listings">
             {VIEWS.map(([v, l]) => (
               <button key={v} type="button" role="tab" aria-selected={view === v} className={view === v ? 'on' : ''} onClick={() => setView(v)}>
@@ -257,7 +271,7 @@ export default function Explore() {
           {!res && !err && <SkeletonRows n={8} />}
           {res && (
             <div className={busy ? 'is-busy' : ''}>
-              {view === 'all' ? <Grouped results={res.results} byFit={sort === 'fit'} onFocus={setFocus} />
+              {view === 'all' ? <Grouped results={res.results} byFit={sort === 'fit' && !company} onFocus={setFocus} />
                 : <ByDay results={res.results} field="first_seen" onFocus={setFocus}
                   empty="Nothing new matches these filters in the last 2 days. New listings land here within about 10 minutes of being posted." />}
             </div>
