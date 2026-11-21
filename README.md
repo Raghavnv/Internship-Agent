@@ -191,3 +191,24 @@ pip install -r requirements.txt
 python -m agent.main --dry-run   # prints messages instead of sending
 python -m pytest tests           # offline tests
 ```
+
+## Talk to your agent (two-way WhatsApp)
+
+Message the same business number and it answers from the live listings: *"backend internships in Bangalore"*,
+*"which companies hire most in Austin?"*, *"remote ML roles posted this week"*. Shortcuts that don't use the AI:
+`new` (last 24 hours), `alerts` (what it recently sent you), `closing` (deadlines in 2 weeks), `soon` (companies about
+to open), `help`. Follow-up questions work ("and remote ones?"). It only answers your number (`META_WA_TO`).
+
+The listing check runs on GitHub, but replies need an always-on server, so this part runs on the Render backend.
+
+1. **Render → your service → Environment**, add: `META_WA_TOKEN`, `META_WA_PHONE_NUMBER_ID`, `META_WA_TO` (the same
+   values as the GitHub secrets), `META_WA_VERIFY_TOKEN` (any word you choose, e.g. `copilot-hook-2026`) and
+   `META_APP_SECRET` (Meta app dashboard → **App settings → Basic → App secret → Show**). Save; Render redeploys.
+2. **Meta app dashboard → WhatsApp → Configuration → Webhook → Edit**:
+   - Callback URL: `https://<your-render-service>.onrender.com/api/whatsapp/webhook`
+   - Verify token: the same word as `META_WA_VERIFY_TOKEN` → **Verify and save**
+   - Under **Webhook fields**, **Subscribe** to `messages`.
+3. Send `help` to the business number from your WhatsApp.
+
+Render's free plan sleeps after 15 minutes idle, so the first reply after a quiet spell can take up to a minute.
+The cron-job.org timer from the Copilot setup keeps it awake.

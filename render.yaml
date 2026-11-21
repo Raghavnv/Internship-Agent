@@ -22,3 +22,14 @@ services:
         sync: false
       - key: LLM_MODEL
         value: openai/gpt-oss-120b
+      # two-way WhatsApp (optional): see "Talk to your agent" in README.md
+      - key: META_WA_TOKEN
+        sync: false
+      - key: META_WA_PHONE_NUMBER_ID
+        sync: false
+      - key: META_WA_TO
+        sync: false
+      - key: META_WA_VERIFY_TOKEN
+        sync: false
+      - key: META_APP_SECRET
+        sync: false

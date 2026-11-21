@@ -57,6 +57,10 @@ FILTER_PROPS = {
     "fit_only": {"type": "boolean", "description": "Only roles that are a strong fit for the user's profile."},
     "closing_within_days": {"type": "integer",
                             "description": "Only roles whose stated application deadline is within this many days."},
+    "new_within_hours": {"type": "integer",
+                         "description": "Only roles first seen in the last N hours (24 = today's new roles, 48 = last two days)."},
+    "alerted_only": {"type": "boolean",
+                     "description": "Only roles that were already sent to the user's WhatsApp as alerts."},
 }
 TOOLS = [
     {"type": "function", "function": {
@@ -64,7 +68,7 @@ TOOLS = [
         "description": "Search the live internship listings. Returns the total count and the top results.",
         "parameters": {"type": "object", "properties": {
             **FILTER_PROPS,
-            "sort": {"type": "string", "enum": ["relevance", "newest", "fit", "closing"],
+            "sort": {"type": "string", "enum": ["relevance", "newest", "fit", "closing", "found", "alerted"],
                      "description": "'fit' = best match for the user's profile; 'closing' = soonest deadline first."},
             "limit": {"type": "integer", "description": "1-50, default 15."},
         }}}},
@@ -81,8 +85,19 @@ TOOLS = [
 ALLOWED = set(FILTER_PROPS) | {"sort", "limit", "group_by", "top", "hide_stale"}
 
 
-def system_prompt(meta, profile=None):
+WHATSAPP_RULES = """
+You are replying on WhatsApp. Write plain text, no markdown tables or headings; *single asterisks* make bold.
+Keep it to 2-4 short sentences. The top matches (with links) are added under your message automatically,
+so never paste URLs or list every result yourself. For counts and "which companies" questions, give the
+numbers in a short list instead."""
+
+
+def system_prompt(meta, profile=None, channel="web"):
     about = profile_summary(profile) or PROFILE
+    return (_base_prompt(meta, about) + (WHATSAPP_RULES if channel == "whatsapp" else ""))
+
+
+def _base_prompt(meta, about):
     return f"""You are Internship Copilot, an assistant that helps a student find internships.
 Today is {date.today():%A %d %B %Y}. You have {meta['count']} live listings (refreshed every 15 minutes; last
 update {meta['updated_human']}). Most are US internships from the SimplifyJobs feed, plus some Indian ones
@@ -119,11 +134,11 @@ def run_tool(name, args, jobs, profile=None):
     return search(jobs, **args, **extra), args
 
 
-def chat(messages, jobs, meta, profile=None):
+def chat(messages, jobs, meta, profile=None, channel="web"):
     """messages: [{role: user|assistant, content: str}] from the client. Returns reply + last results."""
     if not API_KEY:
         raise RuntimeError("LLM_API_KEY (or GROQ_API_KEY) is not set on the server.")
-    convo = [{"role": "system", "content": system_prompt(meta, profile)}]
+    convo = [{"role": "system", "content": system_prompt(meta, profile, channel)}]
     for m in messages[-20:]:
         if m.get("role") in ("user", "assistant") and isinstance(m.get("content"), str):
             convo.append({"role": m["role"], "content": m["content"][:4000]})

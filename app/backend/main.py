@@ -10,7 +10,8 @@ import time
 from collections import Counter, defaultdict, deque
 from datetime import datetime, timedelta, timezone
 
-from fastapi import Depends, FastAPI, File, HTTPException, UploadFile
+from fastapi import BackgroundTasks, Depends, FastAPI, File, HTTPException, Request, UploadFile
+from fastapi.responses import PlainTextResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
@@ -23,6 +24,7 @@ import jobdetail
 import llm
 import market
 import resume as resume_ai
+import whatsapp
 from auth import current_user
 from data import store
 from geo import geocode
@@ -307,6 +309,31 @@ def post_tailor(body: CoachIn, user: dict = Depends(limited("coach", RESUME_PER_
 def post_referral(body: CoachIn, user: dict = Depends(limited("coach", RESUME_PER_HOUR * 2))):
     """A LinkedIn connection note and follow-up message asking for a referral."""
     return coach.referral(_coach_job(body), body.profile, body.projects[:20])
+
+
+@app.get("/api/whatsapp/webhook")
+def whatsapp_verify(request: Request):
+    """Meta's handshake when you save the webhook URL in the app dashboard."""
+    q = request.query_params
+    out = whatsapp.verify_challenge(q.get("hub.mode"), q.get("hub.verify_token"), q.get("hub.challenge"))
+    if out is None:
+        raise HTTPException(403, "Verify token doesn't match META_WA_VERIFY_TOKEN.")
+    return PlainTextResponse(out)
+
+
+@app.post("/api/whatsapp/webhook")
+async def whatsapp_incoming(request: Request, background: BackgroundTasks):
+    """Messages sent to the business number. Answer Meta straight away, reply to the owner in the background."""
+    raw = await request.body()
+    if not whatsapp.signature_ok(raw, request.headers.get("x-hub-signature-256")):
+        raise HTTPException(403, "Bad signature (is META_APP_SECRET set on the server?).")
+    try:
+        payload = await request.json()
+    except Exception:
+        raise HTTPException(400, "Not JSON.")
+    if whatsapp.configured():
+        background.add_task(whatsapp.process, payload, store.get(), meta(), store.openings)
+    return {"ok": True}
 
 
 @app.post("/api/chat")
